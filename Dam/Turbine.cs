@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dam
 {
-    class Turbine:Convertible
+    class Turbine
     {
         private ulong _MinFlowRate, _MaxFlowRate, _MinPressure, _MaxPressure, _MinEnergyProduced,
             _MaxEnergyProduced, _CurrentPressure, _CurrentFlowRate, _CurrentEnergyProduced;

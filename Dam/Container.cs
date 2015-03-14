@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dam
 {
-    class Container:Convertible
+    class Container
     {
         private Int16[] _CurrentVolume; //arreglo para repesentar con exactitud numeros grandes
         ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;
