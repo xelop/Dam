@@ -1,2 +1,3 @@
 C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\bin\Debug\Dam.exe.config
 C:\Users\Xelop\Documents\GitHub\Dam\Dam\bin\Debug\Dam.exe.config
+C:\Users\Josue\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\Dam\bin\Debug\Dam.exe.config
