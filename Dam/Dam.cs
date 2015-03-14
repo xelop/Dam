@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dam
 {
-    class Dam:Convertible
+    class Dam
     {
         private Int16[] _CurrentFlowRate, _CurrentTotalEnergyProduced;
         private List<Turbine> _Turbines = new List<Turbine>();

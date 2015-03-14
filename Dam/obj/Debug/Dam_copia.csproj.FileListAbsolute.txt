@@ -1,3 +1,11 @@
 C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\bin\Debug\Dam.exe.config
 C:\Users\Xelop\Documents\GitHub\Dam\Dam\bin\Debug\Dam.exe.config
 C:\Users\Josue\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\Dam\bin\Debug\Dam.exe.config
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam_copia.csprojResolveAssemblyReference.cache
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam.DamRepresentation.resources
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam.Properties.Resources.resources
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam_copia.csproj.GenerateResource.Cache
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\bin\Debug\Dam.exe
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\bin\Debug\Dam.pdb
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam.exe
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam.pdb

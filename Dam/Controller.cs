@@ -9,9 +9,14 @@ namespace Dam
     class Controller
     {
         Dam _Dam;
-        Form1 _View;
-        public String getFlowRate();
-        public String setValues();
-        
+        DamRepresentation _View;
+        public String getFlowRate()
+        {
+            return "nada";
+        }
+        public String setValues()
+        {
+            return "nada";
+        }        
     }
 }
