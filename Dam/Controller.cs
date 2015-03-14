@@ -12,6 +12,6 @@ namespace Dam
         Form1 _View;
         public String getFlowRate();
         public String setValues();
-        public int kmToPixel();// To paint the current heigth in the view proportionate to the screen
+        
     }
 }
