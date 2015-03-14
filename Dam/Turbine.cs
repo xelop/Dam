@@ -8,7 +8,7 @@ namespace Dam
 {
     class Turbine:Convertible
     {
-        private Int16[] _MinFlowRate, _MaxFlowRate, _MinPressure, _MaxPressure, _MinEnergyProduced,
+        private Int16 _MinFlowRate, _MaxFlowRate, _MinPressure, _MaxPressure, _MinEnergyProduced,
             _MaxEnergyProduced, _CurrentPressure, _CurrentFlowRate, _CurrentEnergyProduced;
         private Boolean TurnedOn;
 

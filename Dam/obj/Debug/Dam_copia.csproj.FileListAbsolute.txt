@@ -1,1 +1,2 @@
 C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\bin\Debug\Dam.exe.config
+C:\Users\Xelop\Documents\GitHub\Dam\Dam\bin\Debug\Dam.exe.config
