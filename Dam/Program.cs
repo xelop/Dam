@@ -16,7 +16,10 @@ namespace Dam
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            DamRepresentation Simulator= new DamRepresentation();
+            Dam DAM = new Dam("100", "100", "900", "887");
+            Controller MainControl = new Controller(DAM, Simulator);
+            Application.Run(Simulator);
         }
     }
 }
