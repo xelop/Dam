@@ -69,7 +69,7 @@ namespace Dam
             List<Point[]> water=new List<Point[]>();
             for(int waveQuantity = 0; waveQuantity < 10; waveQuantity++){
                     Point[] singleWave ={new Point(pStartingX, pStartingY),
-                                         new Point(pStartingX + waveLenght / 2, pStartingY-Constants.INCREMENTOFWAVES),
+                                         new Point(pStartingX + waveLenght / 2, pStartingY-Constants._IncrementofWaves),
                                          new Point(pStartingX + waveLenght, pStartingY)};
                     pStartingX += waveLenght;
                     water.Add(singleWave);

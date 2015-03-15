@@ -17,3 +17,4 @@ C:\Users\Josue\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\Da
 C:\Users\Josue\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\Dam\obj\Debug\Dam.DamRepresentation.resources
 C:\Users\Josue\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\Dam\obj\Debug\Dam.Properties.Resources.resources
 C:\Users\Josue\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\Dam\obj\Debug\Dam_copia.csproj.GenerateResource.Cache
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam.Form2.resources

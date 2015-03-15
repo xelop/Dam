@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dam_copia", "Dam\Dam_copia.csproj", "{AA5EA989-522E-4091-8084-51CFAF4123DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamProyect", "Dam\DamProyect.csproj", "{AA5EA989-522E-4091-8084-51CFAF4123DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
