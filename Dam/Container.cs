@@ -33,7 +33,7 @@ namespace Dam
             Converter.addList(_CurrentVolume, Converter.stringToList(pWater.ToString()));
             if (waterOverflow())
             {
-                _CurrentVolume = Converter.doubleList(_MaxVolume);
+                _CurrentVolume = Converter.copyList(_MaxVolume);
                 throw new Exception("The water overflowed the maximun capacity of the damming");
             }
 
@@ -44,6 +44,7 @@ namespace Dam
             Converter.restList(_CurrentVolume, Converter.stringToList(pWater.ToString()));
             if (minCapacity())
             {
+                _CurrentVolume = Converter.copyList(_MinVolume);
                 throw new Exception("The dam´s water level is at its minimum capacity. Dam´s operation will be paused for a moment");
             }
         }
