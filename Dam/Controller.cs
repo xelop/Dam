@@ -10,6 +10,19 @@ namespace Dam
     {
         Dam _Dam;
         DamRepresentation _View;
+
+
+        public Controller(Dam pDam, DamRepresentation pView)
+        {
+            _Dam = pDam;
+            _View = pView;
+            pView.clickked=pView.clickked+sendWaveValues;
+        }
+        public void sendWaveValues()
+        {
+            _View.paintWater(Converter.waveDrawing(100,300, 300));
+        }
+
         public String getFlowRate()
         {
             return "nada";

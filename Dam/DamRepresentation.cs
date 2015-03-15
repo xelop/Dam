@@ -13,6 +13,14 @@ namespace Dam
     public partial class DamRepresentation : Form
     {
         Graphics graphics;
+        private Action Clickked;
+
+        public Action clickked
+        {
+            get { return Clickked; }
+            set { Clickked = value; }
+        }
+
         public DamRepresentation()
         {
             InitializeComponent();
@@ -21,15 +29,19 @@ namespace Dam
 
         private void screen_Click(object sender, EventArgs e)
         {
-            List<Point[]> pWater=Converter.waveDrawing(100,400,110,100);
-
-            for (int element_counter = 0; element_counter < pWater.Count; element_counter++)
-            graphics.FillClosedCurve(Brushes.Blue,pWater[element_counter]);
+            Clickked();
+        }
+        public void paintWater(List<Point[]> pWaterCoordenates)
+        {
+            for (int element_counter = 0; element_counter < pWaterCoordenates.Count; element_counter++)
+                graphics.FillClosedCurve(Brushes.Blue, pWaterCoordenates[element_counter]);
         }
 
         private void screen_Paint(object sender, PaintEventArgs e)
         {
 
         }
+
+
     }
 }
