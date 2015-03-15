@@ -8,47 +8,57 @@ namespace Dam
 {
     class Container
     {
-        private Int16[] _CurrentVolume, Int16[] _MaxVolume; //arreglo para repesentar con exactitud numeros grandes
+        private List<Int16> _CurrentVolume; //arreglo para repesentar con exactitud numeros grandes
+        private List<Int16> _MaxVolume; //arreglo para repesentar con exactitud numeros grandes
+        private List<Int16> _MinVolume; //arreglo para repesentar con exactitud numeros grandes
         private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;
 
 
-        public Container(ulong pMaxHeigth, ulong pMinHeight,ulong pWidth, ulong pLong)
+        public Container(ulong pMaxHeight, ulong pMinHeight, ulong pWidth, ulong pLong)
         {
-            _MaxHeigth = pMaxHeigth;
+            _MaxHeigth = pMaxHeight;
             _MinHeigth = pMinHeight;
             _Width = pWidth;
             _Long = pLong;
-            calculateVolume();
-
+            _MaxVolume = Converter.calculateVolume(pMaxHeight, pWidth, pLong);
+            _MinVolume = Converter.calculateVolume(pMinHeight, pWidth, pLong);
+            _CurrentVolume = Converter.calculateVolume(pMinHeight + ((pMaxHeight - pMinHeight) / 2), pWidth, pLong);//container starts filled up to the middle
+            _CurrentHeigth = pMinHeight + ((pMaxHeight - pMinHeight) / 2);
         }
 
-        public void calculateVolume()
-        {
-            
-        }
-        //public String getVolumeString(); //metodo para representarlo en la interfaz
+
 
         public void addWater(Int32 pWater)
         {
-            Converter.stringToArray(pWater.ToString());
+            Converter.addList(_CurrentVolume, Converter.stringToList(pWater.ToString()));
+            if (waterOverflow())
+            {
+                _CurrentVolume = Converter.doubleList(_MaxVolume);
+                throw new Exception("The water overflowed the maximun capacity of the damming");
+            }
+
         }
 
-        public void removeWater(Int16 pWater)
+        public void removeWater(Int32 pWater)
         {
-            
+            Converter.restList(_CurrentVolume, Converter.stringToList(pWater.ToString()));
+            if (minCapacity())
+            {
+                throw new Exception("The dam´s water level is at its minimum capacity. Dam´s operation will be paused for a moment");
+            }
         }
 
 
-        public Boolean checkMinCapacity()
+        public Boolean minCapacity()
         {
-            return _MinHeigth > _CurrentHeigth;
+            return Converter.compareList(_MinVolume , _CurrentVolume);
         }
-        public Boolean checkMaxCapacity()
+        public Boolean waterOverflow()
         {
-            return _CurrentHeigth > _MaxHeigth;
+            return Converter.compareList(_CurrentVolume, _MaxVolume);
         }
 
-        public Int16[] currentVolume
+        public List<Int16> CurrentVolume
         {
             get
             {
@@ -60,7 +70,7 @@ namespace Dam
             }
         }
 
-        public ulong currentHeigth
+        public ulong CurrentHeigth
         {
             get { return _CurrentHeigth; }
             set { _CurrentHeigth = value; }
@@ -72,19 +82,19 @@ namespace Dam
             set { _Long = value; }
         }
 
-        public ulong width
+        public ulong Width
         {
             get { return _Width; }
             set { _Width = value; }
         }
 
-        public ulong maxHeigth
+        public ulong MaxHeigth
         {
             get { return _MaxHeigth; }
             set { _MaxHeigth = value; }
         }
 
-        public ulong minHeigth
+        public ulong MinHeigth
         {
             get { return _MinHeigth; }
             set { _MinHeigth = value; }

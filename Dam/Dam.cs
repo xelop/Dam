@@ -15,7 +15,7 @@ namespace Dam
 
         public Dam(String pHeigth, String pWidth, String pLong, String pCurrentFlowRate)
         {
-            _Tank = new Container(pHeigth, pWidth, pLong);
+            //_Tank = new Container(pHeigth, pWidth, pLong);
         }
 
     }
