@@ -8,7 +8,7 @@ namespace Dam
 {
     static class Constants
     {
-        public const int _IncrementofWaves = 8;
+        public const int INCREMENTOFWAVES = 8;
         //public const int _StartingXforTank;
         //public const int _FinalXforTank;
         //public const int _StartingXforRiver;

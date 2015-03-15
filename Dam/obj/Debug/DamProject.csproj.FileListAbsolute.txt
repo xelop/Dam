@@ -1,0 +1,3 @@
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\bin\Debug\Dam.exe.config
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam.exe
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam.pdb
