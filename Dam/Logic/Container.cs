@@ -41,7 +41,7 @@ namespace Dam
 
         public void removeWater(Int32 pWater)
         {
-            Converter.restList(_CurrentVolume, Converter.stringToList(pWater.ToString()));
+            Converter.subtractList(_CurrentVolume, Converter.stringToList(pWater.ToString()));
             if (minCapacity())
             {
                 _CurrentVolume = Converter.copyList(_MinVolume);
@@ -68,6 +68,30 @@ namespace Dam
             set
             {
                 _CurrentVolume = value;
+            }
+        }
+
+        public List<Int16> MaxVolume
+        {
+            get
+            {
+                return _MaxVolume;
+            }
+            set
+            {
+                _MaxVolume = value;
+            }
+        }
+
+        public List<Int16> MinVolume
+        {
+            get
+            {
+                return _MinVolume;
+            }
+            set
+            {
+                _MinVolume = value;
             }
         }
 
