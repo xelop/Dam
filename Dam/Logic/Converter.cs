@@ -271,15 +271,55 @@ namespace Dam
             return water;
         }
 
-        public static List<Int16> calculateVolume(ulong pHeight, ulong pWidth, ulong pLong)
+        public static List<Int16> calculateVolume(ulong pHeight, ulong pWidth, ulong pLong)//in cm3
         {
-            return null;
+            pHeight = pHeight * 100;
+            pWidth = pWidth * 100;
+            pLong = pLong * 100;//meters are converted into cm
+            List<Int16> volume = new List<Int16>();
+            volume.Add(1);
+            List<ulong> dimensions = new List<ulong>();
+            dimensions.Add(pHeight);
+            dimensions.Add(pWidth);
+            dimensions.Add(pLong);
+            ulong dimension1 = 0;
+            ulong dimension2 = 0;
+            int counter = dimensions.Count - 1;
+            while (counter > 0)
+            {
+                dimension1 = (dimensions.Min());
+                dimensions.Remove(dimension1);
+                if (dimensions.Count > 0)
+                {
+                    dimension2 = (dimensions.Min());
+                    dimensions.Remove(dimension2);//this way we get the minimun dimensions
+                }
+                else
+                {
+                    dimension2 = 1;
+                }
+                try
+                {
+                    checked
+                    {
+
+                        volume = multiplyList(volume , stringToList((dimension1 * dimension2).ToString()));
+                    }
+                }
+                catch (OverflowException e)//the number is huge, we will requier to multiply them using lists
+                {
+                    volume = multiplyList(volume , multiplyList(stringToList(dimension1.ToString()) , stringToList(dimension2.ToString())));
+                }
+                counter--;
+            }
+            
+ 
+            return volume;
         }
 
-        public static ulong kmtometers(ulong pKilometers)
+        public static ulong kmToMeters(ulong pKilometers)
         {
             return pKilometers * 1000;
         }
-
     }
 }

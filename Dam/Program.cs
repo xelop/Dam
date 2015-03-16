@@ -24,14 +24,15 @@ namespace Dam
             Controller MainControl = new Controller(DAM, Simulator);
             Application.Run(Simulator);*/
 
-            String caca  = "01000";
-            String caca2 = "1";
+            String caca  = "20000";
+            String caca2 = "300";
             List<Int16> lista = Converter.stringToList(caca);
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(lista));
             List<Int16> lista2 = Converter.stringToList(caca2);
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.addList(lista, lista2)));
-            System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.subtractList(lista, lista2)));
-            
+            //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.subtractList(lista, lista2)));
+            System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.calculateVolume(15123123123123,20987987987987,25456456456456)));
+            //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.multiplyList(lista, lista2)));
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.takeOutNonSignificantCeroes(lista)));
 
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(lista2));
