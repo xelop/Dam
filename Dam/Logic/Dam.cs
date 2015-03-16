@@ -8,14 +8,15 @@ namespace Dam
 {
     class Dam
     {
-        private Int16[] _CurrentFlowRate, _CurrentTotalEnergyProduced;
+        private ulong _CurrentFlowRate, _CurrentTotalEnergyProduced;
         private List<Turbine> _Turbines = new List<Turbine>();
         private Container _Tank;
         private Container _River;
 
-        public Dam(String pHeigth, String pWidth, String pLong, String pCurrentFlowRate)
+        public Dam(ulong pMaxHeigth, ulong pMinHeight, ulong pWidth, ulong pLong, ulong pCurrentFlowRate)
         {
-            //_Tank = new Container(pHeigth, pWidth, pLong);
+            _CurrentFlowRate = pCurrentFlowRate;
+            _Tank = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
         }
 
     }

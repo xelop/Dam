@@ -194,17 +194,20 @@ namespace Dam
         {
             return 0;
         }
-        public static List<Point[]> waveDrawing(int pStartingX, int pEndingX, int pStartingY) //pStartingY simbolizes where the wave originates 
+
+        public static List<Point[]> waveDrawing(int pStartingX, int pEndingX, int pStartingY,int pWaveQuantity) //pStartingY simbolizes where the wave originates 
         { 
-            int waveLenght = (pEndingX - pStartingX) / 10;
+            int waveLenght = (pEndingX - pStartingX) / pWaveQuantity;
             List<Point[]> water=new List<Point[]>();
-            for(int waveQuantity = 0; waveQuantity < 10; waveQuantity++){
+            int waveDelimiter = 0;
+            while(pStartingX<pEndingX)
+            {
                     Point[] singleWave ={new Point(pStartingX, pStartingY),
                                          new Point(pStartingX + waveLenght / 2, pStartingY-Constants.INCREMENTOFWAVES),
                                          new Point(pStartingX + waveLenght, pStartingY)};
                     pStartingX += waveLenght;
                     water.Add(singleWave);
-                }
+            }
             return water;
         }
 
@@ -212,5 +215,11 @@ namespace Dam
         {
             return null;
         }
+
+        public static ulong kmtometers(ulong pKilometers)
+        {
+            return pKilometers * 1000;
+        }
+
     }
 }

@@ -2,26 +2,70 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace Dam
 {
     class Controller
     {
-        Dam _Dam;
-        DamRepresentation _View;
+        private Dam _Dam;
+        private DamRepresentation _View;
+        private DamAttributeSelection _TemporalView;
+        private Thread x;
 
 
-        public Controller(Dam pDam, DamRepresentation pView)
+        public Controller(DamAttributeSelection pTemporalView)
         {
-            _Dam = pDam;
-            _View = pView;
-            pView.clickked=pView.clickked+sendWaveValues;
+            _TemporalView = pTemporalView;
+            _TemporalView.startSimulation=createDam+_TemporalView.startSimulation;
         }
+        public void createDam(string pMaxHeight, string pMinHeight, string pWidth, string pLength, string pFlowRate, bool pKm)
+        {
+            if(pKm)
+            {
+                _Dam= new Dam(Converter.kmtometers(ulong.Parse(pMaxHeight)), Converter.kmtometers(ulong.Parse(pMinHeight)),
+                    Converter.kmtometers(ulong.Parse(pWidth)), Converter.kmtometers(ulong.Parse(pLength)), ulong.Parse(pFlowRate));
+            }
+            else{
+
+                _Dam = new Dam(ulong.Parse(pMaxHeight), ulong.Parse(pMinHeight),
+                   ulong.Parse(pWidth), ulong.Parse(pLength), ulong.Parse(pFlowRate));
+            }
+            _TemporalView.Hide();
+            newView();
+        }
+
+        public void newView()
+        {
+            _View = new DamRepresentation();
+            _View.clickked = _View.clickked + sendWaveValues;
+            _View.Show();
+            x = new Thread(waveAnimation);
+        }
+
         public void sendWaveValues()
         {
-            _View.paintWater(Converter.waveDrawing(100,300, 300));
+            x.Start();
+           //_View.paintWater(Converter.waveDrawing(0,104,200,10));
         }
+
+        public void waveAnimation()
+        {
+           
+            bool stop=true;
+            while (stop)
+            {
+
+                _View.paintWater(Converter.waveDrawing(0, 104, 200, 10), Converter.waveDrawing(696, 859, 430, 10));
+                Thread.Sleep(200);
+
+                _View.paintWater(Converter.waveDrawing(0, 104, 200, 12), Converter.waveDrawing(696, 859, 430, 10));
+                Thread.Sleep(200);
+             
+                
+               
+            }
+        } //Metodo de animacion del agua, debo implimentarlo de mejor manera
 
         public String getFlowRate()
         {

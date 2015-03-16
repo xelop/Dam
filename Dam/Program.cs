@@ -15,13 +15,14 @@ namespace Dam
         [STAThread]
         static void Main()
         {
-            /*Application.EnableVisualStyles();
+            Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            DamRepresentation Simulator= new DamRepresentation();
-            
-            Dam DAM = new Dam("100", "100", "900", "887");
+            DamAttributeSelection Simulator= new DamAttributeSelection();
+            Controller MainControl = new Controller(Simulator);
+            Application.Run(Simulator);
+            /*Dam DAM = new Dam("100", "100", "900", "887");
             Controller MainControl = new Controller(DAM, Simulator);
-            Application.Run(Simulator);*/
+            Application.Run(Simulator);
             String caca  = "101";
             String caca2 = "10000";
             List<Int16> lista = Converter.stringToList(caca);
@@ -31,6 +32,8 @@ namespace Dam
             System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.multiplyList(lista,lista2)));
 
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(lista2));
+             */
+
         }
     }
 }

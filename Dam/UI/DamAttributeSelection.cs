@@ -12,6 +12,23 @@ namespace Dam
 {
     public partial class DamAttributeSelection : Form
     {
+        private Action<String, String, String, String, String, bool> _StartSimulation;
+        
+        //Sends in the following order: MaxHeigth, MinHeight Width, Length, waterflowrate and bool for kilometers
+
+        public Action<String, String, String, String, String, bool> startSimulation
+        {
+            get
+            {
+                return _StartSimulation;
+            }
+            set
+            {
+                _StartSimulation = value;
+            }
+        }
+
+ 
         public DamAttributeSelection()
         {
             InitializeComponent();
@@ -19,10 +36,8 @@ namespace Dam
 
         private void Start_Click(object sender, EventArgs e)
         {
-            if (KmOption.Checked)
-            {
-
-            }
+            _StartSimulation(MaxHeightTextBox.Text, MinHeightTextBox.Text, 
+                WidthTextBox.Text, LengthTextBox.Text, FlowRateTextBox.Text, KmOption.Checked);
         }
     }
 }

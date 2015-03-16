@@ -22,7 +22,7 @@ namespace Dam
             _Long = pLong;
             _MaxVolume = Converter.calculateVolume(pMaxHeight, pWidth, pLong);
             _MinVolume = Converter.calculateVolume(pMinHeight, pWidth, pLong);
-            _CurrentVolume = Converter.calculateVolume(pMinHeight + ((pMaxHeight - pMinHeight) / 2), pWidth, pLong);//container starts filled up to the middle
+            _CurrentVolume = Converter.calculateVolume(pMinHeight + ((pMaxHeight - pMinHeight) / 2), pWidth, pLong);//container starts filled up above the minimun half by half the diference of the min and max height
             _CurrentHeigth = pMinHeight + ((pMaxHeight - pMinHeight) / 2);
         }
 

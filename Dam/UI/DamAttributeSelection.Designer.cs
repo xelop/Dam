@@ -41,13 +41,16 @@
             this.FlowRateTextBox = new System.Windows.Forms.TextBox();
             this.LengthTextBox = new System.Windows.Forms.TextBox();
             this.WidthTextBox = new System.Windows.Forms.TextBox();
-            this.HeightTextBox = new System.Windows.Forms.TextBox();
+            this.MaxHeightTextBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.MinHeightTextBox = new System.Windows.Forms.TextBox();
             this.AttrbutesName.SuspendLayout();
             this.AttributesSet.SuspendLayout();
             this.SuspendLayout();
             // 
             // AttrbutesName
             // 
+            this.AttrbutesName.Controls.Add(this.label6);
             this.AttrbutesName.Controls.Add(this.label5);
             this.AttrbutesName.Controls.Add(this.label4);
             this.AttrbutesName.Controls.Add(this.label3);
@@ -73,7 +76,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Maiandra GD", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(82, 193);
+            this.label4.Location = new System.Drawing.Point(84, 226);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 18);
             this.label4.TabIndex = 3;
@@ -83,7 +86,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Maiandra GD", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(82, 146);
+            this.label3.Location = new System.Drawing.Point(84, 182);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(58, 18);
             this.label3.TabIndex = 2;
@@ -93,17 +96,17 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Maiandra GD", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(82, 98);
+            this.label2.Location = new System.Drawing.Point(79, 86);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(61, 18);
+            this.label2.Size = new System.Drawing.Size(132, 18);
             this.label2.TabIndex = 1;
-            this.label2.Text = "- Heigth";
+            this.label2.Text = "- Maximum Heigth";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Maiandra GD", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(57, 58);
+            this.label1.Location = new System.Drawing.Point(57, 34);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(51, 22);
             this.label1.TabIndex = 0;
@@ -111,13 +114,14 @@
             // 
             // AttributesSet
             // 
+            this.AttributesSet.Controls.Add(this.MinHeightTextBox);
             this.AttributesSet.Controls.Add(this.MetersOption);
             this.AttributesSet.Controls.Add(this.KmOption);
             this.AttributesSet.Controls.Add(this.Start);
             this.AttributesSet.Controls.Add(this.FlowRateTextBox);
             this.AttributesSet.Controls.Add(this.LengthTextBox);
             this.AttributesSet.Controls.Add(this.WidthTextBox);
-            this.AttributesSet.Controls.Add(this.HeightTextBox);
+            this.AttributesSet.Controls.Add(this.MaxHeightTextBox);
             this.AttributesSet.Dock = System.Windows.Forms.DockStyle.Right;
             this.AttributesSet.Location = new System.Drawing.Point(283, 0);
             this.AttributesSet.Name = "AttributesSet";
@@ -165,24 +169,41 @@
             // 
             // LengthTextBox
             // 
-            this.LengthTextBox.Location = new System.Drawing.Point(76, 191);
+            this.LengthTextBox.Location = new System.Drawing.Point(76, 224);
             this.LengthTextBox.Name = "LengthTextBox";
             this.LengthTextBox.Size = new System.Drawing.Size(100, 20);
             this.LengthTextBox.TabIndex = 2;
             // 
             // WidthTextBox
             // 
-            this.WidthTextBox.Location = new System.Drawing.Point(76, 144);
+            this.WidthTextBox.Location = new System.Drawing.Point(76, 180);
             this.WidthTextBox.Name = "WidthTextBox";
             this.WidthTextBox.Size = new System.Drawing.Size(100, 20);
             this.WidthTextBox.TabIndex = 1;
             // 
-            // HeightTextBox
+            // MaxHeightTextBox
             // 
-            this.HeightTextBox.Location = new System.Drawing.Point(76, 94);
-            this.HeightTextBox.Name = "HeightTextBox";
-            this.HeightTextBox.Size = new System.Drawing.Size(100, 20);
-            this.HeightTextBox.TabIndex = 0;
+            this.MaxHeightTextBox.Location = new System.Drawing.Point(76, 86);
+            this.MaxHeightTextBox.Name = "MaxHeightTextBox";
+            this.MaxHeightTextBox.Size = new System.Drawing.Size(100, 20);
+            this.MaxHeightTextBox.TabIndex = 0;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Maiandra GD", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(82, 135);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(129, 18);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "- Minimum Heigth";
+            // 
+            // MinHeightTextBox
+            // 
+            this.MinHeightTextBox.Location = new System.Drawing.Point(76, 135);
+            this.MinHeightTextBox.Name = "MinHeightTextBox";
+            this.MinHeightTextBox.Size = new System.Drawing.Size(100, 20);
+            this.MinHeightTextBox.TabIndex = 7;
             // 
             // DamAttributeSelection
             // 
@@ -211,12 +232,14 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel AttributesSet;
-        private System.Windows.Forms.TextBox HeightTextBox;
+        private System.Windows.Forms.TextBox MaxHeightTextBox;
         private System.Windows.Forms.RadioButton MetersOption;
         private System.Windows.Forms.RadioButton KmOption;
         private System.Windows.Forms.Button Start;
         private System.Windows.Forms.TextBox FlowRateTextBox;
         private System.Windows.Forms.TextBox LengthTextBox;
         private System.Windows.Forms.TextBox WidthTextBox;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox MinHeightTextBox;
     }
 }
