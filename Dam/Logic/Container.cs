@@ -9,9 +9,9 @@ namespace Dam
     class Container
     {
         private List<Int16> _CurrentVolume; 
-        private List<Int16> _MaxVolume;
+        private List<Int16> _MaxVolume;//volumes are in cm3
         private List<Int16> _MinVolume;//arrays used to display huge numbers
-        private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;
+        private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;//dimensions are in m3
 
 
         public Container(ulong pMaxHeight, ulong pMinHeight, ulong pWidth, ulong pLong)
@@ -22,7 +22,6 @@ namespace Dam
             _Long = pLong;
             _MaxVolume = Converter.calculateVolume(pMaxHeight, pWidth, pLong);
             _MinVolume = Converter.calculateVolume(pMinHeight, pWidth, pLong);
-
             _CurrentVolume = Converter.calculateVolume(pMinHeight + ((pMaxHeight - pMinHeight) / 2), pWidth, pLong);//container starts filled up above the minimun half by half the diference of the min and max height
             _CurrentHeigth = pMinHeight + (pMaxHeight - pMinHeight) / 2;
 
@@ -30,20 +29,20 @@ namespace Dam
 
 
 
-        public void addWater(Int32 pWater) //pWater enter method as meters^3
+        public void addWater(Int32 pWater) //pWater enters method as meters^3
         {
-            Converter.addList(_CurrentVolume, Converter.stringToList(pWater.ToString()+"000000"));
+            Converter.addList(_CurrentVolume, Converter.stringToList(pWater.ToString()+ "000000"));//converted in cm3
             if (waterOverflow())
             {
                 _CurrentVolume = Converter.copyList(_MaxVolume);
-                throw new Exception("The water overflowed the maximun capacity of the tank");
+                throw new Exception("The water overflowed the maximun capacity of the tank. Dam´s water entrance will be paused for a moment.");
             }
 
         }
 
-        public void removeWater(Int32 pWater)
+        public void removeWater(Int32 pWater)//pWater enters method as meters^3
         {
-            Converter.subtractList(_CurrentVolume, Converter.stringToList(pWater.ToString()));
+            Converter.subtractList(_CurrentVolume, Converter.stringToList(pWater.ToString() + "000000"));//converted in cm3
             if (minCapacity())
             {
                 _CurrentVolume = Converter.copyList(_MinVolume);

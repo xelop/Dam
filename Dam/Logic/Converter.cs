@@ -48,23 +48,23 @@ namespace Dam
             int productInt = 0;
             int carry = 0;
             int unit = 0;
-            int cerosToAdd = 0;
+            int cerosToAdd = 0;//ceros added to the right to each little sum each iteration
             int cerosRemaining;
             for (int firstListIndex = pFirstList.Count - 1 ; firstListIndex  >= 0; firstListIndex--)
             {
                 carry = 0;
-                intermidiaryList.Clear();//refresh
+                intermidiaryList.Clear();//refresh, to clean the last little sum
                 cerosRemaining = cerosToAdd;
                 for (int secondListIndex = pSecondList.Count - 1; secondListIndex >= 0; secondListIndex--)
                 {
-                    if (pFirstList[firstListIndex] == 0)
+                    if (pFirstList[firstListIndex] == 0)//multiply by 0, no little sum need to do
                     {
                         break;
                     }
-                    if (pFirstList[firstListIndex] == 1)
+                    if (pFirstList[firstListIndex] == 1)//multiply by 1, just copy the list and add it
                     {
                         intermidiaryList = copyList(pSecondList);
-                        secondListIndex = -1; //so it exits the next iteration
+                        secondListIndex = -1; //so it exits the next iteration, yet it need to add ceros to the right
                     }
                     else
                     {
@@ -79,13 +79,13 @@ namespace Dam
                         cerosRemaining--;
                     }
                 }
-                if (carry != 0)
+                if (carry != 0)//if one single carry remained to be added
                 {
                     intermidiaryList.Insert(0, (Int16)carry);
                 }
                 if (intermidiaryList.Count != 0)
                 {
-                    addList(productList, intermidiaryList);
+                    addList(productList, intermidiaryList);//each iteration, 1 little sum is added to the total of little sums
                 }
                 cerosToAdd++;//each time 1 cero extra to the right is added
             }
@@ -94,7 +94,7 @@ namespace Dam
 
         public static List<Int16> addList(List<Int16> pFirstList, List<Int16> pSecondList)//the result is stored in pFirstList
         {
-            while (pFirstList.Count < pSecondList.Count)//in case second list is bigger than first list, first least is covered up with 0´s to the right
+            while (pFirstList.Count < pSecondList.Count)//in case the second list is bigger than first list, firstList is covered up with 0´s to the right
             {
                 pFirstList.Insert(0, 0);
             }
@@ -111,9 +111,9 @@ namespace Dam
                 secondListIndex--;
                 firstListIndexCopy = firstListIndex;
                 consecutiveOverflow = true;
-                if (pSecondList[secondListIndex] == 0)
+                if (pSecondList[secondListIndex] == 0)//adding a 0
                 {
-                    continue;
+                    continue;//no need to add it :)
                 }
                 else
                 {
@@ -125,7 +125,7 @@ namespace Dam
                     else
                     {
                         pFirstList[firstListIndex] = (Int16)(sum - 10);
-                        while (consecutiveOverflow)//in case we have a number like 99999  which if its added with one it more replace all 9´s with 0 and add a 1, so the result its 100000
+                        while (consecutiveOverflow)//in case we have a number like 99999;  which if its added with 1 it replace all 9´s with 0 and add a 1, so the result its 100000
                         {
                             if (firstListIndexCopy != 0)
                             {
@@ -270,7 +270,7 @@ namespace Dam
             return water;
         }
 
-        public static List<Int16> calculateVolume(ulong pHeight, ulong pWidth, ulong pLong)//in cm3
+        public static List<Int16> calculateVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
         {
             pHeight = pHeight * 100;
             pWidth = pWidth * 100;
@@ -305,7 +305,7 @@ namespace Dam
                         volume = multiplyList(volume , stringToList((dimension1 * dimension2).ToString()));
                     }
                 }
-                catch (OverflowException e)//the number is huge, we will requier to multiply them using lists
+                catch (OverflowException e)//the number is huge, we will require to multiply them using lists
                 {
                     volume = multiplyList(volume , multiplyList(stringToList(dimension1.ToString()) , stringToList(dimension2.ToString())));
                 }

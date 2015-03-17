@@ -28,6 +28,19 @@ namespace Dam
             _TurnedOn = true;
         }
 
+        /*public abstract void calculateCurrentPressure()
+        {
+            
+        }
+        public void calculateCurrentFlowRate() 
+        {
+            int caca;
+        }
+        public void calculateCurrentEnergyProduced() 
+        {
+            int caca;
+        }*/
+
         public ulong MinFlowRate
         {
             get { return _MinFlowRate; }

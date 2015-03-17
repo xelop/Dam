@@ -56,25 +56,13 @@ namespace Dam
 
         public Container River
         {
-            get
-            {
-                return _River;
-            }
-            set
-            {
-                _River = value;
-            }
+            get { return _River; }
+            set {  _River = value; }
         }
         public Container Tank
         {
-            get
-            {
-                return _Tank;
-            }
-            set
-            {
-                _Tank = value;
-            }
+            get { return _Tank; }
+            set { _Tank = value; }
         }
 
         public Action MaxCapacityReached1
@@ -82,5 +70,20 @@ namespace Dam
             get { return _MaxCapacityReached; }
             set { _MaxCapacityReached = value; }
         }
+
+        //private ulong _CurrentFlowRate, _CurrentTotalEnergyProduced;
+
+        public ulong CurrentFlowRate
+        {
+            get { return _CurrentFlowRate; }
+            set { _CurrentFlowRate = value; }
+        }
+
+        public ulong CurrentTotalEnergyProduced
+        {
+            get { return _CurrentTotalEnergyProduced; }
+            set { _CurrentTotalEnergyProduced = value; }
+        }
+
     }
 }
