@@ -30,9 +30,9 @@ namespace Dam
 
 
 
-        public void addWater(Int32 pWater)
+        public void addWater(Int32 pWater) //pWater enter method as meters^3
         {
-            Converter.addList(_CurrentVolume, Converter.stringToList(pWater.ToString()));
+            Converter.addList(_CurrentVolume, Converter.stringToList(pWater.ToString()+"000000"));
             if (waterOverflow())
             {
                 _CurrentVolume = Converter.copyList(_MaxVolume);

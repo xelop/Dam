@@ -17,7 +17,7 @@ namespace Dam
         public Controller(DamAttributeSelection pTemporalView)
         {
             _TemporalView = pTemporalView;
-            _TemporalView.startSimulation=createDam+_TemporalView.startSimulation;
+            _TemporalView.startSimulation += createDam;
         }
         public void createDam(string pMaxHeight, string pMinHeight, string pWidth, string pLength, string pFlowRate, bool pKm)
         {
@@ -31,8 +31,16 @@ namespace Dam
                 _Dam = new Dam(ulong.Parse(pMaxHeight), ulong.Parse(pMinHeight),
                    ulong.Parse(pWidth), ulong.Parse(pLength), ulong.Parse(pFlowRate));
             }
+
+            _Dam.MaxCapacityReached1 +=waterOverflow;
+
             _TemporalView.Hide();
             newView();
+        }
+
+        public void waterOverflow()
+        {
+            System.Windows.Forms.MessageBox.Show("Water exceeded the capacity. Water entrance will be stopped.");
         }
 
         public void newView()
