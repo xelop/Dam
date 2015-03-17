@@ -32,21 +32,17 @@ namespace Dam
             BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
             null, WaterContainer, new object[] { true }); //forma abstracta de agregar una property a una clase que no la tiene
 
-            typeof(Panel).InvokeMember("DoubleBuffered",
+            /*typeof(Panel).InvokeMember("DoubleBuffered",
             BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
-            null, WaterRiver, new object[] { true });
+            null, WaterRiver, new object[] { true });*/
         }
 
-        private void screen_Click(object sender, EventArgs e)
-        {
-            Clickked();
-        }
         public void paintWater(List<Point[]> pContainerCoordenates, List<Point[]> pRiverCoordenates)
         {
             WaterContainerCoordenates = pContainerCoordenates;
             WaterContainer.Invalidate();
             WaterRiverCoordenates = pRiverCoordenates;
-            WaterRiver.Invalidate();
+            RiverWater.Invalidate();
         }
 
 
@@ -60,18 +56,33 @@ namespace Dam
             WaterContainerCoordenates.Clear();
         }
 
-        private void WaterRiver_Paint(object sender, PaintEventArgs e)
+        private void RiverWater_Paint(object sender, PaintEventArgs e)
         {
-           
-            e.Graphics.DrawLine(new Pen(Brushes.Blue, 20), WaterRiver.Location, new Point(WaterRiver.Location.X + 100, WaterRiver.Location.Y + 100));
-            /*e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(696, 350, 163,50)); //WaterRiver.Height + WaterRiver.Location.Y - 400));
-            System.Windows.Forms.MessageBox.Show("hello");
+            e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(0, 100, 164, RiverWater.Height + RiverWater.Location.Y - 100));
             for (int element_counter = 0; element_counter < WaterRiverCoordenates.Count; element_counter++)
                 e.Graphics.FillClosedCurve(Brushes.Blue, WaterRiverCoordenates[element_counter]);
 
-            WaterRiverCoordenates.Clear();*/
+            WaterRiverCoordenates.Clear();
         }
 
+        private void DamRepresentation_Click(object sender, EventArgs e)
+        {
+            Clickked();
+        }
 
+        public void TankLabelChanged(ulong pCurrentHeight)
+        {
+            TankHeight.Invoke((MethodInvoker)(() => TankHeight.Text = Convert.ToString(pCurrentHeight)));
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TankHeight_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

@@ -195,12 +195,11 @@ namespace Dam
             return 0;
         }
 
-        public static List<Point[]> waveDrawing(int pStartingX, int pEndingX, int pStartingY,int pWaveQuantity) //pStartingY simbolizes where the wave originates 
+        public static List<Point[]> waveDrawing(int pStartingX, int pEndingX, int pStartingY,int pWaveQuantity) //pStartingY designates where the wave originates 
         { 
-            int waveLenght = (pEndingX - pStartingX) / pWaveQuantity;
+            int waveLenght = (pEndingX - pStartingX) / pWaveQuantity; //pWaveQuantity would be an approximate
             List<Point[]> water=new List<Point[]>();
-            int waveDelimiter = 0;
-            while(pStartingX<pEndingX)
+            while(pStartingX < pEndingX)
             {
                     Point[] singleWave ={new Point(pStartingX, pStartingY),
                                          new Point(pStartingX + waveLenght / 2, pStartingY-Constants.INCREMENTOFWAVES),

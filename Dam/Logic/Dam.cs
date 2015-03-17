@@ -19,5 +19,29 @@ namespace Dam
             _Tank = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
         }
 
+        public Container River
+        {
+            get
+            {
+                return _River;
+            }
+            set
+            {
+                _River = value;
+            }
+        }
+        public Container Tank
+        {
+            get
+            {
+                return _Tank;
+            }
+            set
+            {
+                _Tank = value;
+            }
+        }
+
+
     }
 }

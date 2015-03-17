@@ -56,10 +56,10 @@ namespace Dam
             while (stop)
             {
 
-                _View.paintWater(Converter.waveDrawing(0, 104, 200, 10), Converter.waveDrawing(696, 859, 430, 10));
+                _View.paintWater(Converter.waveDrawing(0, 104, Convert.ToInt32(_Dam.Tank.CurrentHeigth), 10), Converter.waveDrawing(0, 164, 100, 10));
                 Thread.Sleep(200);
-
-                _View.paintWater(Converter.waveDrawing(0, 104, 200, 12), Converter.waveDrawing(696, 859, 430, 10));
+                _View.TankLabelChanged(_Dam.Tank.CurrentHeigth);
+                _View.paintWater(Converter.waveDrawing(0, 104, Convert.ToInt32(_Dam.Tank.CurrentHeigth), 12), Converter.waveDrawing(0, 164, 100, 12));
                 Thread.Sleep(200);
              
                 
