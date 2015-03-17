@@ -8,9 +8,9 @@ namespace Dam
 {
     class Container
     {
-        private List<Int16> _CurrentVolume; //arreglo para repesentar con exactitud numeros grandes
-        private List<Int16> _MaxVolume; //arreglo para repesentar con exactitud numeros grandes
-        private List<Int16> _MinVolume; //arreglo para repesentar con exactitud numeros grandes
+        private List<Int16> _CurrentVolume; 
+        private List<Int16> _MaxVolume;
+        private List<Int16> _MinVolume;//arrays used to display huge numbers
         private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;
 
 
@@ -22,8 +22,10 @@ namespace Dam
             _Long = pLong;
             _MaxVolume = Converter.calculateVolume(pMaxHeight, pWidth, pLong);
             _MinVolume = Converter.calculateVolume(pMinHeight, pWidth, pLong);
+
             _CurrentVolume = Converter.calculateVolume(pMinHeight + ((pMaxHeight - pMinHeight) / 2), pWidth, pLong);//container starts filled up above the minimun half by half the diference of the min and max height
             _CurrentHeigth = pMinHeight + (pMaxHeight - pMinHeight) / 2;
+
         }
 
 
@@ -34,7 +36,7 @@ namespace Dam
             if (waterOverflow())
             {
                 _CurrentVolume = Converter.copyList(_MaxVolume);
-                throw new Exception("The water overflowed the maximun capacity of the damming");
+                throw new Exception("The water overflowed the maximun capacity of the tank");
             }
 
         }
@@ -61,38 +63,20 @@ namespace Dam
 
         public List<Int16> CurrentVolume
         {
-            get
-            {
-                return _CurrentVolume;
-            }
-            set
-            {
-                _CurrentVolume = value;
-            }
+            get { return _CurrentVolume; }
+            set { _CurrentVolume = value; }
         }
 
         public List<Int16> MaxVolume
         {
-            get
-            {
-                return _MaxVolume;
-            }
-            set
-            {
-                _MaxVolume = value;
-            }
+            get { return _MaxVolume; }
+            set { _MaxVolume = value; }
         }
 
         public List<Int16> MinVolume
         {
-            get
-            {
-                return _MinVolume;
-            }
-            set
-            {
-                _MinVolume = value;
-            }
+            get { return _MinVolume; }
+            set { _MinVolume = value; }
         }
 
         public ulong CurrentHeigth
