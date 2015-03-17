@@ -3,3 +3,9 @@ Dam.v11.suo
 *.suo
 *.exe
 Dam/bin/Debug/Dam.exe
+*.suo
+*.suo
+*.exe
+*.pdb
+*.exe
+Dam/obj/Debug/Dam.pdb

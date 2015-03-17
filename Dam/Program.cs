@@ -15,24 +15,28 @@ namespace Dam
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
+            /*Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DamAttributeSelection Simulator= new DamAttributeSelection();
             Controller MainControl = new Controller(Simulator);
             Application.Run(Simulator);
-            /*Dam DAM = new Dam("100", "100", "900", "887");
+            Dam DAM = new Dam("100", "100", "900", "887");
             Controller MainControl = new Controller(DAM, Simulator);
-            Application.Run(Simulator);
-            String caca  = "101";
-            String caca2 = "10000";
+            Application.Run(Simulator);*/
+
+            String caca  = "20000";
+            String caca2 = "300";
             List<Int16> lista = Converter.stringToList(caca);
-            System.Windows.Forms.MessageBox.Show(Converter.listToString(lista));
+            //System.Windows.Forms.MessageBox.Show(Converter.listToString(lista));
             List<Int16> lista2 = Converter.stringToList(caca2);
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.addList(lista, lista2)));
-            System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.multiplyList(lista,lista2)));
+            //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.subtractList(lista, lista2)));
+            System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.calculateVolume(15123123123123,20987987987987,25456456456456)));
+            //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.multiplyList(lista, lista2)));
+            //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.takeOutNonSignificantCeroes(lista)));
 
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(lista2));
-             */
+
 
         }
     }

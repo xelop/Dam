@@ -23,8 +23,8 @@ namespace Dam
         {
             if(pKm)
             {
-                _Dam= new Dam(Converter.kmtometers(ulong.Parse(pMaxHeight)), Converter.kmtometers(ulong.Parse(pMinHeight)),
-                    Converter.kmtometers(ulong.Parse(pWidth)), Converter.kmtometers(ulong.Parse(pLength)), ulong.Parse(pFlowRate));
+                _Dam= new Dam(Converter.kmToMeters(ulong.Parse(pMaxHeight)), Converter.kmToMeters(ulong.Parse(pMinHeight)),
+                    Converter.kmToMeters(ulong.Parse(pWidth)), Converter.kmToMeters(ulong.Parse(pLength)), ulong.Parse(pFlowRate));
             }
             else{
 
