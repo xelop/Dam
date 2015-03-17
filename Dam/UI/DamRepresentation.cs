@@ -35,6 +35,10 @@ namespace Dam
             /*typeof(Panel).InvokeMember("DoubleBuffered",
             BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
             null, WaterRiver, new object[] { true });*/
+
+            WaterContainer.Height = Constants.HEIGHT_TANK_LABEL;
+            RiverWater.Height = Constants.HEIGHT_RIVER_LABEL;
+
         }
 
         public void paintWater(List<Point[]> pContainerCoordenates, List<Point[]> pRiverCoordenates)
@@ -48,21 +52,31 @@ namespace Dam
 
         private void WaterContainer_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(0, 200, 104, WaterContainer.Height + WaterContainer.Location.Y - 200));
-            
-            for (int element_counter = 0; element_counter < WaterContainerCoordenates.Count; element_counter++)
-                e.Graphics.FillClosedCurve(Brushes.Blue, WaterContainerCoordenates[element_counter]);
+            try
+            {
+                e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, WaterContainerCoordenates[0][0].Y,
+                                                                            Constants.ENDING_X_TANK, Constants.HEIGHT_TANK_LABEL));
 
-            WaterContainerCoordenates.Clear();
+                for (int element_counter = 0; element_counter < WaterContainerCoordenates.Count; element_counter++)
+                    e.Graphics.FillClosedCurve(Brushes.Blue, WaterContainerCoordenates[element_counter]);
+
+                WaterContainerCoordenates.Clear();
+            }
+            catch { };
         }
 
         private void RiverWater_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(0, 100, 164, RiverWater.Height + RiverWater.Location.Y - 100));
-            for (int element_counter = 0; element_counter < WaterRiverCoordenates.Count; element_counter++)
-                e.Graphics.FillClosedCurve(Brushes.Blue, WaterRiverCoordenates[element_counter]);
+            try
+            {
+                e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, WaterRiverCoordenates[0][0].Y,
+                                                                        Constants.ENDING_X_RIVER, Constants.HEIGHT_RIVER_LABEL));
+                for (int element_counter = 0; element_counter < WaterRiverCoordenates.Count; element_counter++)
+                    e.Graphics.FillClosedCurve(Brushes.Blue, WaterRiverCoordenates[element_counter]);
 
-            WaterRiverCoordenates.Clear();
+                WaterRiverCoordenates.Clear();
+            }
+            catch { }
         }
 
         private void DamRepresentation_Click(object sender, EventArgs e)

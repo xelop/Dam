@@ -40,7 +40,7 @@ namespace Dam
             _View = new DamRepresentation();
             _View.clickked = _View.clickked + sendWaveValues;
             _View.Show();
-            x = new Thread(waveAnimation);
+            x = new Thread(runThread);
         }
 
         public void sendWaveValues()
@@ -49,23 +49,32 @@ namespace Dam
            //_View.paintWater(Converter.waveDrawing(0,104,200,10));
         }
 
-        public void waveAnimation()
+        public void runThread()
         {
-           
-            bool stop=true;
+            bool stop = true;
+            bool image1 = true;
             while (stop)
             {
+                waveAnimation(image1);
+                image1 = !image1;
+            }
+        }
 
-                _View.paintWater(Converter.waveDrawing(0, 104, Convert.ToInt32(_Dam.Tank.CurrentHeigth), 10), Converter.waveDrawing(0, 164, 100, 10));
+        public void waveAnimation(bool pImageOne)
+        {      
+            int waveQuantity;
+                if(pImageOne)
+                    waveQuantity=10;
+                else waveQuantity=12;
+
+                _View.paintWater(Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_TANK,
+                                                        Constants.HEIGHT_TANK_LABEL - Converter.threeRule(Convert.ToInt32(_Dam.Tank.MinHeigth), 1, Convert.ToInt32(_Dam.Tank.CurrentHeigth)), waveQuantity),
+                                                        Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_RIVER,
+                                                        100, waveQuantity));
                 Thread.Sleep(200);
                 _View.TankLabelChanged(_Dam.Tank.CurrentHeigth);
-                _View.paintWater(Converter.waveDrawing(0, 104, Convert.ToInt32(_Dam.Tank.CurrentHeigth), 12), Converter.waveDrawing(0, 164, 100, 12));
-                Thread.Sleep(200);
-             
-                
-               
-            }
-        } //Metodo de animacion del agua, debo implimentarlo de mejor manera
+ 
+        } 
 
         public String getFlowRate()
         {

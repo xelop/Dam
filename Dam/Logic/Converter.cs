@@ -250,9 +250,9 @@ namespace Dam
         }
 
 
-        public static int threeRule(int pMin, int pMax , int pRelation)// To paint the current heigth in the view proportionate to the screen
+        public static int threeRule(int pMin, int pMax , int pMinRelation)// To paint the current heigth in the view proportionate to the screen
         {
-            return 0;
+            return pMinRelation*pMax/pMin;
         }
 
         public static List<Point[]> waveDrawing(int pStartingX, int pEndingX, int pStartingY,int pWaveQuantity) //pStartingY designates where the wave originates 

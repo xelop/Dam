@@ -17,6 +17,7 @@ namespace Dam
         {
             _CurrentFlowRate = pCurrentFlowRate;
             _Tank = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
+            _River = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
         }
 
         public Container River
