@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Dam.Logic;
 namespace Dam
 {
     static class Program
@@ -15,23 +16,27 @@ namespace Dam
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
+            /*Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DamAttributeSelection Simulator= new DamAttributeSelection();
             Controller MainControl = new Controller(Simulator);
-            Application.Run(Simulator);
+            Application.Run(Simulator);*/
 
-            /*Stopwatch s = new Stopwatch();
+            Stopwatch s = new Stopwatch();
             s.Start();
-            Converter.listToString(Converter.calculateVolume(15123123123123, 20987987987987, 25456456456456));
+            BigInt number1 = new BigInt("9999999999");
+            BigInt number2 = new BigInt("9999999999");
+            //System.Windows.Forms.MessageBox.Show(number1.greaterOrEqual(number2).ToString());
+            //number1.subtract(number2);
+            //number1.add(number2);
+            number1.multiply(number2);
+            System.Windows.Forms.MessageBox.Show(number1.toString());
             s.Stop();
             TimeSpan d = s.Elapsed;
             
-            System.Windows.Forms.MessageBox.Show(d.ToString());
-            //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.takeOutNonSignificantCeroes(lista)));
+            //System.Windows.Forms.MessageBox.Show(d.ToString());
+
             
-            //System.Windows.Forms.MessageBox.Show(Converter.listToString(lista2));
-            */
             
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using Dam.Logic;
 
 namespace Dam
 {
@@ -128,13 +129,13 @@ namespace Dam
                 }
                 sum = pFirstList[firstListIndex] + operand2 + carry;
                 carry = 0;
-                if (sum < 1000000000)
+                if (sum < Constants.OVERFLOW_NUMBER)
                 {
                     pFirstList[firstListIndex] = sum;
                 }
                 else
                 {
-                    pFirstList[firstListIndex] = (sum - 1000000000);
+                    pFirstList[firstListIndex] = (sum - Constants.OVERFLOW_NUMBER);
                     carry = 1;
                 }
             }
@@ -248,16 +249,14 @@ namespace Dam
             return water;
         }
 
-        public static List<ulong> calculateVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
+        public static BigInt calculateHugeVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
         {
             pHeight = pHeight * 100;
             pWidth = pWidth * 100;
             pLong = pLong * 100;//meters are converted into cm
-            List<ulong> volume = new List<ulong>();
-            volume.Add(1);
-            List<ulong> dimensions = new List<ulong>();
-            volume = multiplyList(stringToList(pWidth.ToString()), stringToList(pHeight.ToString()));
-            volume = multiplyList(volume, stringToList(pLong.ToString()));
+            BigInt volume = new BigInt(pHeight.ToString());
+            volume.multiply(new BigInt(pWidth.ToString()));
+            volume.multiply(new BigInt(pLong.ToString()));
             return volume;
         }
 

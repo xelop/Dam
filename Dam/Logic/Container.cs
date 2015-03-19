@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dam.Logic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,10 @@ namespace Dam
 {
     class Container
     {
-        private List<ulong> _CurrentVolume; 
-        private List<ulong> _MaxVolume;//volumes are in cm3
-        private List<ulong> _MinVolume;//lists used to display huge numbers
-        private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;//dimensions are in m3
+        private BigInt _CurrentVolume; 
+        private BigInt _MaxVolume;//volumes are in cm3
+        private BigInt _MinVolume;
+        private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;//dimensions are in m
 
 
         public Container(ulong pMaxHeight, ulong pMinHeight, ulong pWidth, ulong pLong)
@@ -20,9 +21,9 @@ namespace Dam
             _MinHeigth = pMinHeight;
             _Width = pWidth;
             _Long = pLong;
-            _MaxVolume = Converter.calculateVolume(pMaxHeight, pWidth, pLong);
-            _MinVolume = Converter.calculateVolume(pMinHeight, pWidth, pLong);
-            _CurrentVolume = Converter.calculateVolume(pMinHeight + ((pMaxHeight - pMinHeight) / 2), pWidth, pLong);//container starts filled up above the minimun half by half the diference of the min and max height
+            _MaxVolume = Converter.calculateHugeVolume(pMaxHeight, pWidth, pLong);
+            _MinVolume = Converter.calculateHugeVolume(pMinHeight, pWidth, pLong);
+            _CurrentVolume = Converter.calculateHugeVolume(pMinHeight + ((pMaxHeight - pMinHeight) / 2), pWidth, pLong);//container starts filled up above the minimun half by half the diference of the min and max height
             _CurrentHeigth = pMinHeight + (pMaxHeight - pMinHeight) / 2;
 
         }
@@ -31,10 +32,10 @@ namespace Dam
 
         public void addWater(Int32 pWater) //pWater enters method as meters^3
         {
-            Converter.addList(_CurrentVolume, Converter.stringToList(pWater.ToString()+ "000000"));//converted in cm3
+            _CurrentVolume.add(new BigInt(pWater.ToString()+ "000000"));//converted in cm3
             if (waterOverflow())
             {
-                _CurrentVolume = Converter.copyList(_MaxVolume);
+                _CurrentVolume = _MaxVolume;
                 throw new Exception("The water overflowed the maximun capacity of the tank. Dam´s water entrance will be paused for a moment.");
             }
 
@@ -42,37 +43,37 @@ namespace Dam
 
         public void removeWater(Int32 pWater)//pWater enters method as meters^3
         {
-            Converter.subtractList(_CurrentVolume, Converter.stringToList(pWater.ToString() + "000000"));//converted in cm3
-            if (minCapacity())
+            _CurrentVolume.subtract(new BigInt (pWater.ToString() + "000000"));//converted in cm3
+            if (notEnoughWater())
             {
-                _CurrentVolume = Converter.copyList(_MinVolume);
+                _CurrentVolume = _MinVolume;
                 throw new Exception("The dam´s water level is at its minimum capacity. Dam´s operation will be paused for a moment");
             }
         }
 
 
-        public Boolean minCapacity()
+        public Boolean notEnoughWater()
         {
-            return Converter.compareList(_MinVolume , _CurrentVolume);
+            return _MinVolume.greaterOrEqual(_CurrentVolume);
         }
         public Boolean waterOverflow()
         {
-            return Converter.compareList(_CurrentVolume, _MaxVolume);
+            return _CurrentVolume.greaterOrEqual(_MaxVolume);
         }
 
-        public List<ulong> CurrentVolume
+        public BigInt CurrentVolume
         {
             get { return _CurrentVolume; }
             set { _CurrentVolume = value; }
         }
 
-        public List<ulong> MaxVolume
+        public BigInt MaxVolume
         {
             get { return _MaxVolume; }
             set { _MaxVolume = value; }
         }
 
-        public List<ulong> MinVolume
+        public BigInt MinVolume
         {
             get { return _MinVolume; }
             set { _MinVolume = value; }

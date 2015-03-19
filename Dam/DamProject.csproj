@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\BigInt.cs" />
     <Compile Include="Logic\Constants.cs" />
     <Compile Include="Logic\Container.cs" />
     <Compile Include="Logic\Controller.cs" />

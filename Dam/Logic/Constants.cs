@@ -14,6 +14,7 @@ namespace Dam
         public const int ENDING_X_RIVER=164;
         public const int HEIGHT_TANK_LABEL = 247;
         public const int HEIGHT_RIVER_LABEL = 112;
+        public const ulong OVERFLOW_NUMBER = 1000000000;
         //public const int _FinalXfroRiver;
     }
 }
