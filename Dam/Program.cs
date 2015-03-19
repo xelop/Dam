@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Diagnostics;
 namespace Dam
 {
     static class Program
@@ -21,40 +21,29 @@ namespace Dam
             Controller MainControl = new Controller(Simulator);
             Application.Run(Simulator);*/
 
-            //String caca  = "20000";
-            //String caca2 = "300";
-            /*List<Int16> lista = Converter.stringToList(caca);
+            String caca  = "1";
+            String caca2 = "1";
+            List<ulong> lista = Converter.stringToList(caca);
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(lista));
-            List<Int16> lista2 = Converter.stringToList(caca2);
+            List<ulong> lista2 = Converter.stringToList(caca2);
+            //System.Windows.Forms.MessageBox.Show(Converter.compareList(lista,lista2).ToString());
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.addList(lista, lista2)));
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.subtractList(lista, lista2)));
-            System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.calculateVolume(15123123123123, 20987987987987, 25456456456456)));
-            //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.multiplyList(lista, lista2)));
             //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.takeOutNonSignificantCeroes(lista)));
+            //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.multiplyList(lista, lista2)));
 
-            //System.Windows.Forms.MessageBox.Show(Converter.listToString(lista2));*/
+            Stopwatch s = new Stopwatch();
+            s.Start();
+            System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.calculateVolume(15123123123123, 20987987987987, 25456456456456)));
+            s.Stop();
+            TimeSpan d = s.Elapsed;
 
-            Container tank = new Container(10000000000, 1000000000, 50000000000, 7500000000);
-            List<Int16> debug1 = tank.MaxVolume; 
-            List<Int16> debug2 = tank.MinVolume;
-            //System.Windows.Forms.MessageBox.Show(Converter.listToString(tank.MaxVolume));
-            //System.Windows.Forms.MessageBox.Show(Converter.listToString(tank.MinVolume));
+            System.Windows.Forms.MessageBox.Show(d.ToString());
+            //System.Windows.Forms.MessageBox.Show(Converter.listToString(Converter.takeOutNonSignificantCeroes(lista)));
+            
+            //System.Windows.Forms.MessageBox.Show(Converter.listToString(lista2));
 
-            while (true)
-            {
-                try
-                {
-                    List<Int16> debug3 = tank.CurrentVolume;
-                    //System.Windows.Forms.MessageBox.Show(Converter.listToString(tank.CurrentVolume));
-                    tank.addWater(12345);
-                }
-                catch (Exception e)
-                {
-                    System.Windows.Forms.MessageBox.Show(e.Message);
-                    System.Windows.Forms.MessageBox.Show(Converter.listToString(tank.CurrentVolume));
-                    break;
-                }
-            }
+            
         }
     }
 }

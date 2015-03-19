@@ -8,9 +8,9 @@ namespace Dam
 {
     class Container
     {
-        private List<Int16> _CurrentVolume; 
-        private List<Int16> _MaxVolume;//volumes are in cm3
-        private List<Int16> _MinVolume;//arrays used to display huge numbers
+        private List<ulong> _CurrentVolume; 
+        private List<ulong> _MaxVolume;//volumes are in cm3
+        private List<ulong> _MinVolume;//lists used to display huge numbers
         private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;//dimensions are in m3
 
 
@@ -60,19 +60,19 @@ namespace Dam
             return Converter.compareList(_CurrentVolume, _MaxVolume);
         }
 
-        public List<Int16> CurrentVolume
+        public List<ulong> CurrentVolume
         {
             get { return _CurrentVolume; }
             set { _CurrentVolume = value; }
         }
 
-        public List<Int16> MaxVolume
+        public List<ulong> MaxVolume
         {
             get { return _MaxVolume; }
             set { _MaxVolume = value; }
         }
 
-        public List<Int16> MinVolume
+        public List<ulong> MinVolume
         {
             get { return _MinVolume; }
             set { _MinVolume = value; }

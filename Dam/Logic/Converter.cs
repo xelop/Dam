@@ -9,30 +9,51 @@ namespace Dam
 {
     static class Converter
     {//Siempre poner try y catch??
-        public static String listToString(List<Int16> pList)
+        public static String listToString(List<ulong> pList)
         {
             String result = "";
+            String intermediaryString ="";
             for (int numberPosition = 0; numberPosition < pList.Count; numberPosition++)
             {
-                result += pList[numberPosition];
+                if (numberPosition != 0)
+                {
+                    intermediaryString = pList[numberPosition].ToString(); //refresh
+                    while (intermediaryString.Length != 9)
+                    {
+                        intermediaryString = intermediaryString.Insert(0, "0");
+                    }
+                    result += intermediaryString;
+                }
+                else
+                {
+                    result += pList[numberPosition].ToString();
+                }
             }
             return result;
         }
 
-        public static List<Int16> stringToList(String pNumber)
+        public static List<ulong> stringToList(String pNumber)
         {
-            StringBuilder stringNumber = new StringBuilder(pNumber);
-            List<Int16> listNumbers = new List<Int16>();
-            for (int charNumber = 0; charNumber < pNumber.Length; charNumber++)
+            int numberToSplit;
+            int maximunDigitsInUlong = 9;
+            List<ulong> listOfNumbers = new List<ulong>();
+            while (pNumber.Length != 0)
             {
-                listNumbers.Add(Int16.Parse(stringNumber[charNumber].ToString()));
+                numberToSplit = pNumber.Length - maximunDigitsInUlong;
+                if (numberToSplit < 0)
+                {
+                    numberToSplit = 0;
+                }
+                listOfNumbers.Insert(0, ulong.Parse(pNumber.Substring(numberToSplit)));
+                pNumber = pNumber.Remove(numberToSplit);
             }
-            return listNumbers;
+            
+            return listOfNumbers;
         }
 
-        public static List<Int16> copyList(List<Int16> listToCopy)//make an exact copy of a list
+        public static List<ulong> copyList(List<ulong> listToCopy)//make an exact copy of a list
         {
-            List<Int16> newList = new List<Int16>();
+            List<ulong> newList = new List<ulong>();
             for (int numberIndex = 0 ; numberIndex < listToCopy.Count; numberIndex++)
             {
                 newList.Add(listToCopy[numberIndex]);
@@ -40,14 +61,14 @@ namespace Dam
             return newList;
         }
 
-        public static List<Int16> multiplyList(List<Int16> pFirstList, List<Int16> pSecondList)
+        public static List<ulong> multiplyList(List<ulong> pFirstList, List<ulong> pSecondList)
         {
-            List<Int16> productList = new List<Int16>();
+            List<ulong> productList = new List<ulong>();
             productList.Add(0);
-            List<Int16> intermidiaryList = new List<Int16>();//used as a repositiory for the little sums between pFirsList and PsecondList
-            int productInt = 0;
-            int carry = 0;
-            int unit = 0;
+            List<ulong> intermidiaryList = new List<ulong>();//used as a repositiory for the little sums between pFirsList and PsecondList
+            ulong productInt = 0;
+            ulong carry = 0;
+            ulong unit = 0;
             int cerosToAdd = 0;//ceros added to the right to each little sum each iteration
             int cerosRemaining;
             for (int firstListIndex = pFirstList.Count - 1 ; firstListIndex  >= 0; firstListIndex--)
@@ -57,23 +78,11 @@ namespace Dam
                 cerosRemaining = cerosToAdd;
                 for (int secondListIndex = pSecondList.Count - 1; secondListIndex >= 0; secondListIndex--)
                 {
-                    if (pFirstList[firstListIndex] == 0)//multiply by 0, no little sum need to do
-                    {
-                        break;
-                    }
-                    if (pFirstList[firstListIndex] == 1)//multiply by 1, just copy the list and add it
-                    {
-                        intermidiaryList = copyList(pSecondList);
-                        secondListIndex = -1; //so it exits the next iteration, yet it need to add ceros to the right
-                    }
-                    else
-                    {
-                        productInt = (pFirstList[firstListIndex] * pSecondList[secondListIndex]) + carry;
-                        carry = productInt / 10;
-                        unit = productInt % 10;
-                        intermidiaryList.Insert(0, (Int16)unit);
-                    }
-                      while (cerosRemaining != 0)
+                    productInt = (pFirstList[firstListIndex] * pSecondList[secondListIndex]) + carry;
+                    carry = productInt / 1000000000;
+                    unit = productInt % 1000000000;
+                    intermidiaryList.Insert(0, (ulong)unit);
+                    while (cerosRemaining != 0)
                     {
                         intermidiaryList.Add(0);
                         cerosRemaining--;
@@ -81,92 +90,69 @@ namespace Dam
                 }
                 if (carry != 0)//if one single carry remained to be added
                 {
-                    intermidiaryList.Insert(0, (Int16)carry);
+                    intermidiaryList.Insert(0, (ulong)carry);
                 }
-                if (intermidiaryList.Count != 0)
-                {
-                    addList(productList, intermidiaryList);//each iteration, 1 little sum is added to the total of little sums
-                }
+                addList(productList, intermidiaryList);//each iteration, 1 little sum is added to the total of little sums
                 cerosToAdd++;//each time 1 cero extra to the right is added
             }
             return productList;
         }
 
-        public static List<Int16> addList(List<Int16> pFirstList, List<Int16> pSecondList)//the result is stored in pFirstList
+        public static List<ulong> addList(List<ulong> pFirstList, List<ulong> pSecondList)//the result is stored in pFirstList
         {
-            while (pFirstList.Count < pSecondList.Count)//in case the second list is bigger than first list, firstList is covered up with 0´s to the right
+            while (pFirstList.Count < pSecondList.Count)//in case the second list is bigger than first list, firstList is covered up with 0´s to the left
             {
                 pFirstList.Insert(0, 0);
             }
-            Boolean consecutiveOverflow;
             int firstListIndex = pFirstList.Count;
-            int firstListIndexCopy = firstListIndex;
             int secondListIndex = pSecondList.Count;
-            int smallestCount = Math.Min(pSecondList.Count, pFirstList.Count);
-            int sum;
-            while (smallestCount > 0)
+            ulong sum;
+            ulong carry = 0;
+            ulong operand2 = 0;
+            while (secondListIndex > 0 || carry == 1)
             {
-                smallestCount--;
                 firstListIndex--;
                 secondListIndex--;
-                firstListIndexCopy = firstListIndex;
-                consecutiveOverflow = true;
-                if (pSecondList[secondListIndex] == 0)//adding a 0
+                if (firstListIndex < 0)//in case the list have to grow in size because the carry
                 {
-                    continue;//no need to add it :)
+                    firstListIndex = 0;
+                    pFirstList.Insert(0, 0);
+                }
+                if (secondListIndex >= 0)
+                {
+                    operand2 = pSecondList[secondListIndex];
                 }
                 else
                 {
-                    sum = pFirstList[firstListIndex] + pSecondList[secondListIndex];
-                    if (sum < 10)
-                    {
-                        pFirstList[firstListIndex] = (Int16)sum;
-                    }
-                    else
-                    {
-                        pFirstList[firstListIndex] = (Int16)(sum - 10);
-                        while (consecutiveOverflow)//in case we have a number like 99999;  which if its added with 1 it replace all 9´s with 0 and add a 1, so the result its 100000
-                        {
-                            if (firstListIndexCopy != 0)
-                            {
-                                if (pFirstList[firstListIndexCopy - 1] != 9)
-                                {
-                                    pFirstList[firstListIndexCopy - 1] += 1;
-                                    consecutiveOverflow = false;
-                                }
-                                else
-                                {
-                                    pFirstList[firstListIndexCopy - 1] = 0;
-                                }
-                            }
-                            else
-                            {
-                                pFirstList.Insert(0, 1);
-                                consecutiveOverflow = false;
-                                firstListIndex++; //the list has grown
-                            }
-                            firstListIndexCopy--;
-                        }
-                    }
+                    operand2 = 0;
+                }
+                sum = pFirstList[firstListIndex] + operand2 + carry;
+                carry = 0;
+                if (sum < 1000000000)
+                {
+                    pFirstList[firstListIndex] = sum;
+                }
+                else
+                {
+                    pFirstList[firstListIndex] = (sum - 1000000000);
+                    carry = 1;
                 }
             }
             return pFirstList;
         }
 
 
-        public static List<Int16> subtractList(List<Int16> pFirstList, List<Int16> pSecondList)//subtracts the number in the first list minus the numers of the secondlist
+        public static List<ulong> subtractList(List<ulong> pFirstList, List<ulong> pSecondList)//subtracts the number in the first list minus the numers of the secondlist
         {
             if (compareList(pFirstList, pSecondList))//minuend must be greater than subtrahend
             {
                 int firstListIndex = pFirstList.Count;
                 int secondListIndex = pSecondList.Count;
-                int smallestCount = secondListIndex;
-                int rest;
-                int carry = 0;
-                int subtrahend;
-                while (smallestCount > 0 || carry == 1)
+                ulong rest;
+                ulong carry = 0;
+                ulong subtrahend;
+                while (secondListIndex > 0 || carry == 1)
                 {
-                    smallestCount--;
                     firstListIndex--;
                     secondListIndex--;
                     if (secondListIndex >= 0)
@@ -177,23 +163,16 @@ namespace Dam
                     {
                         subtrahend = 0;
                     }
-                    if (subtrahend == 0 && carry == 0)
+                    rest = pFirstList[firstListIndex] - subtrahend - carry;
+                    carry = 0;
+                    if (rest >= 0)
                     {
-                        continue;
+                        pFirstList[firstListIndex] = rest;
                     }
                     else
                     {
-                        rest = pFirstList[firstListIndex] - subtrahend - carry;
-                        carry = 0;
-                        if (rest >= 0)
-                        {
-                            pFirstList[firstListIndex] = (Int16)rest;
-                        }
-                        else
-                        {
-                            carry = 1;//it borrows 1 to the numbers to the left
-                            pFirstList[firstListIndex] = (Int16)(rest + 10);
-                        }
+                        carry = 1;//it borrows 1 to the numbers to the left
+                        pFirstList[firstListIndex] = (rest + 10);
                     }
                 }
                 takeOutNonSignificantCeroes(pFirstList);
@@ -201,7 +180,7 @@ namespace Dam
             return pFirstList;
         }
 
-        public static List<Int16> takeOutNonSignificantCeroes(List<Int16> pList)
+        public static List<ulong> takeOutNonSignificantCeroes(List<ulong> pList)
         {
             int listSize = pList.Count;
             for (int numberIndex = 0; numberIndex < listSize; numberIndex++)
@@ -216,11 +195,10 @@ namespace Dam
                 }
             }
             return pList;
-
         }
 
 
-        public static Boolean compareList(List<Int16> pFirstList, List<Int16> pSecondList)
+        public static Boolean compareList(List<ulong> pFirstList, List<ulong> pSecondList)
          //Return true if the number contained in firstList is larger or equal than the number in second list
         {
             if (pFirstList.Count > pSecondList.Count)
@@ -270,49 +248,17 @@ namespace Dam
             return water;
         }
 
-        public static List<Int16> calculateVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
+        public static List<ulong> calculateVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
         {
             pHeight = pHeight * 100;
             pWidth = pWidth * 100;
             pLong = pLong * 100;//meters are converted into cm
-            List<Int16> volume = new List<Int16>();
+            List<ulong> volume = new List<ulong>();
             volume.Add(1);
             List<ulong> dimensions = new List<ulong>();
-            dimensions.Add(pHeight);
-            dimensions.Add(pWidth);
-            dimensions.Add(pLong);
-            ulong dimension1 = 0;
-            ulong dimension2 = 0;
-            int counter = dimensions.Count - 1;
-            while (counter > 0)
-            {
-                dimension1 = (dimensions.Min());
-                dimensions.Remove(dimension1);
-                if (dimensions.Count > 0)
-                {
-                    dimension2 = (dimensions.Min());
-                    dimensions.Remove(dimension2);//this way we get the minimun dimensions
-                }
-                else
-                {
-                    dimension2 = 1;
-                }
-                try
-                {
-                    checked
-                    {
-
-                        volume = multiplyList(volume , stringToList((dimension1 * dimension2).ToString()));
-                    }
-                }
-                catch (OverflowException e)//the number is huge, we will require to multiply them using lists
-                {
-                    volume = multiplyList(volume , multiplyList(stringToList(dimension1.ToString()) , stringToList(dimension2.ToString())));
-                }
-                counter--;
-            }
-            
- 
+            volume = multiplyList(volume, stringToList(pHeight.ToString()));
+            volume = multiplyList(volume, stringToList(pWidth.ToString()));
+            volume = multiplyList(volume, stringToList(pLong.ToString()));
             return volume;
         }
 
