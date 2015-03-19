@@ -228,7 +228,7 @@ namespace Dam
         }
 
 
-        public static int threeRule(int pMin, int pMax , int pMinRelation)// To paint the current heigth in the view proportionate to the screen
+        public static ulong threeRule(ulong pMin, ulong pMax , ulong pMinRelation)// To paint the current heigth in the view proportionate to the screen
         {
             return pMinRelation*pMax/pMin;
         }
@@ -256,8 +256,7 @@ namespace Dam
             List<ulong> volume = new List<ulong>();
             volume.Add(1);
             List<ulong> dimensions = new List<ulong>();
-            volume = multiplyList(volume, stringToList(pHeight.ToString()));
-            volume = multiplyList(volume, stringToList(pWidth.ToString()));
+            volume = multiplyList(stringToList(pWidth.ToString()), stringToList(pHeight.ToString()));
             volume = multiplyList(volume, stringToList(pLong.ToString()));
             return volume;
         }

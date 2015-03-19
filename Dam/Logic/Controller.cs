@@ -12,14 +12,18 @@ namespace Dam
         private DamRepresentation _View;
         private DamAttributeSelection _TemporalView;
         private Thread x;
+        private UI.AddTurbine _NewTurbineCreator;
 
 
         public Controller(DamAttributeSelection pTemporalView)
         {
             _TemporalView = pTemporalView;
             _TemporalView.startSimulation += createDam;
+            _NewTurbineCreator = new UI.AddTurbine();
+            _NewTurbineCreator.newTurbine += createTurbine;
         }
-        public void createDam(string pMaxHeight, string pMinHeight, string pWidth, string pLength, string pFlowRate, bool pKm)
+        public void createDam(string pMaxHeight, string pMinHeight, 
+            string pWidth, string pLength, string pFlowRate, bool pKm)
         {
             if(pKm)
             {
@@ -38,6 +42,16 @@ namespace Dam
             newView();
         }
 
+        public void createTurbine(string pMaxFlowRate, string pMinFlowRate,
+            string pMaxPressure, string pMinPressure, string pMaxEnergy, string pMinEnergy)
+        {
+            _Dam.addTurbine(Convert.ToUInt64(pMaxFlowRate), Convert.ToUInt64(pMinFlowRate), Convert.ToUInt64(pMaxPressure), Convert.ToUInt64(pMinPressure),
+                Convert.ToUInt64(pMaxEnergy), Convert.ToUInt64(pMinEnergy));
+            String idTurbine = _Dam.getCurrentTurbineId();
+            _View.IdTurbines.Add(idTurbine);
+
+        }
+
         public void waterOverflow()
         {
             System.Windows.Forms.MessageBox.Show("Water exceeded the capacity. Water entrance will be stopped.");
@@ -48,12 +62,35 @@ namespace Dam
             _View = new DamRepresentation();
             _View.clickked = _View.clickked + sendWaveValues;
             _View.Show();
+            _View.RequestForTurbine += showTurbineGenerator;
+            _View.ChangeStateCurrentTurbine += changeStateofTurbine;
+            _View.StateCurrentTurbine += stateOfCurrentTurbine;
             x = new Thread(runThread);
+            x.Start();
+        }
+
+        public void changeStateofTurbine(string pIdTurbine)
+        {
+            _Dam.setTurbineStateForId(pIdTurbine);
+            stateOfCurrentTurbine(pIdTurbine);
+        }
+
+        public void stateOfCurrentTurbine(string pIdTurbine)
+        {
+            Turbine turbineFound = _Dam.turbineById(pIdTurbine);
+            if (turbineFound.TurnedOn)
+            {
+                _View.statusLabelChanged("ON");
+            }
+            else
+            {
+                _View.statusLabelChanged("OFF");
+            }
         }
 
         public void sendWaveValues()
         {
-            x.Start();
+            //x.Start();
            //_View.paintWater(Converter.waveDrawing(0,104,200,10));
         }
 
@@ -76,13 +113,17 @@ namespace Dam
                 else waveQuantity=12;
 
                 _View.paintWater(Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_TANK,
-                                                        Constants.HEIGHT_TANK_LABEL - Converter.threeRule(Convert.ToInt32(_Dam.Tank.MinHeigth), 1, Convert.ToInt32(_Dam.Tank.CurrentHeigth)), waveQuantity),
+                                                        Constants.HEIGHT_TANK_LABEL - (Int32)Converter.threeRule(_Dam.Tank.MaxHeigth, Constants.HEIGHT_TANK_LABEL, _Dam.Tank.CurrentHeigth), waveQuantity),
                                                         Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_RIVER,
                                                         100, waveQuantity));
                 Thread.Sleep(200);
                 _View.TankLabelChanged(_Dam.Tank.CurrentHeigth);
  
-        } 
+        }
+        public void showTurbineGenerator()
+        {
+            _NewTurbineCreator.Show();
+        }
 
         public String getFlowRate()
         {

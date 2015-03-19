@@ -30,6 +30,13 @@ namespace Dam
             _TurbineActivity = new Thread(turbineCheck);
         }
 
+        public void addTurbine(ulong pMaxFlowRate, ulong pMinFlowRate,
+            ulong pMaxPressure, ulong pMinPressure, ulong pMaxEnergy, ulong pMinEnergy)
+        {
+            _Turbines.Add(new Turbine(pMinFlowRate, pMaxFlowRate, pMinPressure,
+                                      pMaxPressure, pMinEnergy, pMaxEnergy));
+        }
+
         public void addWaterToTank()
         {
             _WaterFlowing = true;
@@ -48,6 +55,28 @@ namespace Dam
             }
 
         }
+
+        public String getCurrentTurbineId()
+        {
+            return _Turbines[_Turbines.Count-1].Identifier;
+        }
+
+        public void setTurbineStateForId(string pIndexToFind)
+        {
+            Turbine foundTurbine = turbineById(pIndexToFind);
+            foundTurbine.TurnedOn = !foundTurbine.TurnedOn;
+        }
+
+        public Turbine turbineById(string pIndexToFind)
+        {
+            for (int indexOfTurbines = 0; indexOfTurbines < _Turbines.Count; indexOfTurbines++)
+            {
+                if (_Turbines[indexOfTurbines].Identifier == pIndexToFind)
+                    return _Turbines[indexOfTurbines];
+            }
+            return null;
+        }
+
 
         public void turbineCheck()
         {
@@ -83,6 +112,12 @@ namespace Dam
         {
             get { return _CurrentTotalEnergyProduced; }
             set { _CurrentTotalEnergyProduced = value; }
+        }
+
+        public List<Turbine> Turbines
+        {
+            get { return _Turbines; }
+            set { _Turbines = value; }
         }
 
     }

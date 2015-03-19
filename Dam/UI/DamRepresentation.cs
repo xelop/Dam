@@ -13,10 +13,11 @@ namespace Dam
 {
     public partial class DamRepresentation : Form
     {
-        private Action Clickked;
+        private Action Clickked, _RequestForTurbine;
+        private Action<String> _ChangeStateCurrentTurbine, _StateCurrentTurbine; //sends the id of the current turbine
         private List<Point[]> WaterContainerCoordenates = new List<Point[]>();
         private List<Point[]> WaterRiverCoordenates = new List<Point[]>();
-
+        private BindingList<String> _IdTurbines = new BindingList<String>();
 
         public Action clickked
         {
@@ -38,6 +39,7 @@ namespace Dam
 
             WaterContainer.Height = Constants.HEIGHT_TANK_LABEL;
             RiverWater.Height = Constants.HEIGHT_RIVER_LABEL;
+            _cmb_Turbines.DataSource = _IdTurbines;
 
         }
 
@@ -79,6 +81,11 @@ namespace Dam
             catch { }
         }
 
+        public void updateBox()
+        {
+            _cmb_Turbines.DataSource = _IdTurbines;
+        }
+
         private void DamRepresentation_Click(object sender, EventArgs e)
         {
             Clickked();
@@ -89,7 +96,17 @@ namespace Dam
             TankHeight.Invoke((MethodInvoker)(() => TankHeight.Text = Convert.ToString(pCurrentHeight)));
         }
 
+        public void statusLabelChanged(string pStatus)
+        {
+            _lbl_TurbineStatus.Invoke((MethodInvoker)(() => _lbl_TurbineStatus.Text = "Current Turbine Status: "+ pStatus));
+        }
+
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public void StatusChanged()
         {
 
         }
@@ -98,5 +115,46 @@ namespace Dam
         {
 
         }
+
+        private void _btn_AddTrubine_Click(object sender, EventArgs e)
+        {
+            _RequestForTurbine();
+        }
+
+        private void _btn_OnorOff_Click(object sender, EventArgs e)
+        {
+            _ChangeStateCurrentTurbine(_IdTurbines[_cmb_Turbines.SelectedIndex]);
+        }
+
+        private void _cmb_Turbines_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            _StateCurrentTurbine(_IdTurbines[_cmb_Turbines.SelectedIndex]);
+        }
+
+
+        public Action RequestForTurbine
+        {
+            get { return _RequestForTurbine; }
+            set { _RequestForTurbine = value; }
+        }
+
+        public BindingList<String> IdTurbines
+        {
+            get { return _IdTurbines; }
+            set { _IdTurbines = value; }
+        }
+
+        public Action<String> StateCurrentTurbine
+        {
+            get { return _StateCurrentTurbine; }
+            set { _StateCurrentTurbine = value; }
+        }
+
+        public Action<String> ChangeStateCurrentTurbine
+        {
+            get { return _ChangeStateCurrentTurbine; }
+            set { _ChangeStateCurrentTurbine = value; }
+        }
+
     }
 }

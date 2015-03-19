@@ -28,3 +28,4 @@ C:\Users\Josué\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\D
 C:\Users\Josué\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\Dam\obj\Debug\DamProject.csproj.GenerateResource.Cache
 C:\Users\Josué\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\Dam\bin\Debug\Dam.exe
 C:\Users\Josué\Documents\TEC\3 Semestre\Análisis de algoritmos\Progras\1\Dam\Dam\bin\Debug\Dam.pdb
+C:\Users\Xelop\Documents\Visual Studio 2012\Projects\Dam\Dam\obj\Debug\Dam.UI.AddTurbine.resources

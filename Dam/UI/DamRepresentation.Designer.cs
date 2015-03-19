@@ -34,10 +34,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.RiverHeight = new System.Windows.Forms.Label();
             this.TankVolume = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this._cmb_Turbines = new System.Windows.Forms.ComboBox();
+            this._btn_AddTurbine = new System.Windows.Forms.Button();
+            this._lbl_TurbineStatus = new System.Windows.Forms.Label();
+            this._btn_OnorOff = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.RiverWater)).BeginInit();
             this.SuspendLayout();
             // 
@@ -102,45 +102,48 @@
             this.TankVolume.Size = new System.Drawing.Size(0, 20);
             this.TankVolume.TabIndex = 7;
             // 
-            // comboBox1
+            // _cmb_Turbines
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(422, 135);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 8;
+            this._cmb_Turbines.FormattingEnabled = true;
+            this._cmb_Turbines.Location = new System.Drawing.Point(422, 135);
+            this._cmb_Turbines.Name = "_cmb_Turbines";
+            this._cmb_Turbines.Size = new System.Drawing.Size(121, 21);
+            this._cmb_Turbines.TabIndex = 8;
+            this._cmb_Turbines.SelectionChangeCommitted += new System.EventHandler(this._cmb_Turbines_SelectionChangeCommitted);
             // 
-            // button1
+            // _btn_AddTurbine
             // 
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(446, 166);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "Add Turbine";
-            this.button1.UseVisualStyleBackColor = true;
+            this._btn_AddTurbine.ForeColor = System.Drawing.Color.Black;
+            this._btn_AddTurbine.Location = new System.Drawing.Point(446, 166);
+            this._btn_AddTurbine.Name = "_btn_AddTurbine";
+            this._btn_AddTurbine.Size = new System.Drawing.Size(75, 23);
+            this._btn_AddTurbine.TabIndex = 9;
+            this._btn_AddTurbine.Text = "Add Turbine";
+            this._btn_AddTurbine.UseVisualStyleBackColor = true;
+            this._btn_AddTurbine.Click += new System.EventHandler(this._btn_AddTrubine_Click);
             // 
-            // label1
+            // _lbl_TurbineStatus
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(356, 43);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(165, 16);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Current Turbine Status:";
+            this._lbl_TurbineStatus.AutoSize = true;
+            this._lbl_TurbineStatus.BackColor = System.Drawing.Color.Transparent;
+            this._lbl_TurbineStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lbl_TurbineStatus.ForeColor = System.Drawing.Color.Black;
+            this._lbl_TurbineStatus.Location = new System.Drawing.Point(356, 43);
+            this._lbl_TurbineStatus.Name = "_lbl_TurbineStatus";
+            this._lbl_TurbineStatus.Size = new System.Drawing.Size(165, 16);
+            this._lbl_TurbineStatus.TabIndex = 10;
+            this._lbl_TurbineStatus.Text = "Current Turbine Status:";
             // 
-            // button2
+            // _btn_OnorOff
             // 
-            this.button2.ForeColor = System.Drawing.Color.Black;
-            this.button2.Location = new System.Drawing.Point(609, 40);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Turn On/Off";
-            this.button2.UseVisualStyleBackColor = true;
+            this._btn_OnorOff.ForeColor = System.Drawing.Color.Black;
+            this._btn_OnorOff.Location = new System.Drawing.Point(609, 40);
+            this._btn_OnorOff.Name = "_btn_OnorOff";
+            this._btn_OnorOff.Size = new System.Drawing.Size(75, 23);
+            this._btn_OnorOff.TabIndex = 11;
+            this._btn_OnorOff.Text = "Turn On/Off";
+            this._btn_OnorOff.UseVisualStyleBackColor = true;
+            this._btn_OnorOff.Click += new System.EventHandler(this._btn_OnorOff_Click);
             // 
             // DamRepresentation
             // 
@@ -148,10 +151,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Dam.Properties.Resources.Dam;
             this.ClientSize = new System.Drawing.Size(859, 537);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this._btn_OnorOff);
+            this.Controls.Add(this._lbl_TurbineStatus);
+            this.Controls.Add(this._btn_AddTurbine);
+            this.Controls.Add(this._cmb_Turbines);
             this.Controls.Add(this.TankVolume);
             this.Controls.Add(this.RiverHeight);
             this.Controls.Add(this.label2);
@@ -176,10 +179,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label RiverHeight;
         private System.Windows.Forms.Label TankVolume;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ComboBox _cmb_Turbines;
+        private System.Windows.Forms.Button _btn_AddTurbine;
+        private System.Windows.Forms.Label _lbl_TurbineStatus;
+        private System.Windows.Forms.Button _btn_OnorOff;
 
     }
 }
