@@ -251,9 +251,9 @@ namespace Dam
 
         public static BigInt calculateHugeVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
         {
-            pHeight = pHeight * 100;
-            pWidth = pWidth * 100;
-            pLong = pLong * 100;//meters are converted into cm
+            pHeight = metersToCentimeters(pHeight);
+            pWidth = metersToCentimeters(pWidth);
+            pLong = metersToCentimeters(pLong);
             BigInt volume = new BigInt(pHeight.ToString());
             volume.multiply(new BigInt(pWidth.ToString()));
             volume.multiply(new BigInt(pLong.ToString()));
@@ -263,6 +263,11 @@ namespace Dam
         public static ulong kmToMeters(ulong pKilometers)
         {
             return pKilometers * 1000;
+        }
+
+        public static ulong metersToCentimeters(ulong pMeters)
+        {
+            return pMeters * 100;
         }
     }
 }
