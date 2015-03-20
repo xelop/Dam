@@ -28,18 +28,19 @@ namespace Dam
             _TurnedOn = true;
         }
 
-        /*public abstract void calculateCurrentPressure()
+        public void calculateCurrentPressure(ulong pMaxHeight, ulong pCurrentHeight)
         {
-            
+            _CurrentPressure = Converter.threeRule(pMaxHeight, _MaxPressure, pCurrentHeight);
         }
         public void calculateCurrentFlowRate() 
         {
-            int caca;
+            _CurrentFlowRate= Converter.threeRule(_MaxPressure, _MaxFlowRate, _CurrentPressure);
         }
+
         public void calculateCurrentEnergyProduced() 
         {
-            int caca;
-        }*/
+            _CurrentEnergyProduced=Converter.threeRule(_MaxPressure, _MaxEnergyProduced, _CurrentPressure);
+        }
 
         public ulong MinFlowRate
         {

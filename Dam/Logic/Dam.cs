@@ -21,9 +21,7 @@ namespace Dam
         //Actions
         private Action _MaxCapacityReached;
 
-        
-
-        private Dam(ulong pMaxHeigth, ulong pMinHeight, ulong pWidth, ulong pLong, ulong pCurrentFlowRate)
+        public Dam(ulong pMaxHeigth, ulong pMinHeight, ulong pWidth, ulong pLong, ulong pCurrentFlowRate)
         {
             _CurrentFlowRate = pCurrentFlowRate;
             _Tank = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
