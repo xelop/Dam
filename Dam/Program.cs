@@ -24,13 +24,12 @@ namespace Dam
 
             Stopwatch s = new Stopwatch();
             s.Start();
-            BigInt number1 = new BigInt("9999999999");
-            BigInt number2 = new BigInt("9999999999");
+            BigInt number1 = Converter.calculateHugeVolume(999999, 999999, 999999);
             //System.Windows.Forms.MessageBox.Show(number1.greaterOrEqual(number2).ToString());
             //number1.subtract(number2);
             //number1.add(number2);
-            number1.multiply(number2);
-            System.Windows.Forms.MessageBox.Show(number1.toString());
+            //number1.multiply(number2);
+            System.Windows.Forms.MessageBox.Show((number1.toString().Length).ToString());
             s.Stop();
             TimeSpan d = s.Elapsed;
             
