@@ -11,7 +11,7 @@ namespace Dam
         private Dam _Dam;
         private DamRepresentation _View;
         private DamAttributeSelection _TemporalView;
-        private Thread x;
+        private Thread _UIValuesChanger;
         private UI.AddTurbine _NewTurbineCreator;
 
 
@@ -47,8 +47,7 @@ namespace Dam
         {
             _Dam.addTurbine(Convert.ToUInt64(pMaxFlowRate), Convert.ToUInt64(pMinFlowRate), Convert.ToUInt64(pMaxPressure), Convert.ToUInt64(pMinPressure),
                 Convert.ToUInt64(pMaxEnergy), Convert.ToUInt64(pMinEnergy));
-            String idTurbine = _Dam.getCurrentTurbineId();
-            _View.IdTurbines.Add(idTurbine);
+            _View.IdTurbines.Add( _Dam.getCurrentTurbineId());
 
         }
 
@@ -60,13 +59,12 @@ namespace Dam
         public void newView()
         {
             _View = new DamRepresentation();
-            _View.clickked = _View.clickked + sendWaveValues;
             _View.Show();
             _View.RequestForTurbine += showTurbineGenerator;
             _View.ChangeStateCurrentTurbine += changeStateofTurbine;
             _View.StateCurrentTurbine += stateOfCurrentTurbine;
-            x = new Thread(runThread);
-            x.Start();
+            _UIValuesChanger = new Thread(runThread);
+            _UIValuesChanger.Start();
         }
 
         public void changeStateofTurbine(string pIdTurbine)
@@ -88,11 +86,11 @@ namespace Dam
             }
         }
 
-        public void sendWaveValues()
+        /*public void sendWaveValues()
         {
             //x.Start();
            //_View.paintWater(Converter.waveDrawing(0,104,200,10));
-        }
+        }*/
 
         public void runThread()
         {
