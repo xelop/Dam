@@ -156,12 +156,14 @@ namespace Dam.Logic
                     carry = productUlong / Constants.OVERFLOW_NUMBER;
                     unit = productUlong % Constants.OVERFLOW_NUMBER;
                     intermidiaryNumber._Number.Insert(0, (ulong)unit);
-                    while (cerosRemaining != 0)
-                    {
-                        intermidiaryNumber._Number.Add(0);
-                        cerosRemaining--;
-                    }
                 }
+
+                while (cerosRemaining != 0)
+                {
+                    intermidiaryNumber._Number.Add(0);
+                    cerosRemaining--;
+                }
+
                 if (carry != 0)//if one single carry remained to be added
                 {
                     intermidiaryNumber._Number.Insert(0, (ulong)carry);
@@ -171,6 +173,7 @@ namespace Dam.Logic
             }
             _Number = finalProduct._Number;
         }
+
 
         public void subtract(BigInt pNumber )
         {

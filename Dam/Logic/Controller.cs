@@ -36,18 +36,21 @@ namespace Dam
                    ulong.Parse(pWidth), ulong.Parse(pLength), ulong.Parse(pFlowRate));
             }
 
-            _Dam.MaxCapacityReached1 +=waterOverflow;
+            _Dam.MaxCapacityReached1 += waterOverflow;
 
             _TemporalView.Hide();
             newView();
         }
 
         public void createTurbine(string pMaxFlowRate, string pMinFlowRate,
-            string pMaxPressure, string pMinPressure, string pMaxEnergy, string pMinEnergy)
+            string pMaxPressure, string pMinPressure, string pMaxEnergy, string pMinEnergy, int pNumberofTurbines)
         {
-            _Dam.addTurbine(Convert.ToUInt64(pMaxFlowRate), Convert.ToUInt64(pMinFlowRate), Convert.ToUInt64(pMaxPressure), Convert.ToUInt64(pMinPressure),
-                Convert.ToUInt64(pMaxEnergy), Convert.ToUInt64(pMinEnergy));
-            _View.IdTurbines.Add( _Dam.getCurrentTurbineId());
+            for (int turbinesToCreate = 0; turbinesToCreate < pNumberofTurbines; turbinesToCreate++)
+            {
+                _Dam.addTurbine(Convert.ToUInt64(pMaxFlowRate), Convert.ToUInt64(pMinFlowRate), Convert.ToUInt64(pMaxPressure), Convert.ToUInt64(pMinPressure),
+                    Convert.ToUInt64(pMaxEnergy), Convert.ToUInt64(pMinEnergy));
+                _View.IdTurbines.Add(_Dam.getCurrentTurbineId());
+            }
 
         }
 
@@ -61,13 +64,13 @@ namespace Dam
             _View = new DamRepresentation();
             _View.Show();
             _View.RequestForTurbine += showTurbineGenerator;
-            _View.ChangeStateCurrentTurbine += changeStateofTurbine;
+            _View.ChangeStateCurrentTurbine += changeStateOfTurbine;
             _View.StateCurrentTurbine += stateOfCurrentTurbine;
             _UIValuesChanger = new Thread(runThread);
             _UIValuesChanger.Start();
         }
 
-        public void changeStateofTurbine(string pIdTurbine)
+        public void changeStateOfTurbine(string pIdTurbine)
         {
             _Dam.setTurbineStateForId(pIdTurbine);
             stateOfCurrentTurbine(pIdTurbine);

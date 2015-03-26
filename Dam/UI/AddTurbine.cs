@@ -13,11 +13,11 @@ namespace Dam.UI
     public partial class AddTurbine : Form
     {
 
-        private Action<String, String, String, String, String, String> _NewTurbine;
+        private Action<String, String, String, String, String, String, int> _NewTurbine;
 
-        //Sends in the following order: MaxCurrentFlow, MinCurrentFlow, MaxPressure, MinPressure, MaxEnergy and MinEergy.
+        //Sends in the following order: MaxCurrentFlow, MinCurrentFlow, MaxPressure, MinPressure, MaxEnergy, MinEergy and #ofTurbines.
 
-        public Action<String, String, String, String, String, String> newTurbine
+        public Action<String, String, String, String, String, String, int> newTurbine
         {
             get
             {
@@ -50,7 +50,7 @@ namespace Dam.UI
 
             _NewTurbine(_txt_MaxFlowRate.Text, _txt_MinFlowRate.Text, 
                 _txt_MaxPressure.Text, _txt_MinFlowRate.Text, 
-                _txt_MaxEnergy.Text, _txt_MinEnergy.Text);
+                _txt_MaxEnergy.Text, _txt_MinEnergy.Text, Convert.ToInt32(_txt_NumberofTurbines.Text));
 
             _txt_MaxEnergy.Text = "";
             _txt_MinEnergy.Text = "";

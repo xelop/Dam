@@ -16,25 +16,23 @@ namespace Dam
         [STAThread]
         static void Main()
         {
-            /*Application.EnableVisualStyles();
+            Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DamAttributeSelection Simulator= new DamAttributeSelection();
             Controller MainControl = new Controller(Simulator);
-            Application.Run(Simulator);*/
-
-            Stopwatch s = new Stopwatch();
-            s.Start();
-            BigInt number1 = new BigInt("9999999999");
-            BigInt number2 = new BigInt("9999999999");
+            Application.Run(Simulator);
+            /*
+            BigInt number1 = new BigInt("999999999999999999");
+            BigInt number2 = new BigInt("999999999999999999");
             //System.Windows.Forms.MessageBox.Show(number1.greaterOrEqual(number2).ToString());
             //number1.subtract(number2);
             //number1.add(number2);
             number1.multiply(number2);
-            System.Windows.Forms.MessageBox.Show(number1.toString());
-            s.Stop();
-            TimeSpan d = s.Elapsed;
+            System.Windows.Forms.MessageBox.Show((number1.toString()).Length.ToString());
+            //s.Stop();
+            //TimeSpan d = s.Elapsed;
             
-            //System.Windows.Forms.MessageBox.Show(d.ToString());
+            //System.Windows.Forms.MessageBox.Show(d.ToString());*/
 
             
             

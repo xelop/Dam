@@ -149,7 +149,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Dam.Properties.Resources.Dam;
+            this.BackgroundImage = global::Dam.Properties.Resources.Dam2;
             this.ClientSize = new System.Drawing.Size(859, 537);
             this.Controls.Add(this._btn_OnorOff);
             this.Controls.Add(this._lbl_TurbineStatus);

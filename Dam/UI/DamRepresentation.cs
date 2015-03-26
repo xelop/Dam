@@ -88,7 +88,7 @@ namespace Dam
 
         private void DamRepresentation_Click(object sender, EventArgs e)
         {
-            Clickked();
+            
         }
 
         public void TankLabelChanged(ulong pCurrentHeight)
