@@ -50,7 +50,7 @@ namespace Dam.Logic
             return result;
         }
 
-        public void takeOutNonSignificantCeroes()
+        public void takeOutNonSignificantZeroes()
         {
             int listSize = _Number.Count;
             for (int numberIndex = 0; numberIndex < listSize; numberIndex++)
@@ -96,10 +96,8 @@ namespace Dam.Logic
 
         public void add(HugeInt pNumber)//adds to _Number the number contained in pNumber
         {
-            while (_Number.Count < pNumber._Number.Count)//_Number is covered up with 0´s to the left, until they are the same size
-            {
-                _Number.Insert(0, 0);
-            }
+            if (_Number.Count < pNumber._Number.Count)
+                addZeroesToLeft(pNumber._Number.Count);//_Number is covered up with 0´s to the left, until they are the same size
             int firstIndex = _Number.Count;
             int secondIndex = pNumber._Number.Count;
             ulong sum;
@@ -143,13 +141,11 @@ namespace Dam.Logic
             ulong productUlong = 0;
             ulong carry = 0;
             ulong unit = 0;
-            int cerosToAdd = 0;//ceros added to the right to each little sum each iteration
-            int cerosRemaining;
+            int ZeroesToAdd = 0;//ceros added to the right to each little sum each iteration
             for (int firstIndex = _Number.Count - 1; firstIndex >= 0; firstIndex--)
             {
                 carry = 0;
                 intermidiaryNumber._Number.Clear();//refresh, to clean the last little sum
-                cerosRemaining = cerosToAdd;
                 for (int secondListIndex = pNumber._Number.Count - 1; secondListIndex >= 0; secondListIndex--)
                 {
                     productUlong = (_Number[firstIndex] * pNumber._Number[secondListIndex]) + carry;
@@ -157,19 +153,13 @@ namespace Dam.Logic
                     unit = productUlong % Constants.OVERFLOW_NUMBER;
                     intermidiaryNumber._Number.Insert(0, (ulong)unit);
                 }
-
-                while (cerosRemaining != 0)
-                {
-                    intermidiaryNumber._Number.Add(0);
-                    cerosRemaining--;
-                }
-
+                intermidiaryNumber.addZeroesToRight(ZeroesToAdd);
                 if (carry != 0)//if one single carry remained to be added
                 {
                     intermidiaryNumber._Number.Insert(0, (ulong)carry);
                 }
                 finalProduct.add(intermidiaryNumber);//each iteration, 1 little sum is added to the total of little sums
-                cerosToAdd++;//each time 1 cero extra to the right is added
+                ZeroesToAdd++;//each time 1 cero extra to the right is added
             }
             _Number = finalProduct._Number;
         }
@@ -208,20 +198,37 @@ namespace Dam.Logic
                         _Number[firstIndex] = (rest + 10);
                     }
                 }
-                this.takeOutNonSignificantCeroes();
+                this.takeOutNonSignificantZeroes();
             }
         }
 
-        //division sin probar
         public void oneHundredDivision()
         {
+            ulong numbersToAdd;
             for (int firstIndex = _Number.Count - 1; firstIndex > 0; firstIndex--)
             {
-                ulong numbersToAdd = (_Number[firstIndex] % 100)*100000000; //como son 9 digitos que caben
-                _Number[firstIndex] = _Number[firstIndex] / 100;
-                _Number[firstIndex - 1] = _Number[firstIndex - 1] + numbersToAdd;
+                 numbersToAdd = (_Number[firstIndex-1] % 100)*10000000; //we are adding 8 0´s to the right
+                 _Number[firstIndex] = _Number[firstIndex] / 100 + numbersToAdd;
             }
             _Number[0] = _Number[0] / 100;
+        }
+
+        public void addZeroesToRight(int pAmountOfZeroes)
+        {
+            while (pAmountOfZeroes != 0)
+            {
+                _Number.Add(0);
+                pAmountOfZeroes--;
+            }
+        }
+
+        public void addZeroesToLeft(int pAmountOfZeroes)
+        {
+            while (pAmountOfZeroes != 0)
+            {
+                _Number.Insert(0, 0);
+                pAmountOfZeroes--;
+            }
         }
 
         public List<ulong> Number
