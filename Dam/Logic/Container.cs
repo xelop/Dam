@@ -52,6 +52,8 @@ namespace Dam
                 _VolumePercentage++;
                 _CurrentNoticeableVolume = _CurrentVolume;
                 //notificar que el porcentaje cambio
+                //Hay que calcular la nueva altura por medio del porcentaje actual del agua
+              
             }
         }
 
