@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 
 namespace Dam
 {
-    class Container:IObserver
+    class Container
     {
-        private HugeInt _CurrentVolume; 
+        private HugeInt _CurrentVolume;
+        private HugeInt _CurrentNoticeableVolume;
         private HugeInt _MaxVolume;//volumes are in cm3
         private HugeInt _MinVolume;
         private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;//dimensions are in m
         private Boolean _WaterOverflow, _lowCapacity;
+        private HugeInt _SignificantDiference;
+        private int _VolumePercentage;
 
         public Container(ulong pMaxHeight, ulong pMinHeight, ulong pWidth, ulong pLong)
         {
@@ -23,10 +26,13 @@ namespace Dam
             _Long = pLong;
             _MaxVolume = Converter.calculateHugeVolume(pMaxHeight, pWidth, pLong);
             _MinVolume = Converter.calculateHugeVolume(pMinHeight, pWidth, pLong);
-            _CurrentVolume = Converter.calculateHugeVolume(pMinHeight + ((pMaxHeight - pMinHeight) / 2), pWidth, pLong);//container starts filled up above the minimun half by half the diference of the min and max height
+            _CurrentVolume = Converter.calculateHugeVolume(1, pWidth, pLong);//container starts filled up above the minimun half by half the diference of the min and max height
+            _CurrentNoticeableVolume = _CurrentVolume;
+            _SignificantDiference = _CurrentVolume;
             _CurrentHeigth = pMinHeight + (pMaxHeight - pMinHeight) / 2;
             _WaterOverflow = false;
             _lowCapacity = false;
+            _VolumePercentage = 1;
         }
 
 
@@ -39,6 +45,14 @@ namespace Dam
                 _CurrentVolume = _MaxVolume;
                 _WaterOverflow = true;
             }
+            HugeInt _VolumeDiference=_CurrentVolume;
+            _VolumeDiference.subtract(_CurrentNoticeableVolume);
+            if (_VolumeDiference.greaterOrEqual(_SignificantDiference))
+            {
+                _VolumePercentage++;
+                _CurrentNoticeableVolume = _CurrentVolume;
+                //notificar que el porcentaje cambio
+            }
         }
 
         public void removeWater(ulong pWater)//pWater enters method as meters^3
@@ -50,11 +64,6 @@ namespace Dam
                 _lowCapacity = true;
                 throw new Exception("The dam´s water level is at its minimum capacity. Dam´s operation will be paused for a moment");
             }
-        }
-
-        public void update(IObservable pOservable)
-        {
-
         }
 
         public Boolean notEnoughWater()

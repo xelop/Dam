@@ -1,4 +1,4 @@
-﻿namespace Dam
+﻿namespace Dam.UI
 {
     partial class DamRepresentation
     {
@@ -69,8 +69,6 @@
             this.TankHeight.Name = "TankHeight";
             this.TankHeight.Size = new System.Drawing.Size(0, 16);
             this.TankHeight.TabIndex = 3;
-            this.TankHeight.Click += new System.EventHandler(this.label1_Click);
-            this.TankHeight.Paint += new System.Windows.Forms.PaintEventHandler(this.TankHeight_Paint);
             // 
             // label2
             // 
@@ -164,7 +162,7 @@
             this.ForeColor = System.Drawing.Color.Transparent;
             this.Name = "DamRepresentation";
             this.Text = "DamRepresentation";
-            this.Click += new System.EventHandler(this.DamRepresentation_Click);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DamRepresentation_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.RiverWater)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

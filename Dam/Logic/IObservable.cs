@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dam.Logic
 {
-    interface IObservable
+    public interface IObservable
     {
         void register(IObserver pObserver);
         void unregister(IObserver pObserver);

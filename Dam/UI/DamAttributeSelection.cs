@@ -1,4 +1,5 @@
 ﻿using System;
+using Dam.Logic;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,15 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Dam
+namespace Dam.UI
 {
-    public partial class DamAttributeSelection : Form
+    public partial class DamAttributeSelection : Form, IObservable
     {
-        private Action<String, String, String, String, String, bool> _StartSimulation;
-        
-        //Sends in the following order: MaxHeigth, MinHeight Width, Length, waterflowrate and bool for kilometers
+        private Action<IObservable>_StartSimulation;
 
-        public Action<String, String, String, String, String, bool> startSimulation
+        public Action<IObservable> startSimulation
         {
             get
             {
@@ -28,7 +27,17 @@ namespace Dam
             }
         }
 
- 
+        public String[] getAttributes()
+        {
+            String[] attributeValues= new String[5] {MaxHeightTextBox.Text, MinHeightTextBox.Text, 
+                WidthTextBox.Text, LengthTextBox.Text, FlowRateTextBox.Text};
+            return attributeValues;
+        }
+
+        public bool kmChecked()
+        {
+            return KmOption.Checked;
+        }
         public DamAttributeSelection()
         {
             InitializeComponent();
@@ -36,8 +45,27 @@ namespace Dam
 
         private void Start_Click(object sender, EventArgs e)
         {
-            _StartSimulation(MaxHeightTextBox.Text, MinHeightTextBox.Text, 
-                WidthTextBox.Text, LengthTextBox.Text, FlowRateTextBox.Text, KmOption.Checked);
+            notifyObservers();
+        }
+
+        public void register(IObserver pObserver)
+        {
+            _StartSimulation += pObserver.update;
+        }
+
+        public void unregister(IObserver pObserver)
+        {
+            _StartSimulation -= pObserver.update;
+        }
+
+        public void notifyObservers()
+        {
+            _StartSimulation(this);
+        }
+
+        public void exit()
+        {
+            this.Close();
         }
     }
 }

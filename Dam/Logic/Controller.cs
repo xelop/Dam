@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Dam.UI;
+using System.Windows.Forms;
 
 namespace Dam
 {
@@ -13,8 +15,9 @@ namespace Dam
         private DamRepresentation _View;
         private DamAttributeSelection _TemporalView;
         private Thread _UIValuesChanger;
-        private UI.AddTurbine _NewTurbineCreator;
+        private AddTurbine _NewTurbineCreator;
         private static Controller _Instance = null;
+        private bool _RunningThread = true;
 
 
         private Controller(){
@@ -30,11 +33,12 @@ namespace Dam
             return _Instance;
         }
 
-        public void acttributeSelectionMethods()
+        public void setTemporalView(DamAttributeSelection pSelector)
         {
-            _TemporalView.startSimulation += createDam;
+            _TemporalView = pSelector;
+            _TemporalView.register(this);
             _NewTurbineCreator = new UI.AddTurbine();
-            _NewTurbineCreator.newTurbine += createTurbine;
+            _NewTurbineCreator.register(this);
         }
 
 
@@ -51,9 +55,7 @@ namespace Dam
                    ulong.Parse(pWidth), ulong.Parse(pLength), ulong.Parse(pFlowRate));
             }
 
-            _Dam.MaxCapacityReached1 += waterOverflow;
-
-            _TemporalView.Hide();
+            //_TemporalView.Hide();
             newView();
         }
 
@@ -78,9 +80,7 @@ namespace Dam
         {
             _View = new DamRepresentation();
             _View.Show();
-            _View.RequestForTurbine += showTurbineGenerator;
-            _View.ChangeStateCurrentTurbine += changeStateOfTurbine;
-            _View.StateCurrentTurbine += stateOfCurrentTurbine;
+            _View.register(this);
             _UIValuesChanger = new Thread(runThread);
             _UIValuesChanger.Start();
         }
@@ -112,12 +112,18 @@ namespace Dam
 
         public void runThread()
         {
-            bool stop = true;
             bool image1 = true;
-            while (stop)
+            while (_RunningThread)
             {
-                waveAnimation(image1);
-                image1 = !image1;
+                try
+                {
+                    waveAnimation(image1);
+                    image1 = !image1;
+                    Thread.Sleep(200);
+                }
+                catch { _RunningThread = false;
+                _TemporalView.exit();
+                }
             }
         }
 
@@ -132,15 +138,32 @@ namespace Dam
                                                         Constants.HEIGHT_TANK_LABEL - (Int32)Converter.threeRule(_Dam.Tank.MaxHeigth, Constants.HEIGHT_TANK_LABEL, _Dam.Tank.CurrentHeigth), waveQuantity),
                                                         Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_RIVER,
                                                         100, waveQuantity));
-                Thread.Sleep(200);
-                _View.TankLabelChanged(_Dam.Tank.CurrentHeigth);
- 
-        }
-        public void showTurbineGenerator()
-        {
-            _NewTurbineCreator.Show();
         }
 
+        public void damNotificationHnadler()
+        {
+            if (_View.TurbineStatusRequested)
+            {
+                _View.TurbineStatusRequested = false;
+                stateOfCurrentTurbine(_View.selectedTurbine());
+            }
+            if (_View.TurbineRequested) //en caso de agregar una nueva turbina, se enseña la nueva ventana
+            {
+                _View.TurbineRequested = false;
+                _NewTurbineCreator.Show();
+            }
+            if (_View.TurbineChanged)
+            {
+                _View.TurbineChanged = false;
+                changeStateOfTurbine(_View.selectedTurbine());
+            }
+            if (_View.ProgramClosed)
+            {
+                //metodo para parar todos los threads
+                _RunningThread = false;
+                _TemporalView.exit();
+            }
+        }
         public String getFlowRate()
         {
             return "nada";
@@ -152,16 +175,35 @@ namespace Dam
         
         public void update(IObservable pOservable)
         {
-            _Dam = Dam.getInstance();
-            if (_Dam.Tank.WaterOverflow)
+            if (pOservable.GetType() == typeof(Dam))
             {
-                //message box
-                _Dam.setWaterOverflow();
+                Dam dam = Dam.getInstance();
+                if (_Dam.Tank.WaterOverflow)
+                {
+                    //message box
+                    _Dam.setWaterOverflow();
+                }
+                if (_Dam.Tank.LowCapacity)
+                {
+                    //message box
+                    _Dam.setLowCapacity(); ;
+                }
             }
-            if (_Dam.Tank.LowCapacity)
+            else if (pOservable.GetType() == typeof(DamRepresentation))
             {
-                //message box
-                _Dam.setLowCapacity(); ;
+                damNotificationHnadler();
+            }
+            else if (pOservable.GetType() == typeof(AddTurbine))
+            {
+                String[] turbineValues=_NewTurbineCreator.getTurbineAttributes();
+                createTurbine(turbineValues[0], turbineValues[1], turbineValues[2], turbineValues[3], turbineValues[4],
+                    turbineValues[5], Convert.ToInt32(turbineValues[6]));
+            }
+            else if (pOservable.GetType() == typeof(DamAttributeSelection))
+            {
+                String[] attributesValues = _TemporalView.getAttributes();
+                createDam(attributesValues[0], attributesValues[1], attributesValues[2],
+                    attributesValues[3], attributesValues[4], _TemporalView.kmChecked());
             }
             //draw shits in the interface
         }

@@ -89,7 +89,6 @@
             this.label1.Size = new System.Drawing.Size(87, 21);
             this.label1.TabIndex = 0;
             this.label1.Text = "Flow Rate";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // panel2
             // 
@@ -207,7 +206,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "AddTurbine";
             this.Text = "Add New Turbine";
-            this.Load += new System.EventHandler(this.AddTurbine_Load);
+            
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

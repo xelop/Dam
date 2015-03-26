@@ -31,16 +31,16 @@ namespace Dam
 
         public void calculateCurrentPressure(int porcentage)
         {
-            _CurrentPressure = Converter.threeRule(pMaxHeight, _MaxPressure, pCurrentHeight);
+            //_CurrentPressure = Converter.threeRule(pMaxHeight, _MaxPressure, pCurrentHeight);
         }
         public void calculateCurrentFlowRate(int porcentage) 
         {
-            _CurrentFlowRate= Converter.threeRule(_MaxPressure, _MaxFlowRate, _CurrentPressure);
+            //_CurrentFlowRate= Converter.threeRule(_MaxPressure, _MaxFlowRate, _CurrentPressure);
         }
 
         public void calculateCurrentEnergyProduced(int porcentage) 
         {
-            _CurrentEnergyProduced=Converter.threeRule(_MaxPressure, _MaxEnergyProduced, _CurrentPressure);
+            //_CurrentEnergyProduced=Converter.threeRule(_MaxPressure, _MaxEnergyProduced, _CurrentPressure);
         }
 
         public void update(IObservable pOservable)
@@ -49,10 +49,10 @@ namespace Dam
             {
                 Dam dam = Dam.getInstance();
             }
-            int porcentage = dam.;//falta metodo en dam de sacar el porcentaje del currentHeight del tank
-            calculateCurrentPressure(porcentage);
+            //int porcentage = dam.;//falta metodo en dam de sacar el porcentaje del currentHeight del tank
+            /*calculateCurrentPressure(porcentage);
             calculateCurrentFlowRate(porcentage);
-            calculateCurrentEnergyProduced(porcentage); 
+            calculateCurrentEnergyProduced(porcentage); */
         }
 
         public ulong MinFlowRate

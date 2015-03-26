@@ -5,25 +5,22 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Dam.Logic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 
-namespace Dam
+namespace Dam.UI
 {
-    public partial class DamRepresentation : Form
+    public partial class DamRepresentation : Form, IObservable
     {
-        private Action Clickked, _RequestForTurbine;
-        private Action<String> _ChangeStateCurrentTurbine, _StateCurrentTurbine; //sends the id of the current turbine
-        private List<Point[]> WaterContainerCoordenates = new List<Point[]>();
-        private List<Point[]> WaterRiverCoordenates = new List<Point[]>();
+        private Action<IObservable> _DamStatusChanged;
+
+        private List<Point[]> _WaterContainerCoordenates = new List<Point[]>();
+        private List<Point[]> _WaterRiverCoordenates = new List<Point[]>();
         private BindingList<String> _IdTurbines = new BindingList<String>();
 
-        public Action clickked
-        {
-            get { return Clickked; }
-            set { Clickked = value; }
-        }
+        private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed = false;
 
         public DamRepresentation()
         {
@@ -45,9 +42,9 @@ namespace Dam
 
         public void paintWater(List<Point[]> pContainerCoordenates, List<Point[]> pRiverCoordenates)
         {
-            WaterContainerCoordenates = pContainerCoordenates;
+            _WaterContainerCoordenates = pContainerCoordenates;
             WaterContainer.Invalidate();
-            WaterRiverCoordenates = pRiverCoordenates;
+            _WaterRiverCoordenates = pRiverCoordenates;
             RiverWater.Invalidate();
         }
 
@@ -56,13 +53,13 @@ namespace Dam
         {
             try
             {
-                e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, WaterContainerCoordenates[0][0].Y,
+                e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, _WaterContainerCoordenates[0][0].Y,
                                                                             Constants.ENDING_X_TANK, Constants.HEIGHT_TANK_LABEL));
 
-                for (int element_counter = 0; element_counter < WaterContainerCoordenates.Count; element_counter++)
-                    e.Graphics.FillClosedCurve(Brushes.Blue, WaterContainerCoordenates[element_counter]);
+                for (int element_counter = 0; element_counter < _WaterContainerCoordenates.Count; element_counter++)
+                    e.Graphics.FillClosedCurve(Brushes.Blue, _WaterContainerCoordenates[element_counter]);
 
-                WaterContainerCoordenates.Clear();
+                _WaterContainerCoordenates.Clear();
             }
             catch { };
         }
@@ -71,24 +68,19 @@ namespace Dam
         {
             try
             {
-                e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, WaterRiverCoordenates[0][0].Y,
+                e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, _WaterRiverCoordenates[0][0].Y,
                                                                         Constants.ENDING_X_RIVER, Constants.HEIGHT_RIVER_LABEL));
-                for (int element_counter = 0; element_counter < WaterRiverCoordenates.Count; element_counter++)
-                    e.Graphics.FillClosedCurve(Brushes.Blue, WaterRiverCoordenates[element_counter]);
+                for (int element_counter = 0; element_counter < _WaterRiverCoordenates.Count; element_counter++)
+                    e.Graphics.FillClosedCurve(Brushes.Blue, _WaterRiverCoordenates[element_counter]);
 
-                WaterRiverCoordenates.Clear();
+                _WaterRiverCoordenates.Clear();
             }
             catch { }
-        }
+        } 
 
         public void updateBox()
         {
             _cmb_Turbines.DataSource = _IdTurbines;
-        }
-
-        private void DamRepresentation_Click(object sender, EventArgs e)
-        {
-            
         }
 
         public void TankLabelChanged(ulong pCurrentHeight)
@@ -101,59 +93,82 @@ namespace Dam
             _lbl_TurbineStatus.Invoke((MethodInvoker)(() => _lbl_TurbineStatus.Text = "Current Turbine Status: "+ pStatus));
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        public void StatusChanged()
-        {
-
-        }
-
-        private void TankHeight_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void _btn_AddTrubine_Click(object sender, EventArgs e)
         {
-            _RequestForTurbine();
+            _TurbineRequested = true;
+            notifyObservers();
         }
 
         private void _btn_OnorOff_Click(object sender, EventArgs e)
         {
-            _ChangeStateCurrentTurbine(_IdTurbines[_cmb_Turbines.SelectedIndex]);
+            _TurbineChanged = true;
+            notifyObservers();
         }
 
         private void _cmb_Turbines_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            _StateCurrentTurbine(_IdTurbines[_cmb_Turbines.SelectedIndex]);
+            _TurbineStatusRequested = true;
+            notifyObservers();
         }
 
-
-        public Action RequestForTurbine
+        public string selectedTurbine()
         {
-            get { return _RequestForTurbine; }
-            set { _RequestForTurbine = value; }
+            return _IdTurbines[_cmb_Turbines.SelectedIndex];
         }
+
+        public void register(IObserver pObserver)
+        {
+            _DamStatusChanged += pObserver.update;
+        }
+
+        public void unregister(IObserver pObserver)
+        {
+            _DamStatusChanged -= pObserver.update;
+        }
+
+        public void notifyObservers()
+        {
+            _DamStatusChanged(this);
+        }
+
+
+        //Properties Methods
 
         public BindingList<String> IdTurbines
         {
             get { return _IdTurbines; }
             set { _IdTurbines = value; }
         }
-
-        public Action<String> StateCurrentTurbine
+        public Action<IObservable> DamStatusChanged
         {
-            get { return _StateCurrentTurbine; }
-            set { _StateCurrentTurbine = value; }
+            get { return _DamStatusChanged; }
+            set { _DamStatusChanged = value; }
+        }
+        public bool TurbineChanged
+        {
+          get { return _TurbineChanged; }
+          set { _TurbineChanged = value; }
+        }    
+        public bool TurbineRequested
+        {
+          get { return _TurbineRequested; }
+          set { _TurbineRequested = value; }
+        }
+        public bool TurbineStatusRequested
+        {
+          get { return _TurbineStatusRequested; }
+          set { _TurbineStatusRequested = value; }
+        }
+        public bool ProgramClosed
+        {
+            get { return _ProgramClosed; }
+            set { _ProgramClosed = value; }
         }
 
-        public Action<String> ChangeStateCurrentTurbine
+        private void DamRepresentation_FormClosing(object sender, FormClosingEventArgs e)
         {
-            get { return _ChangeStateCurrentTurbine; }
-            set { _ChangeStateCurrentTurbine = value; }
+            ProgramClosed = true;
+            notifyObservers();
         }
 
     }

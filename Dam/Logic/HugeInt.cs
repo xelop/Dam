@@ -212,6 +212,18 @@ namespace Dam.Logic
             }
         }
 
+        //division sin probar
+        public void oneHundredDivision()
+        {
+            for (int firstIndex = _Number.Count - 1; firstIndex > 0; firstIndex--)
+            {
+                ulong numbersToAdd = (_Number[firstIndex] % 100)*100000000; //como son 9 digitos que caben
+                _Number[firstIndex] = _Number[firstIndex] / 100;
+                _Number[firstIndex - 1] = _Number[firstIndex - 1] + numbersToAdd;
+            }
+            _Number[0] = _Number[0] / 100;
+        }
+
         public List<ulong> Number
         {
             get { return _Number; }

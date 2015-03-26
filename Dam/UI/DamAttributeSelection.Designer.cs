@@ -1,4 +1,4 @@
-﻿namespace Dam
+﻿namespace Dam.UI
 {
     partial class DamAttributeSelection
     {

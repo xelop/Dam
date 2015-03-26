@@ -7,17 +7,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Dam.Logic;
 
 namespace Dam.UI
 {
-    public partial class AddTurbine : Form
+    public partial class AddTurbine : Form, IObservable
     {
 
-        private Action<String, String, String, String, String, String, int> _NewTurbine;
+        private Action<IObservable> _NewTurbine;
 
-        //Sends in the following order: MaxCurrentFlow, MinCurrentFlow, MaxPressure, MinPressure, MaxEnergy, MinEergy and #ofTurbines.
 
-        public Action<String, String, String, String, String, String, int> newTurbine
+        public AddTurbine()
+        {
+            InitializeComponent();
+            this.Hide();
+        }
+
+        private void _btn_AddTurbine_Click(object sender, EventArgs e)
+        {
+            notifyObservers();
+        }
+
+        public String[] getTurbineAttributes()
+        {
+            String[] turbineValues = new String[] {_txt_MaxFlowRate.Text, _txt_MinFlowRate.Text, 
+                _txt_MaxPressure.Text, _txt_MinFlowRate.Text, 
+                _txt_MaxEnergy.Text, _txt_MinEnergy.Text, _txt_NumberofTurbines.Text};
+
+            _txt_MaxEnergy.Text = "";
+            _txt_MinEnergy.Text = "";
+            _txt_MaxPressure.Text = "";
+            _txt_MinPressure.Text = "";
+            _txt_MaxFlowRate.Text = "";
+            _txt_MinFlowRate.Text = "";
+            _txt_NumberofTurbines.Text = "";
+
+            this.Hide();
+            return turbineValues;
+        }
+
+        public void register(IObserver pObserver)
+        {
+            _NewTurbine += pObserver.update;
+        }
+
+        public void unregister(IObserver pObserver)
+        {
+            _NewTurbine -= pObserver.update;
+        }
+
+        public void notifyObservers()
+        {
+            _NewTurbine(this);
+        }
+
+        public Action<IObservable> newTurbine
         {
             get
             {
@@ -29,38 +73,14 @@ namespace Dam.UI
             }
         }
 
-        public AddTurbine()
+        public void hide()
         {
-            InitializeComponent();
             this.Hide();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        public void show()
         {
-
-        }
-
-        private void AddTurbine_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void _btn_AddTurbine_Click(object sender, EventArgs e)
-        {
-
-            _NewTurbine(_txt_MaxFlowRate.Text, _txt_MinFlowRate.Text, 
-                _txt_MaxPressure.Text, _txt_MinFlowRate.Text, 
-                _txt_MaxEnergy.Text, _txt_MinEnergy.Text, Convert.ToInt32(_txt_NumberofTurbines.Text));
-
-            _txt_MaxEnergy.Text = "";
-            _txt_MinEnergy.Text = "";
-            _txt_MaxPressure.Text = "";
-            _txt_MinPressure.Text = "";
-            _txt_MaxFlowRate.Text = "";
-            _txt_MinFlowRate.Text = "";
-
-            this.Hide();
-
+            this.Show();
         }
     }
 }

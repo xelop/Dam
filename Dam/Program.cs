@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Dam.Logic;
+using Dam.UI;
 namespace Dam
 {
     static class Program
@@ -18,9 +19,10 @@ namespace Dam
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            DamAttributeSelection Simulator= new DamAttributeSelection();
-            Controller MainControl = new Controller(Simulator);
-            Application.Run(Simulator);
+            DamAttributeSelection simulator= new DamAttributeSelection();
+            Controller mainControl = Controller.getInstance();
+            mainControl.setTemporalView(simulator);
+            Application.Run(simulator);
             /*
             HugeInt number1 = new HugeInt("999999999999999999");
             HugeInt number2 = new HugeInt("999999999999999999");
