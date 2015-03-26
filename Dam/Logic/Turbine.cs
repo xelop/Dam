@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dam.Logic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Dam
 {
-    class Turbine
+    class Turbine:IObserver
     {
         private ulong _MinFlowRate, _MaxFlowRate, _MinPressure, _MaxPressure, _MinEnergyProduced,
             _MaxEnergyProduced, _CurrentPressure, _CurrentFlowRate, _CurrentEnergyProduced;
@@ -28,18 +29,30 @@ namespace Dam
             _TurnedOn = true;
         }
 
-        public void calculateCurrentPressure(ulong pMaxHeight, ulong pCurrentHeight)
+        public void calculateCurrentPressure(int porcentage)
         {
             _CurrentPressure = Converter.threeRule(pMaxHeight, _MaxPressure, pCurrentHeight);
         }
-        public void calculateCurrentFlowRate() 
+        public void calculateCurrentFlowRate(int porcentage) 
         {
             _CurrentFlowRate= Converter.threeRule(_MaxPressure, _MaxFlowRate, _CurrentPressure);
         }
 
-        public void calculateCurrentEnergyProduced() 
+        public void calculateCurrentEnergyProduced(int porcentage) 
         {
             _CurrentEnergyProduced=Converter.threeRule(_MaxPressure, _MaxEnergyProduced, _CurrentPressure);
+        }
+
+        public void update(IObservable pOservable)
+        {
+            if (pOservable.GetType() == typeof(Dam))
+            {
+                Dam dam = Dam.getInstance();
+            }
+            int porcentage = dam.;//falta metodo en dam de sacar el porcentaje del currentHeight del tank
+            calculateCurrentPressure(porcentage);
+            calculateCurrentFlowRate(porcentage);
+            calculateCurrentEnergyProduced(porcentage); 
         }
 
         public ulong MinFlowRate

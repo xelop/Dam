@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Dam
 {
-    class Container
+    class Container:IObserver
     {
-        private BigInt _CurrentVolume; 
-        private BigInt _MaxVolume;//volumes are in cm3
-        private BigInt _MinVolume;
+        private HugeInt _CurrentVolume; 
+        private HugeInt _MaxVolume;//volumes are in cm3
+        private HugeInt _MinVolume;
         private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;//dimensions are in m
-
+        private Boolean _WaterOverflow, _lowCapacity;
 
         public Container(ulong pMaxHeight, ulong pMinHeight, ulong pWidth, ulong pLong)
         {
@@ -25,54 +25,61 @@ namespace Dam
             _MinVolume = Converter.calculateHugeVolume(pMinHeight, pWidth, pLong);
             _CurrentVolume = Converter.calculateHugeVolume(pMinHeight + ((pMaxHeight - pMinHeight) / 2), pWidth, pLong);//container starts filled up above the minimun half by half the diference of the min and max height
             _CurrentHeigth = pMinHeight + (pMaxHeight - pMinHeight) / 2;
+            _WaterOverflow = false;
+            _lowCapacity = false;
         }
 
 
 
-        public void addWater(Int32 pWater) //pWater enters method as meters^3
+        public void addWater(ulong pWater) //pWater enters method as meters^3
         {
-            _CurrentVolume.add(new BigInt(pWater.ToString()+ "000000"));//converted in cm3
+            _CurrentVolume.add(new HugeInt(pWater.ToString()+ "000000"));//converted in cm3
             if (waterOverflow())
             {
                 _CurrentVolume = _MaxVolume;
-                throw new Exception("The water overflowed the maximun capacity of the tank. Dam´s water entrance will be paused for a moment.");
+                _WaterOverflow = true;
             }
-
         }
 
-        public void removeWater(Int32 pWater)//pWater enters method as meters^3
+        public void removeWater(ulong pWater)//pWater enters method as meters^3
         {
-            _CurrentVolume.subtract(new BigInt (pWater.ToString() + "000000"));//converted in cm3
+            _CurrentVolume.subtract(new HugeInt (pWater.ToString() + "000000"));//converted in cm3
             if (notEnoughWater())
             {
                 _CurrentVolume = _MinVolume;
+                _lowCapacity = true;
                 throw new Exception("The dam´s water level is at its minimum capacity. Dam´s operation will be paused for a moment");
             }
         }
 
+        public void update(IObservable pOservable)
+        {
+
+        }
 
         public Boolean notEnoughWater()
         {
             return _MinVolume.greaterOrEqual(_CurrentVolume);
         }
+
         public Boolean waterOverflow()
         {
             return _CurrentVolume.greaterOrEqual(_MaxVolume);
         }
 
-        public BigInt CurrentVolume
+        public HugeInt CurrentVolume
         {
             get { return _CurrentVolume; }
             set { _CurrentVolume = value; }
         }
 
-        public BigInt MaxVolume
+        public HugeInt MaxVolume
         {
             get { return _MaxVolume; }
             set { _MaxVolume = value; }
         }
 
-        public BigInt MinVolume
+        public HugeInt MinVolume
         {
             get { return _MinVolume; }
             set { _MinVolume = value; }
@@ -108,5 +115,16 @@ namespace Dam
             set { _MinHeigth = value; }
         }
 
+        public Boolean LowCapacity
+        {
+            get { return _lowCapacity; }
+            set { _lowCapacity = value; }
+        }
+
+        public Boolean WaterOverflow
+        {
+            get { return _WaterOverflow; }
+            set { _WaterOverflow = value; }
+        }
     }
 }

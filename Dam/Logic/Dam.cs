@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dam.Logic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,28 +7,47 @@ using System.Threading;
 
 namespace Dam
 {
-    class Dam
+    class Dam:IObservable
     {
         private ulong _CurrentFlowRate, _CurrentTotalEnergyProduced;
         private List<Turbine> _Turbines = new List<Turbine>();
         private Container _Tank;
         private Container _River;
-        private bool _WaterFlowing;
+        private bool _WaterFlowing, _RealeasingWater;
+
+        private static Dam _Instance = null;
         
         //Threads
         private Thread _FlowRate;
         private Thread _TurbineActivity;
+        private Thread _ReleasingRate;
+        
 
         //Actions
-        private Action _MaxCapacityReached;
+        private Action<IObservable> _ValuesChanged;
 
-        public Dam(ulong pMaxHeigth, ulong pMinHeight, ulong pWidth, ulong pLong, ulong pCurrentFlowRate)
+        public Dam()
+        {
+            _TurbineActivity = new Thread(turbineCheck);
+            _ReleasingRate = new Thread(removeWaterToTank);
+            _RealeasingWater = false;
+        }
+
+        public static Dam getInstance()
+        {
+            if (_Instance == null)
+            {
+                _Instance = new Dam();
+            }
+            return _Instance;
+        }
+
+        public void initializeDam(ulong pMaxHeigth, ulong pMinHeight, ulong pWidth, ulong pLong, ulong pCurrentFlowRate)
         {
             _CurrentFlowRate = pCurrentFlowRate;
             _Tank = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
             _River = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
             _FlowRate = new Thread(addWaterToTank);
-            _TurbineActivity = new Thread(turbineCheck);
         }
 
         public void addTurbine(ulong pMaxFlowRate, ulong pMinFlowRate,
@@ -42,18 +62,40 @@ namespace Dam
             _WaterFlowing = true;
             while (_WaterFlowing)
             {
-                try
+                _Tank.addWater(_CurrentFlowRate);
+                Thread.Sleep(1000);
+                if (_Tank.WaterOverflow)
                 {
-                    _Tank.addWater(Convert.ToInt32(_CurrentFlowRate));
-                    Thread.Sleep(1000);
+                    notifyObservers();//notify will occur when the current height of the tank changes in 1%
+                    Thread.Sleep(10001);
                 }
-                catch (Exception WaterOverFlow)
+            }
+        }
+
+        public void removeWaterToTank()
+        {   
+            _RealeasingWater = true;
+            while (_RealeasingWater)
+            {   
+                ulong quantityToRemove = 0;//method that recorre la lista y sume todas las salidas de agua de turbinas activas
+                _Tank.removeWater(quantityToRemove);
+                Thread.Sleep(1000);
+                if (_Tank.LowCapacity)
                 {
-                    _MaxCapacityReached();
+                    notifyObservers();
                     Thread.Sleep(10000);
                 }
             }
+        }
 
+        public void setWaterOverflow()
+        {
+            Tank.WaterOverflow = !Tank.WaterOverflow;
+        }
+
+        public void setLowCapacity()
+        {
+            Tank.LowCapacity= !Tank.LowCapacity;
         }
 
         public String getCurrentTurbineId()
@@ -94,14 +136,6 @@ namespace Dam
             set { _Tank = value; }
         }
 
-        public Action MaxCapacityReached1
-        {
-            get { return _MaxCapacityReached; }
-            set { _MaxCapacityReached = value; }
-        }
-
-        //private ulong _CurrentFlowRate, _CurrentTotalEnergyProduced;
-
         public ulong CurrentFlowRate
         {
             get { return _CurrentFlowRate; }
@@ -120,5 +154,31 @@ namespace Dam
             set { _Turbines = value; }
         }
 
+        public void register(IObserver pObserver)
+        {
+            _ValuesChanged += pObserver.update;
+        }
+
+        public void unregister(IObserver pObserver)
+        {
+            _ValuesChanged -= pObserver.update;
+        }
+
+        public void notifyObservers()
+        {
+            _ValuesChanged(this);
+        }
+
+        public Action<IObservable> ValuesChanged
+        {
+            get { return _ValuesChanged; }
+            set { _ValuesChanged = value; }
+        }
+
+        public bool RealeasingWater
+        {
+            get { return _RealeasingWater; }
+            set { _RealeasingWater = value; }
+        }
     }
 }

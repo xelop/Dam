@@ -50,6 +50,8 @@
     <Compile Include="Logic\Controller.cs" />
     <Compile Include="Logic\Converter.cs" />
     <Compile Include="Logic\Dam.cs" />
+    <Compile Include="Logic\IObservable.cs" />
+    <Compile Include="Logic\IObserver.cs" />
     <Compile Include="UI\AddTurbine.cs">
       <SubType>Form</SubType>
     </Compile>

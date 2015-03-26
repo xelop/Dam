@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Dam.Logic
 {
-    class BigInt
+    class HugeInt
     {
         private List<ulong> _Number;
 
-        public BigInt(String pNumber)
+        public HugeInt(String pNumber)
         {
             int numberToSplit;
             int maximunDigitsInUlong = 9;//we will be making groups of 9
@@ -66,7 +66,7 @@ namespace Dam.Logic
             }
         }
 
-        public Boolean greaterOrEqual(BigInt pNumber)
+        public Boolean greaterOrEqual(HugeInt pNumber)
         {
             if (_Number.Count > pNumber._Number.Count)
             {
@@ -94,7 +94,7 @@ namespace Dam.Logic
             }
         }
 
-        public void add(BigInt pNumber)//adds to _Number the number contained in pNumber
+        public void add(HugeInt pNumber)//adds to _Number the number contained in pNumber
         {
             while (_Number.Count < pNumber._Number.Count)//_Number is covered up with 0´s to the left, until they are the same size
             {
@@ -136,10 +136,10 @@ namespace Dam.Logic
             }
         }
 
-        public void multiply(BigInt pNumber)
+        public void multiply(HugeInt pNumber)
         {
-            BigInt finalProduct = new BigInt("0");
-            BigInt intermidiaryNumber = new BigInt("0"); ;//used as a repositiory for the little sums
+            HugeInt finalProduct = new HugeInt("0");
+            HugeInt intermidiaryNumber = new HugeInt("0"); ;//used as a repositiory for the little sums
             ulong productUlong = 0;
             ulong carry = 0;
             ulong unit = 0;
@@ -175,7 +175,7 @@ namespace Dam.Logic
         }
 
 
-        public void subtract(BigInt pNumber )
+        public void subtract(HugeInt pNumber )
         {
             if (this.greaterOrEqual(pNumber))//minuend must be greater than subtrahend
             {

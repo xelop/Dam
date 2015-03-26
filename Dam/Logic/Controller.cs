@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dam.Logic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,33 +7,47 @@ using System.Threading;
 
 namespace Dam
 {
-    class Controller
+    class Controller:IObserver
     {
         private Dam _Dam;
         private DamRepresentation _View;
         private DamAttributeSelection _TemporalView;
         private Thread _UIValuesChanger;
         private UI.AddTurbine _NewTurbineCreator;
+        private static Controller _Instance = null;
 
 
-        public Controller(DamAttributeSelection pTemporalView)
+        private Controller(){
+            _Dam = Dam.getInstance();
+        }
+
+        public static Controller getInstance()
         {
-            _TemporalView = pTemporalView;
+            if (_Instance == null)
+            {
+                _Instance = new Controller();
+            }
+            return _Instance;
+        }
+
+        public void acttributeSelectionMethods()
+        {
             _TemporalView.startSimulation += createDam;
             _NewTurbineCreator = new UI.AddTurbine();
             _NewTurbineCreator.newTurbine += createTurbine;
         }
+
+
         public void createDam(string pMaxHeight, string pMinHeight, 
             string pWidth, string pLength, string pFlowRate, bool pKm)
         {
             if(pKm)
             {
-                _Dam= new Dam(Converter.kmToMeters(ulong.Parse(pMaxHeight)), Converter.kmToMeters(ulong.Parse(pMinHeight)),
+                _Dam.initializeDam(Converter.kmToMeters(ulong.Parse(pMaxHeight)), Converter.kmToMeters(ulong.Parse(pMinHeight)),
                     Converter.kmToMeters(ulong.Parse(pWidth)), Converter.kmToMeters(ulong.Parse(pLength)), ulong.Parse(pFlowRate));
             }
             else{
-
-                _Dam = new Dam(ulong.Parse(pMaxHeight), ulong.Parse(pMinHeight),
+                _Dam.initializeDam(ulong.Parse(pMaxHeight), ulong.Parse(pMinHeight),
                    ulong.Parse(pWidth), ulong.Parse(pLength), ulong.Parse(pFlowRate));
             }
 
@@ -133,6 +148,29 @@ namespace Dam
         public String setValues()
         {
             return "nada";
-        }        
+        }
+        
+        public void update(IObservable pOservable)
+        {
+            _Dam = Dam.getInstance();
+            if (_Dam.Tank.WaterOverflow)
+            {
+                //message box
+                _Dam.setWaterOverflow();
+            }
+            if (_Dam.Tank.LowCapacity)
+            {
+                //message box
+                _Dam.setLowCapacity(); ;
+            }
+            //draw shits in the interface
+        }
+
+        public DamAttributeSelection TemporalView
+        {
+            get { return _TemporalView; }
+            set { _TemporalView = value; }
+        }
+
     }
 }

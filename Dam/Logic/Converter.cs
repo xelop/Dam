@@ -42,11 +42,11 @@ namespace Dam
             return water;
         }
 
-        public static BigInt calculateHugeVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
+        public static HugeInt calculateHugeVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
         {
-            BigInt volume = new BigInt(metersToCentimeters(pHeight));
-            volume.multiply(new BigInt(metersToCentimeters(pWidth)));
-            volume.multiply(new BigInt(metersToCentimeters(pLong)));
+            HugeInt volume = new HugeInt(metersToCentimeters(pHeight));
+            volume.multiply(new HugeInt(metersToCentimeters(pWidth)));
+            volume.multiply(new HugeInt(metersToCentimeters(pLong)));
             return volume;
         }
 

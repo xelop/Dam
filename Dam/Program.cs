@@ -22,8 +22,8 @@ namespace Dam
             Controller MainControl = new Controller(Simulator);
             Application.Run(Simulator);
             /*
-            BigInt number1 = new BigInt("999999999999999999");
-            BigInt number2 = new BigInt("999999999999999999");
+            HugeInt number1 = new HugeInt("999999999999999999");
+            HugeInt number2 = new HugeInt("999999999999999999");
             //System.Windows.Forms.MessageBox.Show(number1.greaterOrEqual(number2).ToString());
             //number1.subtract(number2);
             //number1.add(number2);
