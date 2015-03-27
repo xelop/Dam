@@ -29,18 +29,21 @@ namespace Dam
             _TurnedOn = true;
         }
 
-        public void calculateCurrentPressure(int porcentage)
+        public void calculateCurrentPressure(ulong pPercentage)
         {
-            //_CurrentPressure = Converter.threeRule(pMaxHeight, _MaxPressure, pCurrentHeight);
+            _CurrentPressure = Converter.threeRule(pPercentage, _MaxPressure-_MinPressure);
+            _CurrentPressure += _MinPressure;
         }
-        public void calculateCurrentFlowRate(int porcentage) 
+        public void calculateCurrentFlowRate(ulong pPercentage) 
         {
-            //_CurrentFlowRate= Converter.threeRule(_MaxPressure, _MaxFlowRate, _CurrentPressure);
+            _CurrentFlowRate = Converter.threeRule(pPercentage, _MaxFlowRate - _MinFlowRate);
+            _CurrentFlowRate += _MinFlowRate;
         }
 
-        public void calculateCurrentEnergyProduced(int porcentage) 
+        public void calculateCurrentEnergyProduced(ulong pPercentage) 
         {
-            //_CurrentEnergyProduced=Converter.threeRule(_MaxPressure, _MaxEnergyProduced, _CurrentPressure);
+            _CurrentEnergyProduced = Converter.threeRule(pPercentage, _MaxEnergyProduced - _MinEnergyProduced);
+            _CurrentEnergyProduced += _MinEnergyProduced;
         }
 
         public void update(IObservable pOservable)
@@ -48,11 +51,15 @@ namespace Dam
             if (pOservable.GetType() == typeof(Dam))
             {
                 Dam dam = Dam.getInstance();
+                if (_TurnedOn)
+                {
+                    calculateCurrentPressure(dam.Tank.VolumePercentage);
+                    calculateCurrentEnergyProduced(dam.Tank.VolumePercentage);
+                    calculateCurrentFlowRate(dam.Tank.VolumePercentage);
+                }
             }
-            //int porcentage = dam.;//falta metodo en dam de sacar el porcentaje del currentHeight del tank
-            /*calculateCurrentPressure(porcentage);
-            calculateCurrentFlowRate(porcentage);
-            calculateCurrentEnergyProduced(porcentage); */
+
+            
         }
 
         public ulong MinFlowRate

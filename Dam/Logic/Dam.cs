@@ -21,14 +21,13 @@ namespace Dam
         private Thread _FlowRate;
         private Thread _TurbineActivity;
         private Thread _ReleasingRate;
-        
-
+       
         //Actions
         private Action<IObservable> _ValuesChanged;
 
         public Dam()
         {
-            _TurbineActivity = new Thread(turbineCheck);
+            //_TurbineActivity = new Thread(turbineCheck);
             _ReleasingRate = new Thread(removeWaterToTank);
             _RealeasingWater = false;
         }
@@ -53,8 +52,11 @@ namespace Dam
         public void addTurbine(ulong pMaxFlowRate, ulong pMinFlowRate,
             ulong pMaxPressure, ulong pMinPressure, ulong pMaxEnergy, ulong pMinEnergy)
         {
-            _Turbines.Add(new Turbine(pMinFlowRate, pMaxFlowRate, pMinPressure,
-                                      pMaxPressure, pMinEnergy, pMaxEnergy));
+            Turbine turbineInstance = new Turbine(pMinFlowRate, pMaxFlowRate, pMinPressure,
+                                      pMaxPressure, pMinEnergy, pMaxEnergy);
+
+            register(turbineInstance);
+            _Turbines.Add(turbineInstance);
         }
 
         public void addWaterToTank()
@@ -64,12 +66,46 @@ namespace Dam
             {
                 _Tank.addWater(_CurrentFlowRate);
                 Thread.Sleep(1000);
+                if (_Tank.SignificanceVolumeChanged)
+                {
+                    notifyObservers();
+                }
                 if (_Tank.WaterOverflow)
                 {
                     notifyObservers();//notify will occur when the current height of the tank changes in 1%
-                    Thread.Sleep(10001);
+                    Thread.Sleep(10000);
                 }
             }
+        }
+
+        public ulong currentWaterLoss()
+        {
+            if (_Turbines.Count != 0)
+            {
+                ulong allWaterLoss = 0;
+                foreach (Turbine selectedTurbine in _Turbines)
+                {
+                    if (selectedTurbine.TurnedOn)
+                        allWaterLoss += selectedTurbine.CurrentFlowRate;
+                }
+                return allWaterLoss;
+            }
+            return 0;
+        }
+
+        public ulong currentEnergyProduced()
+        {
+            if (_Turbines.Count != 0)
+            {
+                ulong allEnergyProduced = 0;
+                foreach (Turbine selectedTurbine in _Turbines)
+                {
+                    if (selectedTurbine.TurnedOn)
+                        allEnergyProduced += selectedTurbine.CurrentEnergyProduced;
+                }
+                return allEnergyProduced;
+            }
+            return 0;
         }
 
         public void removeWaterToTank()
@@ -77,9 +113,15 @@ namespace Dam
             _RealeasingWater = true;
             while (_RealeasingWater)
             {   
-                ulong quantityToRemove = 0;//method that recorre la lista y sume todas las salidas de agua de turbinas activas
+                ulong quantityToRemove = currentWaterLoss();//method that recorre la lista y sume todas las salidas de agua de turbinas activas
                 _Tank.removeWater(quantityToRemove);
                 Thread.Sleep(1000);
+                if (_Tank.SignificanceVolumeChanged)
+                {
+                    currentWaterLoss();
+                    notifyObservers();
+
+                }
                 if (_Tank.LowCapacity)
                 {
                     notifyObservers();
@@ -117,12 +159,6 @@ namespace Dam
                     return _Turbines[indexOfTurbines];
             }
             return null;
-        }
-
-
-        public void turbineCheck()
-        {
-
         }
 
         public Container River
@@ -174,11 +210,20 @@ namespace Dam
             get { return _ValuesChanged; }
             set { _ValuesChanged = value; }
         }
-
         public bool RealeasingWater
         {
             get { return _RealeasingWater; }
             set { _RealeasingWater = value; }
+        }
+        public Thread FlowRate
+        {
+            get { return _FlowRate; }
+            set { _FlowRate = value; }
+        }
+        public Thread ReleasingRate
+        {
+            get { return _ReleasingRate; }
+            set { _ReleasingRate = value; }
         }
     }
 }

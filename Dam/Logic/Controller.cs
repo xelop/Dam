@@ -54,9 +54,11 @@ namespace Dam
                 _Dam.initializeDam(ulong.Parse(pMaxHeight), ulong.Parse(pMinHeight),
                    ulong.Parse(pWidth), ulong.Parse(pLength), ulong.Parse(pFlowRate));
             }
-
-            //_TemporalView.Hide();
+            _Dam.register(this);
+            _TemporalView.Hide();
             newView();
+            _Dam.FlowRate.Start();
+            _Dam.ReleasingRate.Start();
         }
 
         public void createTurbine(string pMaxFlowRate, string pMinFlowRate,
@@ -104,12 +106,6 @@ namespace Dam
             }
         }
 
-        /*public void sendWaveValues()
-        {
-            //x.Start();
-           //_View.paintWater(Converter.waveDrawing(0,104,200,10));
-        }*/
-
         public void runThread()
         {
             bool image1 = true;
@@ -120,6 +116,9 @@ namespace Dam
                     waveAnimation(image1);
                     image1 = !image1;
                     Thread.Sleep(200);
+                    _View.TankLabelChanged(_Dam.Tank.CurrentHeigth);
+                    _View.volumeLabelChanged(_Dam.Tank.CurrentNoticeableVolume.toString());
+                    _View.EnergyLabelChanged(_Dam.currentEnergyProduced());
                 }
                 catch { _RunningThread = false;
                 _TemporalView.exit();
@@ -135,7 +134,7 @@ namespace Dam
                 else waveQuantity=12;
 
                 _View.paintWater(Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_TANK,
-                                                        Constants.HEIGHT_TANK_LABEL - (Int32)Converter.threeRule(_Dam.Tank.MaxHeigth, Constants.HEIGHT_TANK_LABEL, _Dam.Tank.CurrentHeigth), waveQuantity),
+                                                        Constants.HEIGHT_TANK_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.Tank.CurrentHeigth*Constants.HEIGHT_TANK_LABEL/_Dam.Tank.MaxHeigth), waveQuantity),
                                                         Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_RIVER,
                                                         100, waveQuantity));
         }

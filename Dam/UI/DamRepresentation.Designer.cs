@@ -38,6 +38,7 @@
             this._btn_AddTurbine = new System.Windows.Forms.Button();
             this._lbl_TurbineStatus = new System.Windows.Forms.Label();
             this._btn_OnorOff = new System.Windows.Forms.Button();
+            this._lbl_SingleEnergy = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.RiverWater)).BeginInit();
             this.SuspendLayout();
             // 
@@ -143,12 +144,24 @@
             this._btn_OnorOff.UseVisualStyleBackColor = true;
             this._btn_OnorOff.Click += new System.EventHandler(this._btn_OnorOff_Click);
             // 
+            // _lbl_SingleEnergy
+            // 
+            this._lbl_SingleEnergy.AutoSize = true;
+            this._lbl_SingleEnergy.BackColor = System.Drawing.Color.Transparent;
+            this._lbl_SingleEnergy.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lbl_SingleEnergy.ForeColor = System.Drawing.Color.Black;
+            this._lbl_SingleEnergy.Location = new System.Drawing.Point(373, 85);
+            this._lbl_SingleEnergy.Name = "_lbl_SingleEnergy";
+            this._lbl_SingleEnergy.Size = new System.Drawing.Size(0, 18);
+            this._lbl_SingleEnergy.TabIndex = 12;
+            // 
             // DamRepresentation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Dam.Properties.Resources.Dam2;
             this.ClientSize = new System.Drawing.Size(859, 537);
+            this.Controls.Add(this._lbl_SingleEnergy);
             this.Controls.Add(this._btn_OnorOff);
             this.Controls.Add(this._lbl_TurbineStatus);
             this.Controls.Add(this._btn_AddTurbine);
@@ -163,6 +176,7 @@
             this.Name = "DamRepresentation";
             this.Text = "DamRepresentation";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DamRepresentation_FormClosing);
+            this.Load += new System.EventHandler(this.DamRepresentation_Load);
             ((System.ComponentModel.ISupportInitialize)(this.RiverWater)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -181,6 +195,7 @@
         private System.Windows.Forms.Button _btn_AddTurbine;
         private System.Windows.Forms.Label _lbl_TurbineStatus;
         private System.Windows.Forms.Button _btn_OnorOff;
+        private System.Windows.Forms.Label _lbl_SingleEnergy;
 
     }
 }

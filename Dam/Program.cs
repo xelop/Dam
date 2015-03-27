@@ -24,9 +24,9 @@ namespace Dam
             mainControl.setTemporalView(simulator);
             Application.Run(simulator);
 
-            /*HugeInt number1 = new HugeInt("999999999999999999");
-            HugeInt number2 = new HugeInt("999999999999999999");
-            //System.Windows.Forms.MessageBox.Show(number1.greaterOrEqual(number2).ToString());
+            /*HugeInt number1 = new HugeInt("100");
+            number1.subtract(new HugeInt("101"));
+            System.Windows.Forms.MessageBox.Show(number1.toString());
             //number1.subtract(number2);
             //number1.add(number2);
             //number1.multiply(number2);

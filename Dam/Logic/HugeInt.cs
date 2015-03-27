@@ -36,7 +36,7 @@ namespace Dam.Logic
                 if (numberPosition != 0)
                 {
                     intermediaryString = _Number[numberPosition].ToString(); //refresh
-                    while (intermediaryString.Length != 9)
+                    while (intermediaryString.Length < 9)
                     {
                         intermediaryString = intermediaryString.Insert(0, "0");//if we have a 1 , but the real is 000000001, so the representation is correct
                     }
@@ -97,7 +97,10 @@ namespace Dam.Logic
         public void add(HugeInt pNumber)//adds to _Number the number contained in pNumber
         {
             if (_Number.Count < pNumber._Number.Count)
-                addZeroesToLeft(pNumber._Number.Count);//_Number is covered up with 0´s to the left, until they are the same size
+            {
+                addZeroesToLeft(pNumber._Number.Count - _Number.Count); //_Number is covered up with 0´s to the left, until they are the same size
+            }
+
             int firstIndex = _Number.Count;
             int secondIndex = pNumber._Number.Count;
             ulong sum;
@@ -132,6 +135,7 @@ namespace Dam.Logic
                     carry = 1;
                 }
             }
+            takeOutNonSignificantZeroes();
         }
 
         public void multiply(HugeInt pNumber)
@@ -188,17 +192,21 @@ namespace Dam.Logic
                     }
                     rest = _Number[firstIndex] - subtrahend - carry;
                     carry = 0;
-                    if (rest >= 0)
+                    if (rest < 1000000000)
                     {
                         _Number[firstIndex] = rest;
                     }
                     else
                     {
                         carry = 1;//it borrows 1 to the numbers to the left
-                        _Number[firstIndex] = (rest + 10);
+                        _Number[firstIndex] = (rest + 1000000000);
                     }
                 }
                 this.takeOutNonSignificantZeroes();
+            }
+            else
+            {
+                _Number = null;
             }
         }
 

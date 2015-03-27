@@ -22,9 +22,9 @@ namespace Dam
         }
 
 
-        public static ulong threeRule(ulong pMin, ulong pMax , ulong pMinRelation)// To paint the current heigth in the view proportionate to the screen
+        public static ulong threeRule(ulong pCurrentPorcentage , ulong pMaxValue) //Max value must be calculated by the substraction of the real Max value minus the Min value 
         {
-            return pMinRelation*pMax/pMin;
+            return pCurrentPorcentage* pMaxValue/100;
         }
 
         public static List<Point[]> waveDrawing(int pStartingX, int pEndingX, int pStartingY,int pWaveQuantity) //pStartingY designates where the wave originates 

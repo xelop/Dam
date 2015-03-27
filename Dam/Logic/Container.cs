@@ -14,9 +14,9 @@ namespace Dam
         private HugeInt _MaxVolume;//volumes are in cm3
         private HugeInt _MinVolume;
         private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;//dimensions are in m
-        private Boolean _WaterOverflow, _lowCapacity;
+        private Boolean _WaterOverflow, _lowCapacity, _SignificanceVolumeChanged;
         private HugeInt _SignificantDiference;
-        private int _VolumePercentage;
+        private ulong _VolumePercentage;
 
         public Container(ulong pMaxHeight, ulong pMinHeight, ulong pWidth, ulong pLong)
         {
@@ -24,15 +24,16 @@ namespace Dam
             _MinHeigth = pMinHeight;
             _Width = pWidth;
             _Long = pLong;
+            _VolumePercentage = 1;
             _MaxVolume = Converter.calculateHugeVolume(pMaxHeight, pWidth, pLong);
             _MinVolume = Converter.calculateHugeVolume(pMinHeight, pWidth, pLong);
-            _CurrentVolume = Converter.calculateHugeVolume(1, pWidth, pLong);//container starts filled up above the minimun half by half the diference of the min and max height
-            _CurrentNoticeableVolume = _CurrentVolume;
-            _SignificantDiference = _CurrentVolume;
-            _CurrentHeigth = pMinHeight + (pMaxHeight - pMinHeight) / 2;
+            calculateSignificantChange();
+            _CurrentVolume =new HugeInt(_SignificantDiference.toString()); //container starts filled up at 1%
+            _CurrentNoticeableVolume = new HugeInt(_SignificantDiference.toString());
+            _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
             _WaterOverflow = false;
             _lowCapacity = false;
-            _VolumePercentage = 1;
+            _SignificanceVolumeChanged = false; 
         }
 
 
@@ -42,19 +43,21 @@ namespace Dam
             _CurrentVolume.add(new HugeInt(pWater.ToString()+ "000000"));//converted in cm3
             if (waterOverflow())
             {
-                _CurrentVolume = _MaxVolume;
+                _CurrentVolume = new HugeInt(_MaxVolume.toString());
                 _WaterOverflow = true;
             }
-            HugeInt _VolumeDiference=_CurrentVolume;
-            _VolumeDiference.subtract(_CurrentNoticeableVolume);
-            if (_VolumeDiference.greaterOrEqual(_SignificantDiference))
+
+            _CurrentNoticeableVolume.add(_SignificantDiference);
+            while (_CurrentVolume.greaterOrEqual(_CurrentNoticeableVolume))
             {
                 _VolumePercentage++;
-                _CurrentNoticeableVolume = _CurrentVolume;
-                //notificar que el porcentaje cambio
-                //Hay que calcular la nueva altura por medio del porcentaje actual del agua
-              
+                _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
+                _CurrentHeigth += _MinHeigth;
+                _SignificanceVolumeChanged = true;
+                _CurrentNoticeableVolume.add(_SignificantDiference);
             }
+            
+            _CurrentNoticeableVolume.subtract(_SignificantDiference);
         }
 
         public void removeWater(ulong pWater)//pWater enters method as meters^3
@@ -62,10 +65,29 @@ namespace Dam
             _CurrentVolume.subtract(new HugeInt (pWater.ToString() + "000000"));//converted in cm3
             if (notEnoughWater())
             {
-                _CurrentVolume = _MinVolume;
+                _CurrentVolume = new HugeInt(_MinVolume.toString());
                 _lowCapacity = true;
-                throw new Exception("The dam´s water level is at its minimum capacity. Dam´s operation will be paused for a moment");
             }
+
+            _CurrentNoticeableVolume.subtract(_SignificantDiference);
+
+            while (_CurrentNoticeableVolume.greaterOrEqual(_CurrentVolume))
+            {
+                _VolumePercentage--;
+                _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
+                _CurrentHeigth += _MinHeigth;
+                _SignificanceVolumeChanged = true;
+                _CurrentNoticeableVolume.subtract(_SignificantDiference);
+            }
+
+            _CurrentNoticeableVolume.add(_SignificantDiference);
+        }
+
+        public void calculateSignificantChange()
+        {
+            _SignificantDiference = new HugeInt(_MaxVolume.toString());
+            _SignificantDiference.oneHundredDivision();
+            System.Windows.Forms.MessageBox.Show(_SignificantDiference.toString());
         }
 
         public Boolean notEnoughWater()
@@ -136,6 +158,24 @@ namespace Dam
         {
             get { return _WaterOverflow; }
             set { _WaterOverflow = value; }
+        }
+
+        public Boolean SignificanceVolumeChanged
+        {
+            get { return _SignificanceVolumeChanged; }
+            set { _SignificanceVolumeChanged = value; }
+        }
+
+        public ulong VolumePercentage
+        {
+            get { return _VolumePercentage; }
+            set { _VolumePercentage = value; }
+        }
+
+        public HugeInt CurrentNoticeableVolume
+        {
+            get { return _CurrentNoticeableVolume; }
+            set { _CurrentNoticeableVolume = value; }
         }
     }
 }

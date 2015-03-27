@@ -88,6 +88,16 @@ namespace Dam.UI
             TankHeight.Invoke((MethodInvoker)(() => TankHeight.Text = Convert.ToString(pCurrentHeight)));
         }
 
+        public void EnergyLabelChanged(ulong pCurrentEnergy)
+        {
+            _lbl_SingleEnergy.Invoke((MethodInvoker)(() => _lbl_SingleEnergy.Text = "Current turbine production: "+Convert.ToString(pCurrentEnergy)));
+        }
+
+        public void volumeLabelChanged(string pCurrentVolume)
+        {
+            TankVolume.Invoke((MethodInvoker)(() => TankVolume.Text = pCurrentVolume));
+        }
+
         public void statusLabelChanged(string pStatus)
         {
             _lbl_TurbineStatus.Invoke((MethodInvoker)(() => _lbl_TurbineStatus.Text = "Current Turbine Status: "+ pStatus));
@@ -169,6 +179,11 @@ namespace Dam.UI
         {
             ProgramClosed = true;
             notifyObservers();
+        }
+
+        private void DamRepresentation_Load(object sender, EventArgs e)
+        {
+
         }
 
     }
