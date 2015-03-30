@@ -104,6 +104,7 @@ namespace Dam
             {
                 _View.statusLabelChanged("OFF");
             }
+            _View.singleEnergyLabelChanged(turbineFound.CurrentEnergyProduced);
         }
 
         public void runThread()
@@ -111,18 +112,12 @@ namespace Dam
             bool image1 = true;
             while (_RunningThread)
             {
-                try
-                {
+           
                     waveAnimation(image1);
                     image1 = !image1;
                     Thread.Sleep(200);
                     _View.TankLabelChanged(_Dam.Tank.CurrentHeigth);
-                    _View.volumeLabelChanged(_Dam.Tank.CurrentNoticeableVolume.toString());
-                    _View.EnergyLabelChanged(_Dam.currentEnergyProduced());
-                }
-                catch { _RunningThread = false;
-                _TemporalView.exit();
-                }
+                    
             }
         }
 
@@ -163,20 +158,18 @@ namespace Dam
                 _TemporalView.exit();
             }
         }
-        public String getFlowRate()
-        {
-            return "nada";
-        }
-        public String setValues()
-        {
-            return "nada";
-        }
         
         public void update(IObservable pOservable)
         {
             if (pOservable.GetType() == typeof(Dam))
             {
                 Dam dam = Dam.getInstance();
+                if (dam.Tank.SignificanceVolumeChanged)
+                {
+                    dam.Tank.SignificanceVolumeChanged = false;
+                    _View.volumeLabelChanged(dam.Tank.CurrentNoticeableVolume.toString());
+                    _View.TankLabelChanged(dam.Tank.CurrentHeigth);
+                }
                 if (_Dam.Tank.WaterOverflow)
                 {
                     //message box

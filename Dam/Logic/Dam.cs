@@ -13,7 +13,7 @@ namespace Dam
         private List<Turbine> _Turbines = new List<Turbine>();
         private Container _Tank;
         private Container _River;
-        private bool _WaterFlowing, _RealeasingWater;
+        private bool _WaterFlowing, _RealeasingWater, _VolumeChanged;
 
         private static Dam _Instance = null;
         
@@ -73,7 +73,7 @@ namespace Dam
                 if (_Tank.WaterOverflow)
                 {
                     notifyObservers();//notify will occur when the current height of the tank changes in 1%
-                    Thread.Sleep(10000);
+                    Thread.Sleep(1000);
                 }
             }
         }
@@ -161,6 +161,29 @@ namespace Dam
             return null;
         }
 
+        public ulong selectedTurbineEnergy(string pIndexToFind)
+        {
+            
+            Turbine foundTurbine = turbineById(pIndexToFind);
+            return foundTurbine.CurrentEnergyProduced;
+           
+        }
+
+        public void register(IObserver pObserver)
+        {
+            _ValuesChanged += pObserver.update;
+        }
+
+        public void unregister(IObserver pObserver)
+        {
+            _ValuesChanged -= pObserver.update;
+        }
+
+        public void notifyObservers()
+        {
+            _ValuesChanged(this);
+        }
+
         public Container River
         {
             get { return _River; }
@@ -190,21 +213,6 @@ namespace Dam
             set { _Turbines = value; }
         }
 
-        public void register(IObserver pObserver)
-        {
-            _ValuesChanged += pObserver.update;
-        }
-
-        public void unregister(IObserver pObserver)
-        {
-            _ValuesChanged -= pObserver.update;
-        }
-
-        public void notifyObservers()
-        {
-            _ValuesChanged(this);
-        }
-
         public Action<IObservable> ValuesChanged
         {
             get { return _ValuesChanged; }
@@ -224,6 +232,11 @@ namespace Dam
         {
             get { return _ReleasingRate; }
             set { _ReleasingRate = value; }
+        }
+        public bool VolumeChanged
+        {
+            get { return _VolumeChanged; }
+            set { _VolumeChanged = value; }
         }
     }
 }

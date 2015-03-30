@@ -24,13 +24,13 @@ namespace Dam
             _MinHeigth = pMinHeight;
             _Width = pWidth;
             _Long = pLong;
-            _VolumePercentage = 1;
             _MaxVolume = Converter.calculateHugeVolume(pMaxHeight, pWidth, pLong);
             _MinVolume = Converter.calculateHugeVolume(pMinHeight, pWidth, pLong);
             calculateSignificantChange();
-            _CurrentVolume =new HugeInt(_SignificantDiference.toString()); //container starts filled up at 1%
-            _CurrentNoticeableVolume = new HugeInt(_SignificantDiference.toString());
-            _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
+            _CurrentVolume =Converter.calculateHugeVolume((pMaxHeight-pMinHeight)/2,pWidth,pLong); //container starts filled up at 1%
+            _CurrentNoticeableVolume = new HugeInt(_CurrentVolume.toString());
+            _CurrentHeigth = (pMaxHeight - pMinHeight) / 2;
+            _VolumePercentage = _CurrentHeigth * 100 / _MaxHeigth;
             _WaterOverflow = false;
             _lowCapacity = false;
             _SignificanceVolumeChanged = false; 
@@ -45,19 +45,26 @@ namespace Dam
             {
                 _CurrentVolume = new HugeInt(_MaxVolume.toString());
                 _WaterOverflow = true;
-            }
-
-            _CurrentNoticeableVolume.add(_SignificantDiference);
-            while (_CurrentVolume.greaterOrEqual(_CurrentNoticeableVolume))
-            {
-                _VolumePercentage++;
+                _VolumePercentage = 100;
                 _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
                 _CurrentHeigth += _MinHeigth;
+                _CurrentNoticeableVolume= new HugeInt(_MaxVolume.toString());
                 _SignificanceVolumeChanged = true;
-                _CurrentNoticeableVolume.add(_SignificantDiference);
             }
-            
-            _CurrentNoticeableVolume.subtract(_SignificantDiference);
+            else
+            {
+                _CurrentNoticeableVolume.add(_SignificantDiference);
+                while (_CurrentVolume.greaterOrEqual(_CurrentNoticeableVolume))
+                {
+                    _VolumePercentage++;
+                    _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
+                    _CurrentHeigth += _MinHeigth;
+                    _SignificanceVolumeChanged = true;
+                    _CurrentNoticeableVolume.add(_SignificantDiference);
+                }
+
+                _CurrentNoticeableVolume.subtract(_SignificantDiference);
+            }
         }
 
         public void removeWater(ulong pWater)//pWater enters method as meters^3

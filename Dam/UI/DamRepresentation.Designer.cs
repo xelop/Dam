@@ -39,6 +39,7 @@
             this._lbl_TurbineStatus = new System.Windows.Forms.Label();
             this._btn_OnorOff = new System.Windows.Forms.Button();
             this._lbl_SingleEnergy = new System.Windows.Forms.Label();
+            this._lbl_TotalEnergy = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.RiverWater)).BeginInit();
             this.SuspendLayout();
             // 
@@ -127,7 +128,7 @@
             this._lbl_TurbineStatus.BackColor = System.Drawing.Color.Transparent;
             this._lbl_TurbineStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._lbl_TurbineStatus.ForeColor = System.Drawing.Color.Black;
-            this._lbl_TurbineStatus.Location = new System.Drawing.Point(356, 43);
+            this._lbl_TurbineStatus.Location = new System.Drawing.Point(346, 30);
             this._lbl_TurbineStatus.Name = "_lbl_TurbineStatus";
             this._lbl_TurbineStatus.Size = new System.Drawing.Size(165, 16);
             this._lbl_TurbineStatus.TabIndex = 10;
@@ -136,7 +137,7 @@
             // _btn_OnorOff
             // 
             this._btn_OnorOff.ForeColor = System.Drawing.Color.Black;
-            this._btn_OnorOff.Location = new System.Drawing.Point(609, 40);
+            this._btn_OnorOff.Location = new System.Drawing.Point(599, 27);
             this._btn_OnorOff.Name = "_btn_OnorOff";
             this._btn_OnorOff.Size = new System.Drawing.Size(75, 23);
             this._btn_OnorOff.TabIndex = 11;
@@ -148,12 +149,25 @@
             // 
             this._lbl_SingleEnergy.AutoSize = true;
             this._lbl_SingleEnergy.BackColor = System.Drawing.Color.Transparent;
-            this._lbl_SingleEnergy.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lbl_SingleEnergy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._lbl_SingleEnergy.ForeColor = System.Drawing.Color.Black;
-            this._lbl_SingleEnergy.Location = new System.Drawing.Point(373, 85);
+            this._lbl_SingleEnergy.Location = new System.Drawing.Point(349, 63);
             this._lbl_SingleEnergy.Name = "_lbl_SingleEnergy";
-            this._lbl_SingleEnergy.Size = new System.Drawing.Size(0, 18);
+            this._lbl_SingleEnergy.Size = new System.Drawing.Size(208, 16);
             this._lbl_SingleEnergy.TabIndex = 12;
+            this._lbl_SingleEnergy.Text = "Selected Turbine\'s Energy: 0";
+            // 
+            // _lbl_TotalEnergy
+            // 
+            this._lbl_TotalEnergy.AutoSize = true;
+            this._lbl_TotalEnergy.BackColor = System.Drawing.Color.Transparent;
+            this._lbl_TotalEnergy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lbl_TotalEnergy.ForeColor = System.Drawing.Color.Black;
+            this._lbl_TotalEnergy.Location = new System.Drawing.Point(349, 94);
+            this._lbl_TotalEnergy.Name = "_lbl_TotalEnergy";
+            this._lbl_TotalEnergy.Size = new System.Drawing.Size(191, 16);
+            this._lbl_TotalEnergy.TabIndex = 13;
+            this._lbl_TotalEnergy.Text = "Total Energy Production: 0";
             // 
             // DamRepresentation
             // 
@@ -161,6 +175,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Dam.Properties.Resources.Dam2;
             this.ClientSize = new System.Drawing.Size(859, 537);
+            this.Controls.Add(this._lbl_TotalEnergy);
             this.Controls.Add(this._lbl_SingleEnergy);
             this.Controls.Add(this._btn_OnorOff);
             this.Controls.Add(this._lbl_TurbineStatus);
@@ -196,6 +211,7 @@
         private System.Windows.Forms.Label _lbl_TurbineStatus;
         private System.Windows.Forms.Button _btn_OnorOff;
         private System.Windows.Forms.Label _lbl_SingleEnergy;
+        private System.Windows.Forms.Label _lbl_TotalEnergy;
 
     }
 }

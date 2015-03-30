@@ -20,7 +20,7 @@ namespace Dam.UI
         private List<Point[]> _WaterRiverCoordenates = new List<Point[]>();
         private BindingList<String> _IdTurbines = new BindingList<String>();
 
-        private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed = false;
+        private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist = false;
 
         public DamRepresentation()
         {
@@ -88,19 +88,24 @@ namespace Dam.UI
             TankHeight.Invoke((MethodInvoker)(() => TankHeight.Text = Convert.ToString(pCurrentHeight)));
         }
 
-        public void EnergyLabelChanged(ulong pCurrentEnergy)
-        {
-            _lbl_SingleEnergy.Invoke((MethodInvoker)(() => _lbl_SingleEnergy.Text = "Current turbine production: "+Convert.ToString(pCurrentEnergy)));
-        }
-
         public void volumeLabelChanged(string pCurrentVolume)
         {
             TankVolume.Invoke((MethodInvoker)(() => TankVolume.Text = pCurrentVolume));
         }
 
+        public void singleEnergyLabelChanged(ulong pCurrentEnergy)
+        {
+            _lbl_SingleEnergy.Text = "Selected Turbine's Energy: "+Convert.ToString(pCurrentEnergy);
+        }
+
+        public void totalEnergyLabelChanged(string pCurrentTotalEnergy)
+        {
+            _lbl_TotalEnergy.Text = "Total Energy Poduction: " + Convert.ToString(pCurrentTotalEnergy);
+        }
+
         public void statusLabelChanged(string pStatus)
         {
-            _lbl_TurbineStatus.Invoke((MethodInvoker)(() => _lbl_TurbineStatus.Text = "Current Turbine Status: "+ pStatus));
+             _lbl_TurbineStatus.Text = "Current Turbine Status: "+ pStatus;
         }
 
         private void _btn_AddTrubine_Click(object sender, EventArgs e)
@@ -123,6 +128,7 @@ namespace Dam.UI
 
         public string selectedTurbine()
         {
+            _TurbineExist = true;
             return _IdTurbines[_cmb_Turbines.SelectedIndex];
         }
 
@@ -184,6 +190,11 @@ namespace Dam.UI
         private void DamRepresentation_Load(object sender, EventArgs e)
         {
 
+        }
+        public bool TurbineExist
+        {
+            get { return _TurbineExist; }
+            set { _TurbineExist = value; }
         }
 
     }
