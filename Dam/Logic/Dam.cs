@@ -9,27 +9,67 @@ namespace Dam
 {
     class Dam:IObservable
     {
-        private ulong _CurrentFlowRate, _CurrentTotalEnergyProduced;
-        private List<Turbine> _Turbines = new List<Turbine>();
-        private Container _Tank;
-        private Container _River;
-        private bool _WaterFlowing, _RealeasingWater, _VolumeChanged;
-
-        private static Dam _Instance = null;
-        
-        //Threads
-        private Thread _FlowRate;
-        private Thread _TurbineActivity;
-        private Thread _ReleasingRate;
-       
-        //Actions
-        private Action<IObservable> _ValuesChanged;
-
+        //Class that will be the center of the facility, which everyone will be observing.
         public Dam()
         {
-            //_TurbineActivity = new Thread(turbineCheck);
             _ReleasingRate = new Thread(removeWaterToTank);
             _RealeasingWater = false;
+            _Turbines = new List<Turbine>();
+        }
+
+        public Container River
+        {
+            get { return _River; }
+            set { _River = value; }
+        }
+        public Container Tank
+        {
+            get { return _Tank; }
+            set { _Tank = value; }
+        }
+
+        public ulong CurrentFlowRate
+        {
+            get { return _CurrentFlowRate; }
+            set { _CurrentFlowRate = value; }
+        }
+
+        public ulong CurrentTotalEnergyProduced
+        {
+            get { return _CurrentTotalEnergyProduced; }
+            set { _CurrentTotalEnergyProduced = value; }
+        }
+
+        public List<Turbine> Turbines
+        {
+            get { return _Turbines; }
+            set { _Turbines = value; }
+        }
+
+        public Action<IObservable> ValuesChanged
+        {
+            get { return _ValuesChanged; }
+            set { _ValuesChanged = value; }
+        }
+        public bool RealeasingWater
+        {
+            get { return _RealeasingWater; }
+            set { _RealeasingWater = value; }
+        }
+        public Thread FlowRate
+        {
+            get { return _FlowRate; }
+            set { _FlowRate = value; }
+        }
+        public Thread ReleasingRate
+        {
+            get { return _ReleasingRate; }
+            set { _ReleasingRate = value; }
+        }
+        public bool VolumeChanged
+        {
+            get { return _VolumeChanged; }
+            set { _VolumeChanged = value; }
         }
 
         public static Dam getInstance()
@@ -41,6 +81,21 @@ namespace Dam
             return _Instance;
         }
 
+        public void setWaterOverflow()
+        {
+            Tank.WaterOverflow = !Tank.WaterOverflow;
+        }
+
+        public void setLowCapacity()
+        {
+            Tank.LowCapacity = !Tank.LowCapacity;
+        }
+
+        public String getCurrentTurbineId()
+        {
+            return _Turbines[_Turbines.Count - 1].Identifier;
+        }
+
         public void initializeDam(ulong pMaxHeigth, ulong pMinHeight, ulong pWidth, ulong pLong, ulong pCurrentFlowRate)
         {
             _CurrentFlowRate = pCurrentFlowRate;
@@ -49,12 +104,40 @@ namespace Dam
             _FlowRate = new Thread(addWaterToTank);
         }
 
+        public void setTurbineStateForId(string pIndexToFind)
+        {
+            Turbine foundTurbine = turbineById(pIndexToFind);
+            if (foundTurbine != null)
+            {
+                foundTurbine.TurnedOn = !foundTurbine.TurnedOn;
+            }
+        }
+
+        public Turbine turbineById(string pIndexToFind)
+        {
+            for (int indexOfTurbines = 0; indexOfTurbines < _Turbines.Count; indexOfTurbines++)
+            {
+                if (_Turbines[indexOfTurbines].Identifier == pIndexToFind)
+                    return _Turbines[indexOfTurbines];
+            }
+            return null;
+        }
+
+        public ulong selectedTurbineEnergy(string pIndexToFind)
+        {
+            Turbine foundTurbine = turbineById(pIndexToFind);
+            if (foundTurbine != null)
+            {
+                return foundTurbine.CurrentEnergyProduced;
+            }
+            return 0;
+        }
+
         public void addTurbine(ulong pMaxFlowRate, ulong pMinFlowRate,
             ulong pMaxPressure, ulong pMinPressure, ulong pMaxEnergy, ulong pMinEnergy)
         {
             Turbine turbineInstance = new Turbine(pMinFlowRate, pMaxFlowRate, pMinPressure,
                                       pMaxPressure, pMinEnergy, pMaxEnergy);
-
             register(turbineInstance);
             _Turbines.Add(turbineInstance);
         }
@@ -130,45 +213,6 @@ namespace Dam
             }
         }
 
-        public void setWaterOverflow()
-        {
-            Tank.WaterOverflow = !Tank.WaterOverflow;
-        }
-
-        public void setLowCapacity()
-        {
-            Tank.LowCapacity= !Tank.LowCapacity;
-        }
-
-        public String getCurrentTurbineId()
-        {
-            return _Turbines[_Turbines.Count-1].Identifier;
-        }
-
-        public void setTurbineStateForId(string pIndexToFind)
-        {
-            Turbine foundTurbine = turbineById(pIndexToFind);
-            foundTurbine.TurnedOn = !foundTurbine.TurnedOn;
-        }
-
-        public Turbine turbineById(string pIndexToFind)
-        {
-            for (int indexOfTurbines = 0; indexOfTurbines < _Turbines.Count; indexOfTurbines++)
-            {
-                if (_Turbines[indexOfTurbines].Identifier == pIndexToFind)
-                    return _Turbines[indexOfTurbines];
-            }
-            return null;
-        }
-
-        public ulong selectedTurbineEnergy(string pIndexToFind)
-        {
-            
-            Turbine foundTurbine = turbineById(pIndexToFind);
-            return foundTurbine.CurrentEnergyProduced;
-           
-        }
-
         public void register(IObserver pObserver)
         {
             _ValuesChanged += pObserver.update;
@@ -184,59 +228,17 @@ namespace Dam
             _ValuesChanged(this);
         }
 
-        public Container River
-        {
-            get { return _River; }
-            set {  _River = value; }
-        }
-        public Container Tank
-        {
-            get { return _Tank; }
-            set { _Tank = value; }
-        }
+        private ulong _CurrentFlowRate, _CurrentTotalEnergyProduced;
+        private List<Turbine> _Turbines;
+        private Container _Tank;
+        private Container _River;
+        private bool _WaterFlowing, _RealeasingWater, _VolumeChanged;
 
-        public ulong CurrentFlowRate
-        {
-            get { return _CurrentFlowRate; }
-            set { _CurrentFlowRate = value; }
-        }
+        private static Dam _Instance = null;
 
-        public ulong CurrentTotalEnergyProduced
-        {
-            get { return _CurrentTotalEnergyProduced; }
-            set { _CurrentTotalEnergyProduced = value; }
-        }
+        private Thread _FlowRate;
+        private Thread _ReleasingRate;
 
-        public List<Turbine> Turbines
-        {
-            get { return _Turbines; }
-            set { _Turbines = value; }
-        }
-
-        public Action<IObservable> ValuesChanged
-        {
-            get { return _ValuesChanged; }
-            set { _ValuesChanged = value; }
-        }
-        public bool RealeasingWater
-        {
-            get { return _RealeasingWater; }
-            set { _RealeasingWater = value; }
-        }
-        public Thread FlowRate
-        {
-            get { return _FlowRate; }
-            set { _FlowRate = value; }
-        }
-        public Thread ReleasingRate
-        {
-            get { return _ReleasingRate; }
-            set { _ReleasingRate = value; }
-        }
-        public bool VolumeChanged
-        {
-            get { return _VolumeChanged; }
-            set { _VolumeChanged = value; }
-        }
+        private Action<IObservable> _ValuesChanged;
     }
 }

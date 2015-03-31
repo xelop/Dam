@@ -8,25 +8,50 @@ namespace Dam.Logic
 {
     class HugeInt
     {
-        private List<ulong> _Number;
+        /* This class is designed to manage unsigned huge numbers. It includes basic operations of: adding, subtraction and multiplication. */ 
 
         public HugeInt(String pNumber)
         {
             int numberToSplit;
             int maximunDigitsInUlong = 9;//we will be making groups of 9
             _Number = new List<ulong>();
-            while (pNumber.Length != 0)
+            if (pNumber.Length == 0)
             {
-                numberToSplit = pNumber.Length - maximunDigitsInUlong;
-                if (numberToSplit < 0)
-                {
-                    numberToSplit = 0;
-                }
-                _Number.Insert(0, ulong.Parse(pNumber.Substring(numberToSplit)));
-                pNumber = pNumber.Remove(numberToSplit);
+                _Number.Add(0);
             }
-        }    
-        
+            else
+            {
+                while (pNumber.Length != 0)
+                {
+                    numberToSplit = pNumber.Length - maximunDigitsInUlong;
+                    if (numberToSplit < 0)
+                    {
+                        numberToSplit = 0;
+                    }
+                    try
+                    {
+                        _Number.Insert(0, ulong.Parse(pNumber.Substring(numberToSplit)));
+                    }
+                    catch (FormatException notNumber)//in case the number contained in the string, wasnt a number
+                    {
+                        _Number.Clear();
+                        _Number.Add(0);
+                        System.Windows.Forms.MessageBox.Show("Converting: "+ pNumber +" to huge integer was impossible because"+
+                            " it isn´t a number. The value of the number would be set to 0");
+                        break;
+                    }
+                    pNumber = pNumber.Remove(numberToSplit);
+                }
+            }
+            takeOutNonSignificantZeroes();//in case the string came like: 0000000000000000001
+        }
+
+        public List<ulong> Number
+        {
+            get { return _Number; }
+            set { _Number = value; }
+        }
+
         public string toString()
         {
             String result = "";
@@ -50,24 +75,8 @@ namespace Dam.Logic
             return result;
         }
 
-        public void takeOutNonSignificantZeroes()
-        {
-            int listSize = _Number.Count;
-            for (int numberIndex = 0; numberIndex < listSize; numberIndex++)
-            {
-                if (_Number[0] == 0 && _Number.Count > 1)
-                {
-                    _Number.RemoveAt(0);
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
-
         public Boolean greaterOrEqual(HugeInt pNumber)
-        {
+        {           
             if (_Number.Count > pNumber._Number.Count)
             {
                 return true;
@@ -90,7 +99,6 @@ namespace Dam.Logic
                     }
                 }
                 return true;//in the case they are exactly the same number
-
             }
         }
 
@@ -100,7 +108,6 @@ namespace Dam.Logic
             {
                 addZeroesToLeft(pNumber._Number.Count - _Number.Count); //_Number is covered up with 0´s to the left, until they are the same size
             }
-
             int firstIndex = _Number.Count;
             int secondIndex = pNumber._Number.Count;
             ulong sum;
@@ -125,17 +132,54 @@ namespace Dam.Logic
                 }
                 sum = _Number[firstIndex] + operand2 + carry;
                 carry = 0;
-                if (sum < 1000000000)
+                if (sum < Constants.OVERFLOW_NUMBER)
                 {
                     _Number[firstIndex] = sum;
                 }
                 else
                 {
-                    _Number[firstIndex] = (sum - 1000000000);
+                    _Number[firstIndex] = (sum - Constants.OVERFLOW_NUMBER);
                     carry = 1;
                 }
             }
             takeOutNonSignificantZeroes();
+        }
+
+        public void subtract(HugeInt pNumber)
+        {
+            if (this.greaterOrEqual(pNumber))//minuend must be greater than subtrahend
+            {
+                int firstIndex = _Number.Count;
+                int secondIndex = pNumber.Number.Count;
+                ulong rest;
+                ulong carry = 0;
+                ulong subtrahend;
+                while (secondIndex > 0 || carry == 1)
+                {
+                    firstIndex--;
+                    secondIndex--;
+                    if (secondIndex >= 0)
+                    {
+                        subtrahend = pNumber.Number[secondIndex];
+                    }
+                    else
+                    {
+                        subtrahend = 0;
+                    }
+                    rest = _Number[firstIndex] - subtrahend - carry;
+                    carry = 0;
+                    if (rest < Constants.OVERFLOW_NUMBER)
+                    {
+                        _Number[firstIndex] = rest;
+                    }
+                    else
+                    {
+                        carry = 1;//it borrows 1 to the numbers to the left
+                        _Number[firstIndex] = (rest + Constants.OVERFLOW_NUMBER);
+                    }
+                }
+                takeOutNonSignificantZeroes();
+            }
         }
 
         public void multiply(HugeInt pNumber)
@@ -168,60 +212,22 @@ namespace Dam.Logic
             _Number = finalProduct._Number;
         }
 
-
-        public void subtract(HugeInt pNumber )
-        {
-            if (this.greaterOrEqual(pNumber))//minuend must be greater than subtrahend
-            {
-                int firstIndex = _Number.Count;
-                int secondIndex = pNumber.Number.Count;
-                ulong rest;
-                ulong carry = 0;
-                ulong subtrahend;
-                while (secondIndex > 0 || carry == 1)
-                {
-                    firstIndex--;
-                    secondIndex--;
-                    if (secondIndex >= 0)
-                    {
-                        subtrahend = pNumber.Number[secondIndex];
-                    }
-                    else
-                    {
-                        subtrahend = 0;
-                    }
-                    rest = _Number[firstIndex] - subtrahend - carry;
-                    carry = 0;
-                    if (rest < 1000000000)
-                    {
-                        _Number[firstIndex] = rest;
-                    }
-                    else
-                    {
-                        carry = 1;//it borrows 1 to the numbers to the left
-                        _Number[firstIndex] = (rest + 1000000000);
-                    }
-                }
-                this.takeOutNonSignificantZeroes();
-            }
-            else
-            {
-                _Number = null;
-            }
-        }
-
         public void oneHundredDivision()
         {
             ulong numbersToAdd;
-            for (int firstIndex = _Number.Count - 1; firstIndex > 0; firstIndex--)
+            if (_Number != null)
             {
-                 numbersToAdd = (_Number[firstIndex-1] % 100)*10000000; //we are adding 8 0´s to the right
-                 _Number[firstIndex] = _Number[firstIndex] / 100 + numbersToAdd;
+                for (int firstIndex = _Number.Count - 1; firstIndex > 0; firstIndex--)
+                {
+                    numbersToAdd = (_Number[firstIndex - 1] % 100) * 10000000; //we are adding 8 0´s to the right
+                    _Number[firstIndex] = _Number[firstIndex] / 100 + numbersToAdd;
+                }
+                _Number[0] = _Number[0] / 100;
+                takeOutNonSignificantZeroes();
             }
-            _Number[0] = _Number[0] / 100;
         }
 
-        public void addZeroesToRight(int pAmountOfZeroes)
+        private void addZeroesToRight(int pAmountOfZeroes)
         {
             while (pAmountOfZeroes != 0)
             {
@@ -230,7 +236,7 @@ namespace Dam.Logic
             }
         }
 
-        public void addZeroesToLeft(int pAmountOfZeroes)
+        private void addZeroesToLeft(int pAmountOfZeroes)
         {
             while (pAmountOfZeroes != 0)
             {
@@ -239,12 +245,22 @@ namespace Dam.Logic
             }
         }
 
-        public List<ulong> Number
+        private void takeOutNonSignificantZeroes()
         {
-            get { return _Number; }
-            set { _Number = value; }
+            int listSize = _Number.Count;
+            for (int numberIndex = 0; numberIndex < listSize; numberIndex++)
+            {
+                if (_Number[0] == 0 && _Number.Count > 1)
+                {
+                    _Number.RemoveAt(0);
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
-
+        private List<ulong> _Number;
     }
 }

@@ -9,12 +9,7 @@ namespace Dam
 {
     class Turbine:IObserver
     {
-        private ulong _MinFlowRate, _MaxFlowRate, _MinPressure, _MaxPressure, _MinEnergyProduced,
-            _MaxEnergyProduced, _CurrentPressure, _CurrentFlowRate, _CurrentEnergyProduced;
-        private Boolean _TurnedOn;
-        private String _Identifier;
-        private static int _Counter = 0;
-
+        //Represent the class turbine, that will be an observer; that change its current values dynamically.
         public Turbine(ulong pMinFlowRate, ulong pMaxFlowRate, ulong pMinPressure, 
             ulong pMaxPressure, ulong pMinEnergyProduced, ulong pMaxEnergyProduced)
         {
@@ -27,39 +22,6 @@ namespace Dam
             _Identifier = "ID " + _Counter.ToString();
             _Counter++;
             _TurnedOn = true;
-        }
-
-        public void calculateCurrentPressure(ulong pPercentage)
-        {
-            _CurrentPressure = Converter.threeRule(pPercentage, _MaxPressure-_MinPressure);
-            _CurrentPressure += _MinPressure;
-        }
-        public void calculateCurrentFlowRate(ulong pPercentage) 
-        {
-            _CurrentFlowRate = Converter.threeRule(pPercentage, _MaxFlowRate - _MinFlowRate);
-            _CurrentFlowRate += _MinFlowRate;
-        }
-
-        public void calculateCurrentEnergyProduced(ulong pPercentage) 
-        {
-            _CurrentEnergyProduced = Converter.threeRule(pPercentage, _MaxEnergyProduced - _MinEnergyProduced);
-            _CurrentEnergyProduced += _MinEnergyProduced;
-        }
-
-        public void update(IObservable pOservable)
-        {
-            if (pOservable.GetType() == typeof(Dam))
-            {
-                Dam dam = Dam.getInstance();
-                if (_TurnedOn)
-                {
-                    calculateCurrentPressure(dam.Tank.VolumePercentage);
-                    calculateCurrentEnergyProduced(dam.Tank.VolumePercentage);
-                    calculateCurrentFlowRate(dam.Tank.VolumePercentage);
-                }
-            }
-
-            
         }
 
         public ulong MinFlowRate
@@ -128,5 +90,41 @@ namespace Dam
             set { _TurnedOn = value; }
         }
 
+        public void update(IObservable pOservable)
+        {
+            if (pOservable.GetType() == typeof(Dam))
+            {
+                Dam dam = Dam.getInstance();
+                if (_TurnedOn)
+                {
+                    calculateCurrentPressure(dam.Tank.VolumePercentage);
+                    calculateCurrentEnergyProduced(dam.Tank.VolumePercentage);
+                    calculateCurrentFlowRate(dam.Tank.VolumePercentage);
+                }
+            }  
+        }
+
+        private void calculateCurrentPressure(ulong pPercentage)
+        {
+            _CurrentPressure = Converter.threeRule(pPercentage, _MaxPressure - _MinPressure);
+            _CurrentPressure += _MinPressure;
+        }
+        private void calculateCurrentFlowRate(ulong pPercentage)
+        {
+            _CurrentFlowRate = Converter.threeRule(pPercentage, _MaxFlowRate - _MinFlowRate);
+            _CurrentFlowRate += _MinFlowRate;
+        }
+
+        private void calculateCurrentEnergyProduced(ulong pPercentage)
+        {
+            _CurrentEnergyProduced = Converter.threeRule(pPercentage, _MaxEnergyProduced - _MinEnergyProduced);
+            _CurrentEnergyProduced += _MinEnergyProduced;
+        }
+
+        private ulong _MinFlowRate, _MaxFlowRate, _MinPressure, _MaxPressure, _MinEnergyProduced,
+            _MaxEnergyProduced, _CurrentPressure, _CurrentFlowRate, _CurrentEnergyProduced;
+        private Boolean _TurnedOn;
+        private String _Identifier;
+        private static int _Counter = 0;
     }
 }

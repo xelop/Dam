@@ -8,15 +8,8 @@ using System.Threading.Tasks;
 namespace Dam
 {
     class Container
-    {
-        private HugeInt _CurrentVolume;
-        private HugeInt _CurrentNoticeableVolume;
-        private HugeInt _MaxVolume;//volumes are in cm3
-        private HugeInt _MinVolume;
-        private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;//dimensions are in m
-        private Boolean _WaterOverflow, _lowCapacity, _SignificanceVolumeChanged;
-        private HugeInt _SignificantDiference;
-        private ulong _VolumePercentage;
+    {/*Class in charge to represent an container that can store matter, including its volume and its dimensions, that can change dynamically
+        when adding or removig matter.*/
 
         public Container(ulong pMaxHeight, ulong pMinHeight, ulong pWidth, ulong pLong)
         {
@@ -27,84 +20,13 @@ namespace Dam
             _MaxVolume = Converter.calculateHugeVolume(pMaxHeight, pWidth, pLong);
             _MinVolume = Converter.calculateHugeVolume(pMinHeight, pWidth, pLong);
             calculateSignificantChange();
-            _CurrentVolume =Converter.calculateHugeVolume((pMaxHeight-pMinHeight)/2,pWidth,pLong); //container starts filled up at 1%
+            _CurrentVolume = Converter.calculateHugeVolume(((pMaxHeight - pMinHeight) / 2) + pMinHeight, pWidth, pLong); //the half between max and min height
             _CurrentNoticeableVolume = new HugeInt(_CurrentVolume.toString());
-            _CurrentHeigth = (pMaxHeight - pMinHeight) / 2;
+            _CurrentHeigth = ((pMaxHeight - pMinHeight) / 2) +pMinHeight;
             _VolumePercentage = _CurrentHeigth * 100 / _MaxHeigth;
             _WaterOverflow = false;
             _lowCapacity = false;
             _SignificanceVolumeChanged = false; 
-        }
-
-
-
-        public void addWater(ulong pWater) //pWater enters method as meters^3
-        {
-            _CurrentVolume.add(new HugeInt(pWater.ToString()+ "000000"));//converted in cm3
-            if (waterOverflow())
-            {
-                _CurrentVolume = new HugeInt(_MaxVolume.toString());
-                _WaterOverflow = true;
-                _VolumePercentage = 100;
-                _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
-                _CurrentHeigth += _MinHeigth;
-                _CurrentNoticeableVolume= new HugeInt(_MaxVolume.toString());
-                _SignificanceVolumeChanged = true;
-            }
-            else
-            {
-                _CurrentNoticeableVolume.add(_SignificantDiference);
-                while (_CurrentVolume.greaterOrEqual(_CurrentNoticeableVolume))
-                {
-                    _VolumePercentage++;
-                    _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
-                    _CurrentHeigth += _MinHeigth;
-                    _SignificanceVolumeChanged = true;
-                    _CurrentNoticeableVolume.add(_SignificantDiference);
-                }
-
-                _CurrentNoticeableVolume.subtract(_SignificantDiference);
-            }
-        }
-
-        public void removeWater(ulong pWater)//pWater enters method as meters^3
-        {
-            _CurrentVolume.subtract(new HugeInt (pWater.ToString() + "000000"));//converted in cm3
-            if (notEnoughWater())
-            {
-                _CurrentVolume = new HugeInt(_MinVolume.toString());
-                _lowCapacity = true;
-            }
-
-            _CurrentNoticeableVolume.subtract(_SignificantDiference);
-
-            while (_CurrentNoticeableVolume.greaterOrEqual(_CurrentVolume))
-            {
-                _VolumePercentage--;
-                _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
-                _CurrentHeigth += _MinHeigth;
-                _SignificanceVolumeChanged = true;
-                _CurrentNoticeableVolume.subtract(_SignificantDiference);
-            }
-
-            _CurrentNoticeableVolume.add(_SignificantDiference);
-        }
-
-        public void calculateSignificantChange()
-        {
-            _SignificantDiference = new HugeInt(_MaxVolume.toString());
-            _SignificantDiference.oneHundredDivision();
-            System.Windows.Forms.MessageBox.Show(_SignificantDiference.toString());
-        }
-
-        public Boolean notEnoughWater()
-        {
-            return _MinVolume.greaterOrEqual(_CurrentVolume);
-        }
-
-        public Boolean waterOverflow()
-        {
-            return _CurrentVolume.greaterOrEqual(_MaxVolume);
         }
 
         public HugeInt CurrentVolume
@@ -184,5 +106,82 @@ namespace Dam
             get { return _CurrentNoticeableVolume; }
             set { _CurrentNoticeableVolume = value; }
         }
+
+        public void addWater(ulong pWater) //pWater enters method as meters^3
+        {
+            _CurrentVolume.add(new HugeInt(pWater.ToString()+ "000000"));//converted in cm3
+            if (waterOverflow())
+            {
+                _CurrentVolume = new HugeInt(_MaxVolume.toString());
+                _WaterOverflow = true;
+                _VolumePercentage = 100;
+                _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
+                _CurrentHeigth += _MinHeigth;
+                _CurrentNoticeableVolume= new HugeInt(_MaxVolume.toString());
+                _SignificanceVolumeChanged = true;
+            }
+            else
+            {
+                _CurrentNoticeableVolume.add(_SignificantDiference);
+                while (_CurrentVolume.greaterOrEqual(_CurrentNoticeableVolume))
+                {
+                    _VolumePercentage++;
+                    _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
+                    _CurrentHeigth += _MinHeigth;
+                    _SignificanceVolumeChanged = true;
+                    _CurrentNoticeableVolume.add(_SignificantDiference);
+                }
+                _CurrentNoticeableVolume.subtract(_SignificantDiference);
+            }
+        }
+
+        public void removeWater(ulong pWater)//pWater enters method as meters^3
+        {
+            _CurrentVolume.subtract(new HugeInt (pWater.ToString() + "000000"));//converted in cm3
+            if (notEnoughWater())
+            {
+                _CurrentVolume = new HugeInt(_MinVolume.toString());
+                _lowCapacity = true;
+            }
+
+            _CurrentNoticeableVolume.subtract(_SignificantDiference);
+
+            while (_CurrentNoticeableVolume.greaterOrEqual(_CurrentVolume))
+            {
+                _VolumePercentage--;
+                _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
+                _CurrentHeigth += _MinHeigth;
+                _SignificanceVolumeChanged = true;
+                _CurrentNoticeableVolume.subtract(_SignificantDiference);
+            }
+
+            _CurrentNoticeableVolume.add(_SignificantDiference);
+        }
+
+        private void calculateSignificantChange()
+        {
+            _SignificantDiference = new HugeInt(_MaxVolume.toString());
+            _SignificantDiference.oneHundredDivision();
+            System.Windows.Forms.MessageBox.Show(_SignificantDiference.toString());
+        }
+
+        private Boolean notEnoughWater()
+        {
+            return _MinVolume.greaterOrEqual(_CurrentVolume);
+        }
+
+        private Boolean waterOverflow()
+        {
+            return _CurrentVolume.greaterOrEqual(_MaxVolume);
+        }
+
+        private HugeInt _CurrentVolume;//changes every time its adds or subtracts water
+        private HugeInt _CurrentNoticeableVolume;//changes only when there is a significant difference
+        private HugeInt _MaxVolume;//volumes are in cm3
+        private HugeInt _MinVolume;
+        private ulong _MinHeigth, _MaxHeigth, _Width, _Long, _CurrentHeigth;//dimensions are in m
+        private Boolean _WaterOverflow, _lowCapacity, _SignificanceVolumeChanged;
+        private HugeInt _SignificantDiference;//represents an 1% of the whole volume
+        private ulong _VolumePercentage;
     }
 }

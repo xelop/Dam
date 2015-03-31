@@ -24,14 +24,15 @@ namespace Dam
             mainControl.setTemporalView(simulator);
             Application.Run(simulator);
 
-            /*HugeInt number1 = new HugeInt("100");
-            number1.subtract(new HugeInt("101"));
-            System.Windows.Forms.MessageBox.Show(number1.toString());
+            /*HugeInt number1 = new HugeInt("123");
+            HugeInt number2 = new HugeInt("9");
+            //number1.subtract(new HugeInt("101"));
+            //System.Windows.Forms.MessageBox.Show(number1.toString());
             //number1.subtract(number2);
             //number1.add(number2);
             //number1.multiply(number2);
             number1.oneHundredDivision();
-            System.Windows.Forms.MessageBox.Show((number1.toString().Length.ToString()));
+            System.Windows.Forms.MessageBox.Show((number1.toString()));
             //s.Stop();
             //TimeSpan d = s.Elapsed;
             

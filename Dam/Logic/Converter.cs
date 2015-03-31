@@ -10,17 +10,7 @@ namespace Dam
 {
     static class Converter
     {
-
-        public static List<ulong> copyList(List<ulong> listToCopy)//make an exact copy of a list
-        {
-            List<ulong> newList = new List<ulong>();
-            for (int numberIndex = 0; numberIndex < listToCopy.Count; numberIndex++)
-            {
-                newList.Add(listToCopy[numberIndex]);
-            }
-            return newList;
-        }
-
+    //Class that contains basic static methods used for conversions, to be called anywhere
 
         public static ulong threeRule(ulong pCurrentPorcentage , ulong pMaxValue) //Max value must be calculated by the substraction of the real Max value minus the Min value 
         {
@@ -28,9 +18,9 @@ namespace Dam
         }
 
         public static List<Point[]> waveDrawing(int pStartingX, int pEndingX, int pStartingY,int pWaveQuantity) //pStartingY designates where the wave originates 
-        { 
+        {
+            List<Point[]> water = new List<Point[]>();
             int waveLenght = (pEndingX - pStartingX) / pWaveQuantity; //pWaveQuantity would be an approximate
-            List<Point[]> water=new List<Point[]>();
             while(pStartingX < pEndingX)
             {
                     Point[] singleWave ={new Point(pStartingX, pStartingY),
@@ -55,7 +45,7 @@ namespace Dam
             return pKilometers * 1000;
         }
 
-        public static String metersToCentimeters(ulong pMeters)
+        private static String metersToCentimeters(ulong pMeters)
         {
             return pMeters.ToString() + "00";
         }
