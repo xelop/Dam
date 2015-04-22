@@ -9,13 +9,25 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Dam.Logic;
 
+/*this class is used to set the attributes of the turbines the user wants, it is hidden as the user can call it many times, at the end it closes
+ * as the whole application closes*/
+
 namespace Dam.UI
 {
     public partial class AddTurbine : Form, IObservable
     {
 
-        private Action<IObservable> _NewTurbine;
-
+        public Action<IObservable> newTurbine
+        {
+            get
+            {
+                return _NewTurbine;
+            }
+            set
+            {
+                _NewTurbine = value;
+            }
+        }
 
         public AddTurbine()
         {
@@ -61,26 +73,6 @@ namespace Dam.UI
             _NewTurbine(this);
         }
 
-        public Action<IObservable> newTurbine
-        {
-            get
-            {
-                return _NewTurbine;
-            }
-            set
-            {
-                _NewTurbine = value;
-            }
-        }
-
-        public void hide()
-        {
-            this.Hide();
-        }
-
-        public void show()
-        {
-            this.Show();
-        }
+        private Action<IObservable> _NewTurbine;
     }
 }

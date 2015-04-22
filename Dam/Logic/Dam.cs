@@ -17,7 +17,7 @@ namespace Dam
             _RealeasingWater = false;
             _Turbines = new List<Turbine>();
             _FlowRate = new Thread(addWaterToTank);
-            _FlowRate.IsBackground = true;
+            _FlowRate.IsBackground = true; //way to exit in case the whole application is closed
         }
 
         public Container River
@@ -104,7 +104,7 @@ namespace Dam
         {
             _CurrentFlowRate = pCurrentFlowRate;
             _Tank = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
-            _River = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
+            _River = new Container(pMaxHeigth, 1, pWidth, pLong);
         }
 
         public void setTurbineStateForId(string pIndexToFind)
@@ -204,7 +204,7 @@ namespace Dam
                 Thread.Sleep(1000);
                 if (_Tank.SignificanceVolumeChanged)
                 {
-                    currentWaterLoss();
+                    _River.addWater(currentWaterLoss());
                     notifyObservers();
 
                 }

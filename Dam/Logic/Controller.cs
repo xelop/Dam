@@ -8,23 +8,25 @@ using System.Drawing;
 using Dam.UI;
 using System.Windows.Forms;
 
+/*This class is in charge of communicating the UI for the user and the logics behind it. It is supposed to be the bridge between those
+ * also, it is in charge of starting the threads of the program and closing them too*/
+
 namespace Dam
 {
     class Controller:IObserver
     {
-        private Dam _Dam;
-        private DamRepresentation _View;
-        private DamAttributeSelection _TemporalView;
-        private Thread _UIValuesChanger;
-        private AddTurbine _NewTurbineCreator;
-        private static Controller _Instance = null;
-        private bool _RunningThread = true;
 
-
-        private Controller(){
+        private Controller()
+        {
             _Dam = Dam.getInstance();
-            _UIValuesChanger = new Thread(runThread);
+            _UIValuesChanger = new Thread(waveAnimation);
             _UIValuesChanger.IsBackground = true;
+        }
+
+        public DamAttributeSelection TemporalView
+        {
+            get { return _TemporalView; }
+            set { _TemporalView = value; }
         }
 
         public static Controller getInstance()
@@ -36,7 +38,7 @@ namespace Dam
             return _Instance;
         }
 
-        public void setTemporalView(DamAttributeSelection pSelector)
+        public void setTemporalView(DamAttributeSelection pSelector) //method to stablish a temporal link of the first UI for the attributes.
         {
             _TemporalView = pSelector;
             _TemporalView.register(this);
@@ -46,21 +48,24 @@ namespace Dam
 
 
         public void createDam(string pMaxHeight, string pMinHeight, 
-            string pWidth, string pLength, string pFlowRate, bool pKm)
+            string pWidth, string pLength, string pFlowRate, bool pKm) //links a Dam with this controller, 
         {
+            ulong[] attributes = new ulong[] { ulong.Parse(pMaxHeight), ulong.Parse(pMinHeight), ulong.Parse(pWidth), ulong.Parse(pLength), ulong.Parse(pFlowRate) };
+            
             if(pKm)
             {
-                _Dam.initializeDam(Converter.kmToMeters(ulong.Parse(pMaxHeight)), Converter.kmToMeters(ulong.Parse(pMinHeight)),
-                    Converter.kmToMeters(ulong.Parse(pWidth)), Converter.kmToMeters(ulong.Parse(pLength)), ulong.Parse(pFlowRate));
-            }
-            else{
-                _Dam.initializeDam(ulong.Parse(pMaxHeight), ulong.Parse(pMinHeight),
-                   ulong.Parse(pWidth), ulong.Parse(pLength), ulong.Parse(pFlowRate));
+                for (int index = 0; index < attributes.Length; index++)
+                {
+                    attributes[index] = Converter.kmToMeters(attributes[index]);
+                }
             }
 
+            _Dam.initializeDam(attributes[0], attributes[1], attributes[2], attributes[3], attributes[4]);
+
             _Dam.register(this); //add observer
-            _TemporalView.Hide(); //hides the first interface running in theb back
+            _TemporalView.Hide(); //hides the first interface running in the back, because of the system.runapplication
             newView(); //generates de main interface
+
             _Dam.FlowRate.Start(); //starts each thread after the interface was created.
             _Dam.ReleasingRate.Start();
         }
@@ -106,18 +111,18 @@ namespace Dam
             _View.singleEnergyLabelChanged(turbineFound.CurrentEnergyProduced);
         }
 
-        public void runThread()
+        public void waveAnimation()
         {
             bool image = true;
             while (_RunningThread)
             {
-                waveAnimation(image);
+                wavePainting(image);
                 image = !image;
                 Thread.Sleep(200);
             }
         }
 
-        public void waveAnimation(bool pImageOne)
+        public void wavePainting(bool pImageOne)
         {      
             int waveQuantity;
 
@@ -127,6 +132,7 @@ namespace Dam
 
             int coordinateYTank = Constants.HEIGHT_TANK_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.Tank.CurrentHeigth*Constants.HEIGHT_TANK_LABEL/_Dam.Tank.MaxHeigth);
             int coordinateYRiver = Constants.HEIGHT_RIVER_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.River.CurrentHeigth*Constants.HEIGHT_RIVER_LABEL/_Dam.River.MaxHeigth);
+
             List<Point[]> tankCoordinates= Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_TANK,
                 coordinateYTank, waveQuantity);
 
@@ -170,11 +176,14 @@ namespace Dam
                 dam.Tank.SignificanceVolumeChanged = false;
                 _View.volumeLabelChanged(dam.Tank.CurrentNoticeableVolume.toString());
                 _View.tankLabelChanged(dam.Tank.CurrentHeigth);
+
                 Turbine currentSelection = dam.turbineById(_View.selectedTurbine());
+
                 if (currentSelection != null)
                     _View.singleEnergyLabelChanged(currentSelection.CurrentEnergyProduced);
                 else
                     _View.singleEnergyLabelChanged(0);
+
                 _View.totalEnergyLabelChanged(Convert.ToString(dam.currentEnergyProduced()));
             }
             if (_Dam.Tank.WaterOverflow)
@@ -219,11 +228,12 @@ namespace Dam
             }
         }
 
-        public DamAttributeSelection TemporalView
-        {
-            get { return _TemporalView; }
-            set { _TemporalView = value; }
-        }
-
+        private DamAttributeSelection _TemporalView;
+        private Dam _Dam;
+        private DamRepresentation _View;
+        private Thread _UIValuesChanger;
+        private AddTurbine _NewTurbineCreator;
+        private static Controller _Instance = null;
+        private bool _RunningThread = true;
     }
 }

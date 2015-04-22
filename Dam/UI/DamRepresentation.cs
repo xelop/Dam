@@ -10,19 +10,56 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 
+/*main class of the UI it is in charge of every single detail that the user wants to see, most of its methods consist of values
+ * changers depending on what the controller sends here. The controller is in charge of notifying that values changed but
+ * this UI thread is the only one who can change them visualy*/
+
 namespace Dam.UI
 {
     public partial class DamRepresentation : Form, IObservable
     {
-        private Action<IObservable> _DamStatusChanged;
 
-        private List<Point[]> _WaterContainerCoordenates = new List<Point[]>();
-        private List<Point[]> _WaterRiverCoordenates = new List<Point[]>();
-        private BindingList<String> _IdTurbines = new BindingList<String>();
-        private String _CurrentTankHeight, _CurrentVolume="0";
-        private int selectedTurbineIndex;
+        public BindingList<String> IdTurbines
+        {
+            get { return _IdTurbines; }
+            set { _IdTurbines = value; }
+        }
+        public Action<IObservable> DamStatusChanged
+        {
+            get { return _DamStatusChanged; }
+            set { _DamStatusChanged = value; }
+        }
+        public bool TurbineChanged
+        {
+            get { return _TurbineChanged; }
+            set { _TurbineChanged = value; }
+        }
+        public bool TurbineRequested
+        {
+            get { return _TurbineRequested; }
+            set { _TurbineRequested = value; }
+        }
+        public bool TurbineStatusRequested
+        {
+            get { return _TurbineStatusRequested; }
+            set { _TurbineStatusRequested = value; }
+        }
+        public bool ProgramClosed
+        {
+            get { return _ProgramClosed; }
+            set { _ProgramClosed = value; }
+        }
+        public bool FlowRateRequest
+        {
+            get { return _FlowRateRequest; }
+            set { _FlowRateRequest = value; }
+        }
+        public bool TurbineExist
+        {
+            get { return _TurbineExist; }
+            set { _TurbineExist = value; }
+        }
 
-        private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist, _FlowRateRequest = false;
 
         public DamRepresentation()
         {
@@ -30,11 +67,7 @@ namespace Dam.UI
             
             typeof(Panel).InvokeMember("DoubleBuffered",
             BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
-            null, WaterContainer, new object[] { true }); //forma abstracta de agregar una property a una clase que no la tiene
-
-            /*typeof(Panel).InvokeMember("DoubleBuffered",
-            BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
-            null, WaterRiver, new object[] { true });*/
+            null, WaterContainer, new object[] { true }); // we add a double buffer into the panel waterContainer to avoid flickering
 
             WaterContainer.Height = Constants.HEIGHT_TANK_LABEL;
             RiverWater.Height = Constants.HEIGHT_RIVER_LABEL;
@@ -45,7 +78,7 @@ namespace Dam.UI
         public void paintWater(List<Point[]> pContainerCoordenates, List<Point[]> pRiverCoordenates)
         {
             _WaterContainerCoordenates = pContainerCoordenates;
-            WaterContainer.Invalidate();
+            WaterContainer.Invalidate(); //request the thread to repaint the given element.
             _WaterRiverCoordenates = pRiverCoordenates;
             RiverWater.Invalidate();
         }
@@ -167,61 +200,21 @@ namespace Dam.UI
 
         //Properties Methods
 
-        public BindingList<String> IdTurbines
-        {
-            get { return _IdTurbines; }
-            set { _IdTurbines = value; }
-        }
-        public Action<IObservable> DamStatusChanged
-        {
-            get { return _DamStatusChanged; }
-            set { _DamStatusChanged = value; }
-        }
-        public bool TurbineChanged
-        {
-          get { return _TurbineChanged; }
-          set { _TurbineChanged = value; }
-        }    
-        public bool TurbineRequested
-        {
-          get { return _TurbineRequested; }
-          set { _TurbineRequested = value; }
-        }
-        public bool TurbineStatusRequested
-        {
-          get { return _TurbineStatusRequested; }
-          set { _TurbineStatusRequested = value; }
-        }
-        public bool ProgramClosed
-        {
-            get { return _ProgramClosed; }
-            set { _ProgramClosed = value; }
-        }
-        public bool FlowRateRequest
-        {
-            get { return _FlowRateRequest; }
-            set { _FlowRateRequest = value; }
-        }
-
         private void DamRepresentation_FormClosing(object sender, FormClosingEventArgs e)
         {
             ProgramClosed = true;
             notifyObservers();
         }
 
-        private void DamRepresentation_Load(object sender, EventArgs e)
-        {
+        private Action<IObservable> _DamStatusChanged;
 
-        }
-        public bool TurbineExist
-        {
-            get { return _TurbineExist; }
-            set { _TurbineExist = value; }
-        }
+        private List<Point[]> _WaterContainerCoordenates = new List<Point[]>();
+        private List<Point[]> _WaterRiverCoordenates = new List<Point[]>();
+        private BindingList<String> _IdTurbines = new BindingList<String>();
+        private String _CurrentTankHeight, _CurrentVolume = "0";
+        private int selectedTurbineIndex;
 
-        private void _lbl_TankHeight_Paint(object sender, PaintEventArgs e)
-        {
-            _lbl_TankHeight.Text = _CurrentTankHeight;
-        }
+        private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist, _FlowRateRequest = false;
+
     }
 }

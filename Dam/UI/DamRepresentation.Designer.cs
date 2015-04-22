@@ -74,7 +74,6 @@
             this._lbl_TankHeight.Name = "_lbl_TankHeight";
             this._lbl_TankHeight.Size = new System.Drawing.Size(0, 16);
             this._lbl_TankHeight.TabIndex = 3;
-            this._lbl_TankHeight.Paint += new System.Windows.Forms.PaintEventHandler(this._lbl_TankHeight_Paint);
             // 
             // label2
             // 
