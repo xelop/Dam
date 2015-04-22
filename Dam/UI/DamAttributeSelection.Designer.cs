@@ -29,12 +29,14 @@
         private void InitializeComponent()
         {
             this.AttrbutesName = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.AttributesSet = new System.Windows.Forms.Panel();
+            this.MinHeightTextBox = new System.Windows.Forms.TextBox();
             this.MetersOption = new System.Windows.Forms.RadioButton();
             this.KmOption = new System.Windows.Forms.RadioButton();
             this.Start = new System.Windows.Forms.Button();
@@ -42,8 +44,6 @@
             this.LengthTextBox = new System.Windows.Forms.TextBox();
             this.WidthTextBox = new System.Windows.Forms.TextBox();
             this.MaxHeightTextBox = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.MinHeightTextBox = new System.Windows.Forms.TextBox();
             this.AttrbutesName.SuspendLayout();
             this.AttributesSet.SuspendLayout();
             this.SuspendLayout();
@@ -61,6 +61,16 @@
             this.AttrbutesName.Name = "AttrbutesName";
             this.AttrbutesName.Size = new System.Drawing.Size(277, 378);
             this.AttrbutesName.TabIndex = 0;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Maiandra GD", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(82, 135);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(129, 18);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "- Minimum Heigth";
             // 
             // label5
             // 
@@ -128,6 +138,13 @@
             this.AttributesSet.Size = new System.Drawing.Size(248, 378);
             this.AttributesSet.TabIndex = 1;
             // 
+            // MinHeightTextBox
+            // 
+            this.MinHeightTextBox.Location = new System.Drawing.Point(76, 135);
+            this.MinHeightTextBox.Name = "MinHeightTextBox";
+            this.MinHeightTextBox.Size = new System.Drawing.Size(100, 20);
+            this.MinHeightTextBox.TabIndex = 1;
+            // 
             // MetersOption
             // 
             this.MetersOption.AutoSize = true;
@@ -165,21 +182,21 @@
             this.FlowRateTextBox.Location = new System.Drawing.Point(76, 270);
             this.FlowRateTextBox.Name = "FlowRateTextBox";
             this.FlowRateTextBox.Size = new System.Drawing.Size(100, 20);
-            this.FlowRateTextBox.TabIndex = 3;
+            this.FlowRateTextBox.TabIndex = 4;
             // 
             // LengthTextBox
             // 
             this.LengthTextBox.Location = new System.Drawing.Point(76, 224);
             this.LengthTextBox.Name = "LengthTextBox";
             this.LengthTextBox.Size = new System.Drawing.Size(100, 20);
-            this.LengthTextBox.TabIndex = 2;
+            this.LengthTextBox.TabIndex = 3;
             // 
             // WidthTextBox
             // 
             this.WidthTextBox.Location = new System.Drawing.Point(76, 180);
             this.WidthTextBox.Name = "WidthTextBox";
             this.WidthTextBox.Size = new System.Drawing.Size(100, 20);
-            this.WidthTextBox.TabIndex = 1;
+            this.WidthTextBox.TabIndex = 2;
             // 
             // MaxHeightTextBox
             // 
@@ -187,23 +204,6 @@
             this.MaxHeightTextBox.Name = "MaxHeightTextBox";
             this.MaxHeightTextBox.Size = new System.Drawing.Size(100, 20);
             this.MaxHeightTextBox.TabIndex = 0;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Maiandra GD", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(82, 135);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(129, 18);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "- Minimum Heigth";
-            // 
-            // MinHeightTextBox
-            // 
-            this.MinHeightTextBox.Location = new System.Drawing.Point(76, 135);
-            this.MinHeightTextBox.Name = "MinHeightTextBox";
-            this.MinHeightTextBox.Size = new System.Drawing.Size(100, 20);
-            this.MinHeightTextBox.TabIndex = 7;
             // 
             // DamAttributeSelection
             // 

@@ -19,8 +19,10 @@ namespace Dam.UI
         private List<Point[]> _WaterContainerCoordenates = new List<Point[]>();
         private List<Point[]> _WaterRiverCoordenates = new List<Point[]>();
         private BindingList<String> _IdTurbines = new BindingList<String>();
+        private String _CurrentTankHeight, _CurrentVolume="0";
+        private int selectedTurbineIndex;
 
-        private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist = false;
+        private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist, _FlowRateRequest = false;
 
         public DamRepresentation()
         {
@@ -48,34 +50,24 @@ namespace Dam.UI
             RiverWater.Invalidate();
         }
 
+        public void paintWaves(List<Point[]> pLiquidCoordinates, int pEndingX, int pHeightContainer, PaintEventArgs pEvent)
+        {
+            pEvent.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, pLiquidCoordinates[0][0].Y,
+                                                                        pEndingX, pHeightContainer));
+            for (int element_counter = 0; element_counter < pLiquidCoordinates.Count; element_counter++)
+                pEvent.Graphics.FillClosedCurve(Brushes.Blue, pLiquidCoordinates[element_counter]);
+
+            pLiquidCoordinates.Clear();
+        }
 
         private void WaterContainer_Paint(object sender, PaintEventArgs e)
         {
-            try
-            {
-                e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, _WaterContainerCoordenates[0][0].Y,
-                                                                            Constants.ENDING_X_TANK, Constants.HEIGHT_TANK_LABEL));
-
-                for (int element_counter = 0; element_counter < _WaterContainerCoordenates.Count; element_counter++)
-                    e.Graphics.FillClosedCurve(Brushes.Blue, _WaterContainerCoordenates[element_counter]);
-
-                _WaterContainerCoordenates.Clear();
-            }
-            catch { };
+            paintWaves(_WaterContainerCoordenates, Constants.ENDING_X_TANK, Constants.HEIGHT_TANK_LABEL, e);
         }
 
         private void RiverWater_Paint(object sender, PaintEventArgs e)
         {
-            try
-            {
-                e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, _WaterRiverCoordenates[0][0].Y,
-                                                                        Constants.ENDING_X_RIVER, Constants.HEIGHT_RIVER_LABEL));
-                for (int element_counter = 0; element_counter < _WaterRiverCoordenates.Count; element_counter++)
-                    e.Graphics.FillClosedCurve(Brushes.Blue, _WaterRiverCoordenates[element_counter]);
-
-                _WaterRiverCoordenates.Clear();
-            }
-            catch { }
+            paintWaves(_WaterRiverCoordenates, Constants.ENDING_X_RIVER, Constants.HEIGHT_RIVER_LABEL, e);
         } 
 
         public void updateBox()
@@ -83,24 +75,29 @@ namespace Dam.UI
             _cmb_Turbines.DataSource = _IdTurbines;
         }
 
-        public void TankLabelChanged(ulong pCurrentHeight)
+        public void changeCurrentFlowText(ulong pQuantity)
         {
-            TankHeight.Invoke((MethodInvoker)(() => TankHeight.Text = Convert.ToString(pCurrentHeight)));
+            _txt_CurrentFlow.Text = Convert.ToString(pQuantity);
+        }
+
+        public void tankLabelChanged(ulong pCurrentHeight)
+        {
+            _lbl_TankHeight.Invoke((MethodInvoker)(() => _lbl_TankHeight.Text = Convert.ToString(pCurrentHeight)));
         }
 
         public void volumeLabelChanged(string pCurrentVolume)
         {
-            TankVolume.Invoke((MethodInvoker)(() => TankVolume.Text = pCurrentVolume));
+            _lbl_TankVolume.Invoke((MethodInvoker)(() => _lbl_TankVolume.Text = pCurrentVolume));
         }
 
         public void singleEnergyLabelChanged(ulong pCurrentEnergy)
         {
-            _lbl_SingleEnergy.Text = "Selected Turbine's Energy: "+Convert.ToString(pCurrentEnergy);
+            _lbl_SingleEnergy.Invoke((MethodInvoker)(() => _lbl_SingleEnergy.Text = "Selected Turbine's Energy: " + Convert.ToString(pCurrentEnergy)));
         }
 
         public void totalEnergyLabelChanged(string pCurrentTotalEnergy)
         {
-            _lbl_TotalEnergy.Text = "Total Energy Poduction: " + Convert.ToString(pCurrentTotalEnergy);
+            _lbl_TotalEnergy.Invoke((MethodInvoker)(() => _lbl_TotalEnergy.Text = "Total Energy Poduction: " + Convert.ToString(pCurrentTotalEnergy)));
         }
 
         public void statusLabelChanged(string pStatus)
@@ -128,8 +125,17 @@ namespace Dam.UI
 
         public string selectedTurbine()
         {
-            _TurbineExist = true;
-            return _IdTurbines[_cmb_Turbines.SelectedIndex];
+            _cmb_Turbines.Invoke((MethodInvoker)(() => selectedTurbineIndex = _cmb_Turbines.SelectedIndex));
+            if (selectedTurbineIndex >= 0)
+            {
+                _TurbineExist = true;
+                return _IdTurbines[selectedTurbineIndex];
+            }
+            else
+            {
+                _TurbineExist = false;
+                return "0";
+            }
         }
 
         public void register(IObserver pObserver)
@@ -145,6 +151,17 @@ namespace Dam.UI
         public void notifyObservers()
         {
             _DamStatusChanged(this);
+        }
+
+        private void _btn_ChangeFlow_Click(object sender, EventArgs e)
+        {
+            _FlowRateRequest = true;
+            notifyObservers();
+        }
+
+        public string currentFlowRate()
+        {
+            return _txt_CurrentFlow.Text;
         }
 
 
@@ -180,6 +197,11 @@ namespace Dam.UI
             get { return _ProgramClosed; }
             set { _ProgramClosed = value; }
         }
+        public bool FlowRateRequest
+        {
+            get { return _FlowRateRequest; }
+            set { _FlowRateRequest = value; }
+        }
 
         private void DamRepresentation_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -197,5 +219,9 @@ namespace Dam.UI
             set { _TurbineExist = value; }
         }
 
+        private void _lbl_TankHeight_Paint(object sender, PaintEventArgs e)
+        {
+            _lbl_TankHeight.Text = _CurrentTankHeight;
+        }
     }
 }

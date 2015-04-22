@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Drawing;
 using Dam.UI;
 using System.Windows.Forms;
 
@@ -22,6 +23,8 @@ namespace Dam
 
         private Controller(){
             _Dam = Dam.getInstance();
+            _UIValuesChanger = new Thread(runThread);
+            _UIValuesChanger.IsBackground = true;
         }
 
         public static Controller getInstance()
@@ -54,10 +57,11 @@ namespace Dam
                 _Dam.initializeDam(ulong.Parse(pMaxHeight), ulong.Parse(pMinHeight),
                    ulong.Parse(pWidth), ulong.Parse(pLength), ulong.Parse(pFlowRate));
             }
-            _Dam.register(this);
-            _TemporalView.Hide();
-            newView();
-            _Dam.FlowRate.Start();
+
+            _Dam.register(this); //add observer
+            _TemporalView.Hide(); //hides the first interface running in theb back
+            newView(); //generates de main interface
+            _Dam.FlowRate.Start(); //starts each thread after the interface was created.
             _Dam.ReleasingRate.Start();
         }
 
@@ -73,17 +77,12 @@ namespace Dam
 
         }
 
-        public void waterOverflow()
-        {
-            System.Windows.Forms.MessageBox.Show("Water exceeded the capacity. Water entrance will be stopped.");
-        }
-
         public void newView()
         {
             _View = new DamRepresentation();
             _View.Show();
             _View.register(this);
-            _UIValuesChanger = new Thread(runThread);
+            _View.changeCurrentFlowText(_Dam.CurrentFlowRate);
             _UIValuesChanger.Start();
         }
 
@@ -109,39 +108,95 @@ namespace Dam
 
         public void runThread()
         {
-            bool image1 = true;
+            bool image = true;
             while (_RunningThread)
             {
-           
-                    waveAnimation(image1);
-                    image1 = !image1;
-                    Thread.Sleep(200);
-                    _View.TankLabelChanged(_Dam.Tank.CurrentHeigth);
-                    
+                waveAnimation(image);
+                image = !image;
+                Thread.Sleep(200);
             }
         }
 
         public void waveAnimation(bool pImageOne)
         {      
             int waveQuantity;
-                if(pImageOne)
-                    waveQuantity=10;
-                else waveQuantity=12;
 
-                _View.paintWater(Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_TANK,
-                                                        Constants.HEIGHT_TANK_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.Tank.CurrentHeigth*Constants.HEIGHT_TANK_LABEL/_Dam.Tank.MaxHeigth), waveQuantity),
-                                                        Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_RIVER,
-                                                        100, waveQuantity));
+            if(pImageOne) //alternate quantity of waves to create a type of animation
+                waveQuantity=10;
+            else waveQuantity=12;
+
+            int coordinateYTank = Constants.HEIGHT_TANK_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.Tank.CurrentHeigth*Constants.HEIGHT_TANK_LABEL/_Dam.Tank.MaxHeigth);
+            int coordinateYRiver = Constants.HEIGHT_RIVER_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.River.CurrentHeigth*Constants.HEIGHT_RIVER_LABEL/_Dam.River.MaxHeigth);
+            List<Point[]> tankCoordinates= Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_TANK,
+                coordinateYTank, waveQuantity);
+
+            List<Point[]> riverCoordinates= Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_RIVER,
+                coordinateYRiver, waveQuantity);
+
+            _View.paintWater(tankCoordinates, riverCoordinates);
+        }
+        
+        public void update(IObservable pOservable)
+        {
+            if (pOservable.GetType() == typeof(Dam))
+            {
+                damHandler();
+            }
+            else if (pOservable.GetType() == typeof(DamRepresentation))
+            {
+                damVisualizationHandler();
+            }
+            else if (pOservable.GetType() == typeof(AddTurbine))
+            {
+                String[] turbineValues=_NewTurbineCreator.getTurbineAttributes();
+
+                createTurbine(turbineValues[0], turbineValues[1], turbineValues[2], turbineValues[3], turbineValues[4],
+                    turbineValues[5], Convert.ToInt32(turbineValues[6]));
+            }
+            else if (pOservable.GetType() == typeof(DamAttributeSelection))
+            {
+                String[] attributesValues = _TemporalView.getAttributes();
+
+                createDam(attributesValues[0], attributesValues[1], attributesValues[2],
+                    attributesValues[3], attributesValues[4], _TemporalView.kmChecked());
+            }
         }
 
-        public void damNotificationHnadler()
+        public void damHandler()
+        {
+            Dam dam = Dam.getInstance();
+            if (dam.Tank.SignificanceVolumeChanged)
+            {
+                dam.Tank.SignificanceVolumeChanged = false;
+                _View.volumeLabelChanged(dam.Tank.CurrentNoticeableVolume.toString());
+                _View.tankLabelChanged(dam.Tank.CurrentHeigth);
+                Turbine currentSelection = dam.turbineById(_View.selectedTurbine());
+                if (currentSelection != null)
+                    _View.singleEnergyLabelChanged(currentSelection.CurrentEnergyProduced);
+                else
+                    _View.singleEnergyLabelChanged(0);
+                _View.totalEnergyLabelChanged(Convert.ToString(dam.currentEnergyProduced()));
+            }
+            if (_Dam.Tank.WaterOverflow)
+            {
+                //message box
+                _Dam.setWaterOverflow();
+            }
+            if (_Dam.Tank.LowCapacity)
+            {
+                //message box
+                _Dam.setLowCapacity(); ;
+            }
+        }
+
+        public void damVisualizationHandler()
         {
             if (_View.TurbineStatusRequested)
             {
                 _View.TurbineStatusRequested = false;
                 stateOfCurrentTurbine(_View.selectedTurbine());
             }
-            if (_View.TurbineRequested) //en caso de agregar una nueva turbina, se enseña la nueva ventana
+            if (_View.TurbineRequested) //en case of adding a new Turbine, a new interface is shown
             {
                 _View.TurbineRequested = false;
                 _NewTurbineCreator.Show();
@@ -151,53 +206,17 @@ namespace Dam
                 _View.TurbineChanged = false;
                 changeStateOfTurbine(_View.selectedTurbine());
             }
+            if (_View.FlowRateRequest)
+                _Dam.CurrentFlowRate=Convert.ToUInt64(_View.currentFlowRate());
+
             if (_View.ProgramClosed)
             {
                 //metodo para parar todos los threads
                 _RunningThread = false;
+                _Dam.WaterFlowing = false;
+                _Dam.RealeasingWater = false;
                 _TemporalView.exit();
             }
-        }
-        
-        public void update(IObservable pOservable)
-        {
-            if (pOservable.GetType() == typeof(Dam))
-            {
-                Dam dam = Dam.getInstance();
-                if (dam.Tank.SignificanceVolumeChanged)
-                {
-                    dam.Tank.SignificanceVolumeChanged = false;
-                    _View.volumeLabelChanged(dam.Tank.CurrentNoticeableVolume.toString());
-                    _View.TankLabelChanged(dam.Tank.CurrentHeigth);
-                }
-                if (_Dam.Tank.WaterOverflow)
-                {
-                    //message box
-                    _Dam.setWaterOverflow();
-                }
-                if (_Dam.Tank.LowCapacity)
-                {
-                    //message box
-                    _Dam.setLowCapacity(); ;
-                }
-            }
-            else if (pOservable.GetType() == typeof(DamRepresentation))
-            {
-                damNotificationHnadler();
-            }
-            else if (pOservable.GetType() == typeof(AddTurbine))
-            {
-                String[] turbineValues=_NewTurbineCreator.getTurbineAttributes();
-                createTurbine(turbineValues[0], turbineValues[1], turbineValues[2], turbineValues[3], turbineValues[4],
-                    turbineValues[5], Convert.ToInt32(turbineValues[6]));
-            }
-            else if (pOservable.GetType() == typeof(DamAttributeSelection))
-            {
-                String[] attributesValues = _TemporalView.getAttributes();
-                createDam(attributesValues[0], attributesValues[1], attributesValues[2],
-                    attributesValues[3], attributesValues[4], _TemporalView.kmChecked());
-            }
-            //draw shits in the interface
         }
 
         public DamAttributeSelection TemporalView

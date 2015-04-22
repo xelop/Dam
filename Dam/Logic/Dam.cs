@@ -13,8 +13,11 @@ namespace Dam
         public Dam()
         {
             _ReleasingRate = new Thread(removeWaterToTank);
+            _ReleasingRate.IsBackground = true;
             _RealeasingWater = false;
             _Turbines = new List<Turbine>();
+            _FlowRate = new Thread(addWaterToTank);
+            _FlowRate.IsBackground = true;
         }
 
         public Container River
@@ -27,25 +30,21 @@ namespace Dam
             get { return _Tank; }
             set { _Tank = value; }
         }
-
         public ulong CurrentFlowRate
         {
             get { return _CurrentFlowRate; }
             set { _CurrentFlowRate = value; }
         }
-
         public ulong CurrentTotalEnergyProduced
         {
             get { return _CurrentTotalEnergyProduced; }
             set { _CurrentTotalEnergyProduced = value; }
         }
-
         public List<Turbine> Turbines
         {
             get { return _Turbines; }
             set { _Turbines = value; }
         }
-
         public Action<IObservable> ValuesChanged
         {
             get { return _ValuesChanged; }
@@ -70,6 +69,11 @@ namespace Dam
         {
             get { return _VolumeChanged; }
             set { _VolumeChanged = value; }
+        }
+        public bool WaterFlowing
+        {
+            get { return _WaterFlowing; }
+            set { _WaterFlowing = value; }
         }
 
         public static Dam getInstance()
@@ -101,7 +105,6 @@ namespace Dam
             _CurrentFlowRate = pCurrentFlowRate;
             _Tank = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
             _River = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
-            _FlowRate = new Thread(addWaterToTank);
         }
 
         public void setTurbineStateForId(string pIndexToFind)
