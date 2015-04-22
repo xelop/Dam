@@ -115,8 +115,7 @@ namespace Dam
                 _CurrentVolume = new HugeInt(_MaxVolume.toString());
                 _WaterOverflow = true;
                 _VolumePercentage = 100;
-                _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
-                _CurrentHeigth += _MinHeigth;
+                _CurrentHeigth = _MaxHeigth;
                 _CurrentNoticeableVolume= new HugeInt(_MaxVolume.toString());
                 _SignificanceVolumeChanged = true;
             }
@@ -126,12 +125,22 @@ namespace Dam
                 while (_CurrentVolume.greaterOrEqual(_CurrentNoticeableVolume))
                 {
                     _VolumePercentage++;
-                    _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
-                    _CurrentHeigth += _MinHeigth;
+                    _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
                     _SignificanceVolumeChanged = true;
                     _CurrentNoticeableVolume.add(_SignificantDiference);
                 }
                 _CurrentNoticeableVolume.subtract(_SignificantDiference);
+            }
+        }
+
+        public void calculateHeight(ulong pWaterOut, ulong pWaterIn)
+        {
+            if (pWaterIn != 0)
+            {
+                if (pWaterIn > pWaterOut)
+                    CurrentHeigth = (pWaterOut * 50 / pWaterIn)+10;
+                else
+                    CurrentHeigth = MaxHeigth;
             }
         }
 
@@ -142,20 +151,25 @@ namespace Dam
             {
                 _CurrentVolume = new HugeInt(_MinVolume.toString());
                 _lowCapacity = true;
-            }
-
-            _CurrentNoticeableVolume.subtract(_SignificantDiference);
-
-            while (_CurrentNoticeableVolume.greaterOrEqual(_CurrentVolume))
-            {
-                _VolumePercentage--;
-                _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth - _MinHeigth);
-                _CurrentHeigth += _MinHeigth;
+                _CurrentHeigth = _MinHeigth;
+                _VolumePercentage = _MinHeigth * 100 / _MaxHeigth;
+                _CurrentNoticeableVolume = new HugeInt(_MinVolume.toString());
                 _SignificanceVolumeChanged = true;
-                _CurrentNoticeableVolume.subtract(_SignificantDiference);
             }
+            else
+            {
+                _CurrentNoticeableVolume.subtract(_SignificantDiference);
 
-            _CurrentNoticeableVolume.add(_SignificantDiference);
+                while (_CurrentNoticeableVolume.greaterOrEqual(_CurrentVolume))
+                {
+                    _VolumePercentage--;
+                    _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
+                    _SignificanceVolumeChanged = true;
+                    _CurrentNoticeableVolume.subtract(_SignificantDiference);
+                }
+
+                _CurrentNoticeableVolume.add(_SignificantDiference);
+            }
         }
 
         private void calculateSignificantChange()

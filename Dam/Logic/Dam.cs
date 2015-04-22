@@ -104,7 +104,7 @@ namespace Dam
         {
             _CurrentFlowRate = pCurrentFlowRate;
             _Tank = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
-            _River = new Container(pMaxHeigth, 1, pWidth, pLong);
+            _River = new Container(200, 1, pWidth, pLong);
         }
 
         public void setTurbineStateForId(string pIndexToFind)
@@ -154,11 +154,12 @@ namespace Dam
                 Thread.Sleep(1000);
                 if (_Tank.SignificanceVolumeChanged)
                 {
-                    notifyObservers();
+                    notifyObservers();//notify will occur when the current height of the tank changes in 1%
                 }
                 if (_Tank.WaterOverflow)
                 {
-                    notifyObservers();//notify will occur when the current height of the tank changes in 1%
+                    notifyObservers();
+                    setWaterOverflow();
                     Thread.Sleep(1000);
                 }
             }
@@ -177,6 +178,14 @@ namespace Dam
                 return allWaterLoss;
             }
             return 0;
+        }
+
+        public void allTurbinesOFF()
+        {
+            foreach (Turbine selectedTurbine in _Turbines)
+            {
+                selectedTurbine.TurnedOn = !selectedTurbine.TurnedOn;
+            }
         }
 
         public ulong currentEnergyProduced()
@@ -204,13 +213,15 @@ namespace Dam
                 Thread.Sleep(1000);
                 if (_Tank.SignificanceVolumeChanged)
                 {
-                    _River.addWater(currentWaterLoss());
+                    _River.calculateHeight(currentWaterLoss(), CurrentFlowRate);
                     notifyObservers();
 
                 }
                 if (_Tank.LowCapacity)
                 {
+                    allTurbinesOFF();
                     notifyObservers();
+                    setLowCapacity(); ;
                     Thread.Sleep(10000);
                 }
             }

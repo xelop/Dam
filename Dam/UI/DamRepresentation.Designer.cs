@@ -31,8 +31,6 @@
             this.WaterContainer = new System.Windows.Forms.Panel();
             this.RiverWater = new System.Windows.Forms.PictureBox();
             this._lbl_TankHeight = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.RiverHeight = new System.Windows.Forms.Label();
             this._lbl_TankVolume = new System.Windows.Forms.Label();
             this._cmb_Turbines = new System.Windows.Forms.ComboBox();
             this._btn_AddTurbine = new System.Windows.Forms.Button();
@@ -43,6 +41,7 @@
             this._txt_CurrentFlow = new System.Windows.Forms.TextBox();
             this._lbl_CurrentFlow = new System.Windows.Forms.Label();
             this._btn_ChangeFlow = new System.Windows.Forms.Button();
+            this._lbl_riverHeight = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.RiverWater)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,26 +73,6 @@
             this._lbl_TankHeight.Name = "_lbl_TankHeight";
             this._lbl_TankHeight.Size = new System.Drawing.Size(0, 16);
             this._lbl_TankHeight.TabIndex = 3;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(429, 259);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(0, 18);
-            this.label2.TabIndex = 5;
-            // 
-            // RiverHeight
-            // 
-            this.RiverHeight.AutoSize = true;
-            this.RiverHeight.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RiverHeight.ForeColor = System.Drawing.Color.Black;
-            this.RiverHeight.Location = new System.Drawing.Point(638, 400);
-            this.RiverHeight.Name = "RiverHeight";
-            this.RiverHeight.Size = new System.Drawing.Size(0, 18);
-            this.RiverHeight.TabIndex = 6;
             // 
             // _lbl_TankVolume
             // 
@@ -202,12 +181,24 @@
             this._btn_ChangeFlow.UseVisualStyleBackColor = true;
             this._btn_ChangeFlow.Click += new System.EventHandler(this._btn_ChangeFlow_Click);
             // 
+            // _lbl_riverHeight
+            // 
+            this._lbl_riverHeight.AutoSize = true;
+            this._lbl_riverHeight.BackColor = System.Drawing.SystemColors.Control;
+            this._lbl_riverHeight.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lbl_riverHeight.ForeColor = System.Drawing.Color.Black;
+            this._lbl_riverHeight.Location = new System.Drawing.Point(602, 366);
+            this._lbl_riverHeight.Name = "_lbl_riverHeight";
+            this._lbl_riverHeight.Size = new System.Drawing.Size(0, 20);
+            this._lbl_riverHeight.TabIndex = 17;
+            // 
             // DamRepresentation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Dam.Properties.Resources.Dam2;
             this.ClientSize = new System.Drawing.Size(859, 537);
+            this.Controls.Add(this._lbl_riverHeight);
             this.Controls.Add(this._lbl_TankVolume);
             this.Controls.Add(this._btn_ChangeFlow);
             this.Controls.Add(this._lbl_CurrentFlow);
@@ -218,8 +209,6 @@
             this.Controls.Add(this._lbl_TurbineStatus);
             this.Controls.Add(this._btn_AddTurbine);
             this.Controls.Add(this._cmb_Turbines);
-            this.Controls.Add(this.RiverHeight);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this._lbl_TankHeight);
             this.Controls.Add(this.RiverWater);
             this.Controls.Add(this.WaterContainer);
@@ -238,8 +227,6 @@
 
         private System.Windows.Forms.PictureBox RiverWater;
         private System.Windows.Forms.Label _lbl_TankHeight;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label RiverHeight;
         private System.Windows.Forms.Label _lbl_TankVolume;
         private System.Windows.Forms.ComboBox _cmb_Turbines;
         private System.Windows.Forms.Button _btn_AddTurbine;
@@ -251,6 +238,7 @@
         private System.Windows.Forms.Label _lbl_CurrentFlow;
         private System.Windows.Forms.Button _btn_ChangeFlow;
         public System.Windows.Forms.Panel WaterContainer;
+        private System.Windows.Forms.Label _lbl_riverHeight;
 
     }
 }

@@ -123,19 +123,24 @@ namespace Dam.UI
             _lbl_TankVolume.Invoke((MethodInvoker)(() => _lbl_TankVolume.Text = pCurrentVolume));
         }
 
+        public void riverLabelChanged(ulong pCurrentHeight)
+        {
+            _lbl_riverHeight.Invoke((MethodInvoker)(() => _lbl_riverHeight.Text = Convert.ToString(pCurrentHeight)));
+        }
+
         public void singleEnergyLabelChanged(ulong pCurrentEnergy)
         {
-            _lbl_SingleEnergy.Invoke((MethodInvoker)(() => _lbl_SingleEnergy.Text = "Selected Turbine's Energy: " + Convert.ToString(pCurrentEnergy)));
+            _lbl_SingleEnergy.Invoke((MethodInvoker)(() => _lbl_SingleEnergy.Text = "Selected Turbine's Energy: " + Convert.ToString(pCurrentEnergy) + "000"));
         }
 
         public void totalEnergyLabelChanged(string pCurrentTotalEnergy)
         {
-            _lbl_TotalEnergy.Invoke((MethodInvoker)(() => _lbl_TotalEnergy.Text = "Total Energy Poduction: " + Convert.ToString(pCurrentTotalEnergy)));
+            _lbl_TotalEnergy.Invoke((MethodInvoker)(() => _lbl_TotalEnergy.Text = "Total Energy Poduction: " + Convert.ToString(pCurrentTotalEnergy)+"000"));
         }
 
         public void statusLabelChanged(string pStatus)
         {
-             _lbl_TurbineStatus.Text = "Current Turbine Status: "+ pStatus;
+             _lbl_TurbineStatus.Invoke((MethodInvoker)(() => _lbl_TurbineStatus.Text = "Current Turbine Status: "+ pStatus));
         }
 
         private void _btn_AddTrubine_Click(object sender, EventArgs e)
@@ -215,6 +220,11 @@ namespace Dam.UI
         private int selectedTurbineIndex;
 
         private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist, _FlowRateRequest = false;
+
+        private void DamRepresentation_Load(object sender, EventArgs e)
+        {
+
+        }
 
     }
 }

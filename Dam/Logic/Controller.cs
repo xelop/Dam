@@ -130,14 +130,14 @@ namespace Dam
                 waveQuantity=10;
             else waveQuantity=12;
 
-            int coordinateYTank = Constants.HEIGHT_TANK_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.Tank.CurrentHeigth*Constants.HEIGHT_TANK_LABEL/_Dam.Tank.MaxHeigth);
-            int coordinateYRiver = Constants.HEIGHT_RIVER_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.River.CurrentHeigth*Constants.HEIGHT_RIVER_LABEL/_Dam.River.MaxHeigth);
+            int coordenateYTank = Constants.HEIGHT_TANK_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.Tank.CurrentHeigth*Constants.HEIGHT_TANK_LABEL/_Dam.Tank.MaxHeigth);
+            int coordenateYRiver = Constants.HEIGHT_RIVER_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.River.CurrentHeigth*Constants.HEIGHT_RIVER_LABEL/_Dam.River.MaxHeigth);
 
             List<Point[]> tankCoordinates= Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_TANK,
-                coordinateYTank, waveQuantity);
+                coordenateYTank, waveQuantity);
 
             List<Point[]> riverCoordinates= Converter.waveDrawing(Constants.STARTING_X_CONTAINER, Constants.ENDING_X_RIVER,
-                coordinateYRiver, waveQuantity);
+                coordenateYRiver, waveQuantity);
 
             _View.paintWater(tankCoordinates, riverCoordinates);
         }
@@ -176,11 +176,14 @@ namespace Dam
                 dam.Tank.SignificanceVolumeChanged = false;
                 _View.volumeLabelChanged(dam.Tank.CurrentNoticeableVolume.toString());
                 _View.tankLabelChanged(dam.Tank.CurrentHeigth);
+                _View.riverLabelChanged(dam.River.CurrentHeigth);
 
                 Turbine currentSelection = dam.turbineById(_View.selectedTurbine());
 
                 if (currentSelection != null)
+                {
                     _View.singleEnergyLabelChanged(currentSelection.CurrentEnergyProduced);
+                }
                 else
                     _View.singleEnergyLabelChanged(0);
 
@@ -189,12 +192,11 @@ namespace Dam
             if (_Dam.Tank.WaterOverflow)
             {
                 //message box
-                _Dam.setWaterOverflow();
             }
             if (_Dam.Tank.LowCapacity)
             {
                 //message box
-                _Dam.setLowCapacity(); ;
+                _View.statusLabelChanged("OFF");
             }
         }
 
