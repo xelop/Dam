@@ -191,11 +191,11 @@ namespace Dam
             }
             if (_Dam.Tank.WaterOverflow)
             {
-                System.Windows.Forms.MessageBox.Show("The dam is at its maximun capacity. Water entrance will be stopped for 10 seconds.");
+                //System.Windows.Forms.MessageBox.Show("The dam is at its maximun capacity. Water entrance will be stopped for 10 seconds.");
             }
             if (_Dam.Tank.LowCapacity)
             {
-                System.Windows.Forms.MessageBox.Show("The dam is at its maximun capacity. All turbines will be set to OFF.");
+                //System.Windows.Forms.MessageBox.Show("The dam is at its maximun capacity. All turbines will be set to OFF.");
                 _View.statusLabelChanged("OFF");
             }
         }

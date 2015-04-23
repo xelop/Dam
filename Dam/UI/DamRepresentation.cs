@@ -85,12 +85,20 @@ namespace Dam.UI
 
         public void paintWaves(List<Point[]> pLiquidCoordinates, int pEndingX, int pHeightContainer, PaintEventArgs pEvent)
         {
-            pEvent.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, pLiquidCoordinates[0][0].Y,
-                                                                        pEndingX, pHeightContainer));
+            try
+            {
+                pEvent.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, pLiquidCoordinates[0][0].Y,
+                                                                            pEndingX, pHeightContainer));
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.ToString() + " pEndingX : " + pEndingX + " pHeightContainer : " + pHeightContainer + " pLiquidCoordinates[0][0].Y " +
+                    pLiquidCoordinates[0][0].Y);
+            }
             for (int element_counter = 0; element_counter < pLiquidCoordinates.Count; element_counter++)
                 pEvent.Graphics.FillClosedCurve(Brushes.Blue, pLiquidCoordinates[element_counter]);
 
-            pLiquidCoordinates.Clear();
+            //pLiquidCoordinates.Clear();
         }
 
         private void WaterContainer_Paint(object sender, PaintEventArgs e)

@@ -161,7 +161,6 @@ namespace Dam
                 }
                 if (_Tank.WaterOverflow)
                 {
-                    notifyObservers();
                     setWaterOverflow();
                     Thread.Sleep(10000);
                 }
