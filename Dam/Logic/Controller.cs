@@ -237,7 +237,14 @@ namespace Dam
             if (_View.SecondsRequested)
             {
                 _View.SecondsRequested = false;
-                _Dam.Seconds = 1000/Convert.ToInt32(_View.currentSeconds());
+                if (Convert.ToInt32(_View.currentSeconds()) <= Constants.MAX_ITERATIONS_PER_SECONDS)
+                {
+                    _Dam.Seconds = 1000 / Convert.ToInt32(_View.currentSeconds());
+                }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("Solo se puede tiempos menores a 20.");
+                }
             }
 
             if (_View.ProgramClosed)

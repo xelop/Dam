@@ -18,6 +18,7 @@ namespace Dam
         public const int MIN_WAVES = 10;
         public const int MAX_WAVES = 12;
         public const int CHANGE_WAVES = 200;
+        public const int MAX_ITERATIONS_PER_SECONDS = 20;
         //public const int _FinalXfroRiver;
     }
 }
