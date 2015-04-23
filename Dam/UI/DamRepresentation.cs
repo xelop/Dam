@@ -103,7 +103,6 @@ namespace Dam.UI
             for (int element_counter = 0; element_counter < pLiquidCoordinates.Count; element_counter++)
                 pEvent.Graphics.FillClosedCurve(Brushes.Blue, pLiquidCoordinates[element_counter]);
 
-            //pLiquidCoordinates.Clear();
         }
 
         private void WaterContainer_Paint(object sender, PaintEventArgs e)
@@ -248,6 +247,5 @@ namespace Dam.UI
             _SecondsRequested = true;
             notifyObservers();
         }
-
     }
 }

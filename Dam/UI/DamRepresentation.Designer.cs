@@ -160,6 +160,7 @@
             this._txt_CurrentFlow.Name = "_txt_CurrentFlow";
             this._txt_CurrentFlow.Size = new System.Drawing.Size(100, 20);
             this._txt_CurrentFlow.TabIndex = 14;
+           
             // 
             // _lbl_CurrentFlow
             // 

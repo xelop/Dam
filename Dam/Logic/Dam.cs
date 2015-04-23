@@ -162,6 +162,7 @@ namespace Dam
                 if (_Tank.SignificanceVolumeChanged)
                 {
                     notifyObservers();//notify will occur when the current height of the tank changes in 1%
+                    _Tank.SignificanceVolumeChanged = false;
                 }
                 if (_Tank.WaterOverflow)
                 {
@@ -221,7 +222,7 @@ namespace Dam
                 {
                     _River.calculateHeight(currentWaterLoss(), CurrentFlowRate);
                     notifyObservers();
-
+                    _Tank.SignificanceVolumeChanged = false;
                 }
                 if (_Tank.LowCapacity)
                 {

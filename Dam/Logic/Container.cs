@@ -146,29 +146,32 @@ namespace Dam
 
         public void removeWater(ulong pWater)//pWater enters method as meters^3
         {
-            _CurrentVolume.subtract(new HugeInt (pWater.ToString() + "000000"));//converted in cm3
-            if (notEnoughWater())
+            if (pWater != 0)
             {
-                _CurrentVolume = new HugeInt(_MinVolume.toString());
-                _lowCapacity = true;
-                _CurrentHeigth = _MinHeigth;
-                _VolumePercentage = _MinHeigth * 100 / _MaxHeigth;
-                _CurrentNoticeableVolume = new HugeInt(_MinVolume.toString());
-                _SignificanceVolumeChanged = true;
-            }
-            else
-            {
-                _CurrentNoticeableVolume.subtract(_SignificantDiference);
-
-                while (_CurrentNoticeableVolume.greaterOrEqual(_CurrentVolume))
+                _CurrentVolume.subtract(new HugeInt(pWater.ToString() + "000000"));//converted in cm3
+                if (notEnoughWater())
                 {
-                    _VolumePercentage--;
-                    _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
+                    _CurrentVolume = new HugeInt(_MinVolume.toString());
+                    _lowCapacity = true;
+                    _CurrentHeigth = _MinHeigth;
+                    _VolumePercentage = _MinHeigth * 100 / _MaxHeigth;
+                    _CurrentNoticeableVolume = new HugeInt(_MinVolume.toString());
                     _SignificanceVolumeChanged = true;
-                    _CurrentNoticeableVolume.subtract(_SignificantDiference);
                 }
+                else
+                {
+                    _CurrentNoticeableVolume.subtract(_SignificantDiference);
 
-                _CurrentNoticeableVolume.add(_SignificantDiference);
+                    while (_CurrentNoticeableVolume.greaterOrEqual(_CurrentVolume))
+                    {
+                        _VolumePercentage--;
+                        _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
+                        _SignificanceVolumeChanged = true;
+                        _CurrentNoticeableVolume.subtract(_SignificantDiference);
+                    }
+
+                    _CurrentNoticeableVolume.add(_SignificantDiference);
+                }
             }
         }
 
