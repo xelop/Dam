@@ -19,6 +19,9 @@ namespace Dam
             _MaxPressure = pMaxPressure;
             _MinEnergyProduced = pMinEnergyProduced;
             _MaxEnergyProduced = pMaxEnergyProduced;
+            _CurrentEnergyProduced = _MinEnergyProduced;
+            _CurrentFlowRate = pMinFlowRate;
+            _CurrentPressure = pMinPressure;
             _Identifier = "ID " + _Counter.ToString();
             _Counter++;
             _TurnedOn = true;

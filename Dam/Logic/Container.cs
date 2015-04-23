@@ -121,15 +121,19 @@ namespace Dam
             }
             else
             {
-                _CurrentNoticeableVolume.add(_SignificantDiference);
-                while (_CurrentVolume.greaterOrEqual(_CurrentNoticeableVolume))
+
+                lock (_Baton)
                 {
-                    _VolumePercentage++;
-                    _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
-                    _SignificanceVolumeChanged = true;
                     _CurrentNoticeableVolume.add(_SignificantDiference);
+                    while (_CurrentVolume.greaterOrEqual(_CurrentNoticeableVolume))
+                    {
+                        _VolumePercentage++;
+                        _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
+                        _SignificanceVolumeChanged = true;
+                        _CurrentNoticeableVolume.add(_SignificantDiference);
+                    }
+                    _CurrentNoticeableVolume.subtract(_SignificantDiference);
                 }
-                _CurrentNoticeableVolume.subtract(_SignificantDiference);
             }
         }
 
@@ -160,17 +164,18 @@ namespace Dam
                 }
                 else
                 {
-                    _CurrentNoticeableVolume.subtract(_SignificantDiference);
-
-                    while (_CurrentNoticeableVolume.greaterOrEqual(_CurrentVolume))
+                    lock (_Baton)
                     {
-                        _VolumePercentage--;
-                        _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
-                        _SignificanceVolumeChanged = true;
                         _CurrentNoticeableVolume.subtract(_SignificantDiference);
+                        while (_CurrentNoticeableVolume.greaterOrEqual(_CurrentVolume))
+                        {
+                            _VolumePercentage--;
+                            _CurrentHeigth = Converter.threeRule(_VolumePercentage, _MaxHeigth);
+                            _SignificanceVolumeChanged = true;
+                            _CurrentNoticeableVolume.subtract(_SignificantDiference);
+                        }
+                        _CurrentNoticeableVolume.add(_SignificantDiference);
                     }
-
-                    _CurrentNoticeableVolume.add(_SignificantDiference);
                 }
             }
         }
@@ -199,5 +204,6 @@ namespace Dam
         private Boolean _WaterOverflow, _lowCapacity, _SignificanceVolumeChanged;
         private HugeInt _SignificantDiference;//represents an 1% of the whole volume
         private ulong _VolumePercentage;
+        static object _Baton = new object();
     }
 }
