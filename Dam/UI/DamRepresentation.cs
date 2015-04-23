@@ -89,12 +89,12 @@ namespace Dam.UI
         }
 
         public void paintWaves(List<Point[]> pLiquidCoordinates, int pEndingX, int pHeightContainer, PaintEventArgs pEvent)
-        {
+        { //N = List<Points> 
             try
             {
                 pEvent.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, pLiquidCoordinates[0][0].Y,
-                                                                            pEndingX, pHeightContainer)); //4+
-                for (int element_counter = 0; element_counter < pLiquidCoordinates.Count; element_counter++)
+                                                                            pEndingX, pHeightContainer)); //4+2+4+4+2
+                for (int element_counter = 0; element_counter < pLiquidCoordinates.Count; element_counter++) //1 +(1+2+4+2+1)
                     pEvent.Graphics.FillClosedCurve(Brushes.Blue, pLiquidCoordinates[element_counter]);
             }
             catch (Exception ex)
@@ -102,7 +102,7 @@ namespace Dam.UI
                 FileManagement.addToFile(ex.Message);
             }
 
-            //pLiquidCoordinates.Clear();
+            //TOTAL= 17+ 10N
         }
 
         private void WaterContainer_Paint(object sender, PaintEventArgs e)

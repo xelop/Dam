@@ -19,8 +19,8 @@ namespace Dam
 
         public static List<Point[]> waveDrawing(int pStartingX, int pEndingX, int pStartingY, int pWaveQuantity) //pStartingY designates where the wave originates 
         {                                                                                               // N seria el waveLenght 
-            List<Point[]> water = new List<Point[]>();            // 1 de la asignacion, no se si el constructor cuenta                                             
-            int waveLenght = (pEndingX - pStartingX) / pWaveQuantity; //pWaveQuantity would be an approximate  //3 = uno de la asignacion, uno de la resta y uno de la division
+            List<Point[]> water = new List<Point[]>();            // 1 + 4                                             
+            int waveLenght = (pEndingX - pStartingX) / pWaveQuantity; //pWaveQuantity would be an approximate  //3 
             while (pStartingX < pEndingX) // 1 tiempo de comparacion
             {
                 Point[] singleWave ={new Point(pStartingX, pStartingY),
@@ -30,7 +30,7 @@ namespace Dam
                 water.Add(singleWave); // 4 tiempos de llamada y retorno y 1 de mandar un parametro
             } // en total= 31
             return water; //2 tiempos de retorno
-            //en total 6+31(N)
+            //en total 10+31(N)
         }//O(n)=N
    
 
