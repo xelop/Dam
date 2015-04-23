@@ -34,6 +34,7 @@ namespace Dam.Logic
                     }
                     catch (FormatException notANumber)//in case the number contained in the string, wasnt a number
                     {
+                        FileManagement.addToFile(notANumber.Message);
                         _Number.Clear();// 2 + 2 = 4
                         _Number.Add(0);// 2 + 2 + 1 = 5
                         //System.Windows.Forms.MessageBox.Show("Converting: "+ pNumber +" to huge integer was impossible because"+

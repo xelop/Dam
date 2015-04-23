@@ -113,12 +113,19 @@ namespace Dam
 
         public void waveAnimation()
         {
-            bool image = true;
-            while (_RunningThread)
+            try
             {
-                wavePainting(image);
-                image = !image;
-                Thread.Sleep(Constants.CHANGE_WAVES);
+                bool image = true;
+                while (_RunningThread)
+                {
+                    wavePainting(image);
+                    image = !image;
+                    Thread.Sleep(Constants.CHANGE_WAVES);
+                }
+            }
+            catch (Exception ex)
+            {
+                FileManagement.addToFile(ex.Message);
             }
         }
 
