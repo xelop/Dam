@@ -10,20 +10,20 @@ namespace Dam.Logic
 {
     static class FileManagement
     {
-        public static void addToFile()
+        public static void addToFile(string pExceptionMessage)
         {
-            string path = @"E:\AppServ\Example.txt";
+            string path = "Exception.txt";
             if (!File.Exists(path))
             {
                 File.Create(path);
                 TextWriter tw = new StreamWriter(path);
-                tw.WriteLine("The very first line!");
+                tw.WriteLine(pExceptionMessage);
                 tw.Close();
             }
             else if (File.Exists(path))
             {
                 TextWriter tw = new StreamWriter(path);
-                tw.WriteLine("The next line!");
+                tw.WriteLine(pExceptionMessage);
                 tw.Close();
             }
         }

@@ -89,19 +89,21 @@ namespace Dam.UI
         }
 
         public void paintWaves(List<Point[]> pLiquidCoordinates, int pEndingX, int pHeightContainer, PaintEventArgs pEvent)
-        {
+        { //N = List<Points> 
             try
             {
                 pEvent.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, pLiquidCoordinates[0][0].Y,
-                                                                            pEndingX, pHeightContainer));
+                                                                            pEndingX, pHeightContainer)); //4+2+4+4+2
+                for (int element_counter = 0; element_counter < pLiquidCoordinates.Count; element_counter++) //1 +(1+2+4+2+1)
+                    pEvent.Graphics.FillClosedCurve(Brushes.Blue, pLiquidCoordinates[element_counter]);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(e.ToString() + " pEndingX : " + pEndingX + " pHeightContainer : " + pHeightContainer + " pLiquidCoordinates[0][0].Y " +
-                    pLiquidCoordinates[0][0].Y);
+                FileManagement.addToFile(ex.Message);
             }
-            for (int element_counter = 0; element_counter < pLiquidCoordinates.Count; element_counter++)
-                pEvent.Graphics.FillClosedCurve(Brushes.Blue, pLiquidCoordinates[element_counter]);
+
+
+            //TOTAL= 17+ 10N
 
         }
 
