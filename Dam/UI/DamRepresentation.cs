@@ -279,8 +279,7 @@ namespace Dam.UI
 
         private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist, _FlowRateRequest, _SecondsRequested = false;
 
-<<<<<<< HEAD
-=======
+
         private void DamRepresentation_Load(object sender, EventArgs e)
         {
 
@@ -291,6 +290,6 @@ namespace Dam.UI
             _SecondsRequested = true;
             notifyObservers();
         }
->>>>>>> origin/master
+
     }
 }
