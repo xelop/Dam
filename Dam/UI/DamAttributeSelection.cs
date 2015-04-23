@@ -69,6 +69,46 @@ namespace Dam.UI
         {
             this.Close();
         }
-        private Action<IObservable> _StartSimulation;//IObservale is a parameter
+        private Action<IObservable> _StartSimulation;
+
+        private void MaxHeightTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void inputNumbers(object pSender, KeyPressEventArgs pEvent)
+        {
+            if (!char.IsControl(pEvent.KeyChar) && !char.IsDigit(pEvent.KeyChar) &&
+                (pEvent.KeyChar != '.'))
+            {
+                pEvent.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((pEvent.KeyChar == '.') && ((pSender as TextBox).Text.IndexOf('.') > -1))
+            {
+                pEvent.Handled = true;
+            }
+        }
+
+        private void MinHeightTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void WidthTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void LengthTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void FlowRateTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }//IObservale is a parameter
     }
 }

@@ -45,6 +45,7 @@
             this._txt_Seconds = new System.Windows.Forms.TextBox();
             this._lbl_seconds = new System.Windows.Forms.Label();
             this._btn_seconds = new System.Windows.Forms.Button();
+            this._lbl_Volume = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.RiverWater)).BeginInit();
             this.SuspendLayout();
             // 
@@ -160,6 +161,7 @@
             this._txt_CurrentFlow.Name = "_txt_CurrentFlow";
             this._txt_CurrentFlow.Size = new System.Drawing.Size(100, 20);
             this._txt_CurrentFlow.TabIndex = 14;
+            this._txt_CurrentFlow.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_CurrentFlow_KeyPress);
             // 
             // _lbl_CurrentFlow
             // 
@@ -202,6 +204,7 @@
             this._txt_Seconds.Size = new System.Drawing.Size(100, 20);
             this._txt_Seconds.TabIndex = 18;
             this._txt_Seconds.Text = "1";
+            this._txt_Seconds.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_Seconds_KeyPress);
             // 
             // _lbl_seconds
             // 
@@ -226,12 +229,24 @@
             this._btn_seconds.UseVisualStyleBackColor = true;
             this._btn_seconds.Click += new System.EventHandler(this._btn_seconds_Click);
             // 
+            // _lbl_Volume
+            // 
+            this._lbl_Volume.AutoSize = true;
+            this._lbl_Volume.BackColor = System.Drawing.Color.Transparent;
+            this._lbl_Volume.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lbl_Volume.ForeColor = System.Drawing.Color.Black;
+            this._lbl_Volume.Location = new System.Drawing.Point(12, 31);
+            this._lbl_Volume.Name = "_lbl_Volume";
+            this._lbl_Volume.Size = new System.Drawing.Size(0, 16);
+            this._lbl_Volume.TabIndex = 21;
+            // 
             // DamRepresentation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Dam.Properties.Resources.Dam2;
             this.ClientSize = new System.Drawing.Size(859, 537);
+            this.Controls.Add(this._lbl_Volume);
             this.Controls.Add(this._btn_seconds);
             this.Controls.Add(this._lbl_seconds);
             this.Controls.Add(this._txt_Seconds);
@@ -279,6 +294,7 @@
         private System.Windows.Forms.TextBox _txt_Seconds;
         private System.Windows.Forms.Label _lbl_seconds;
         private System.Windows.Forms.Button _btn_seconds;
+        private System.Windows.Forms.Label _lbl_Volume;
 
     }
 }

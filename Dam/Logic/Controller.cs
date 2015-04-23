@@ -133,6 +133,8 @@ namespace Dam
         {      
             int waveQuantity;
 
+            _View.VolumeChanged(_Dam.Tank.CurrentVolume.toString());
+
             if(pImageOne) //alternate quantity of waves to create a type of animation
                 waveQuantity=Constants.MIN_WAVES;
             else waveQuantity=Constants.MAX_WAVES;

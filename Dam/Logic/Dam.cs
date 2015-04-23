@@ -153,21 +153,28 @@ namespace Dam
 
         public void addWaterToTank()
         {
-            _WaterFlowing = true;
-            while (_WaterFlowing)
+            try
             {
-                _Tank.addWater(_CurrentFlowRate);
-                Thread.Sleep(_Seconds);
+                _WaterFlowing = true;
+                while (_WaterFlowing)
+                {
+                    _Tank.addWater(_CurrentFlowRate);
+                    Thread.Sleep(_Seconds);
 
-                if (_Tank.SignificanceVolumeChanged)
-                {
-                    notifyObservers();//notify will occur when the current height of the tank changes in 1%
+                    if (_Tank.SignificanceVolumeChanged)
+                    {
+                        notifyObservers();//notify will occur when the current height of the tank changes in 1%
+                    }
+                    if (_Tank.WaterOverflow)
+                    {
+                        setWaterOverflow();
+                        Thread.Sleep(10000);
+                    }
                 }
-                if (_Tank.WaterOverflow)
-                {
-                    setWaterOverflow();
-                    Thread.Sleep(10000);
-                }
+            }
+            catch (Exception ex)
+            {
+                FileManagement.addToFile(ex.Message);
             }
         }
 
@@ -210,26 +217,31 @@ namespace Dam
         }
 
         public void removeWaterToTank()
-        {   
-            _RealeasingWater = true;
-            while (_RealeasingWater)
-            {   
-                ulong quantityToRemove = currentWaterLoss();//method that recorre la lista y sume todas las salidas de agua de turbinas activas
-                _Tank.removeWater(quantityToRemove);
-                Thread.Sleep(_Seconds);
-                if (_Tank.SignificanceVolumeChanged)
-                {
-                    _River.calculateHeight(currentWaterLoss(), CurrentFlowRate);
-                    notifyObservers();
+        {   try{
+                _RealeasingWater = true;
+                while (_RealeasingWater)
+                {   
+                    ulong quantityToRemove = currentWaterLoss();//method that recorre la lista y sume todas las salidas de agua de turbinas activas
+                    _Tank.removeWater(quantityToRemove);
+                    Thread.Sleep(_Seconds);
+                    if (_Tank.SignificanceVolumeChanged)
+                    {
+                        _River.calculateHeight(currentWaterLoss(), CurrentFlowRate);
+                        notifyObservers();
 
+                    }
+                    if (_Tank.LowCapacity)
+                    {
+                        allTurbinesOFF();
+                        notifyObservers();
+                        setLowCapacity(); 
+                        Thread.Sleep(10000);
+                    }
                 }
-                if (_Tank.LowCapacity)
-                {
-                    allTurbinesOFF();
-                    notifyObservers();
-                    setLowCapacity(); 
-                    Thread.Sleep(10000);
-                }
+            }   
+            catch (Exception ex)
+            {
+                FileManagement.addToFile(ex.Message);
             }
         }
 

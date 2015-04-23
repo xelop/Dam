@@ -144,6 +144,7 @@
             this.MinHeightTextBox.Name = "MinHeightTextBox";
             this.MinHeightTextBox.Size = new System.Drawing.Size(100, 20);
             this.MinHeightTextBox.TabIndex = 1;
+            this.MinHeightTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MinHeightTextBox_KeyPress);
             // 
             // MetersOption
             // 
@@ -183,6 +184,7 @@
             this.FlowRateTextBox.Name = "FlowRateTextBox";
             this.FlowRateTextBox.Size = new System.Drawing.Size(100, 20);
             this.FlowRateTextBox.TabIndex = 4;
+            this.FlowRateTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FlowRateTextBox_KeyPress);
             // 
             // LengthTextBox
             // 
@@ -190,6 +192,7 @@
             this.LengthTextBox.Name = "LengthTextBox";
             this.LengthTextBox.Size = new System.Drawing.Size(100, 20);
             this.LengthTextBox.TabIndex = 3;
+            this.LengthTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.LengthTextBox_KeyPress);
             // 
             // WidthTextBox
             // 
@@ -197,6 +200,7 @@
             this.WidthTextBox.Name = "WidthTextBox";
             this.WidthTextBox.Size = new System.Drawing.Size(100, 20);
             this.WidthTextBox.TabIndex = 2;
+            this.WidthTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WidthTextBox_KeyPress);
             // 
             // MaxHeightTextBox
             // 
@@ -204,6 +208,7 @@
             this.MaxHeightTextBox.Name = "MaxHeightTextBox";
             this.MaxHeightTextBox.Size = new System.Drawing.Size(100, 20);
             this.MaxHeightTextBox.TabIndex = 0;
+            this.MaxHeightTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MaxHeightTextBox_KeyPress);
             // 
             // DamAttributeSelection
             // 

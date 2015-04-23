@@ -58,6 +58,24 @@ namespace Dam.UI
             return turbineValues;
         }
 
+        private void inputNumbers(object pSender, KeyPressEventArgs pEvent)
+        {
+            if (!char.IsControl(pEvent.KeyChar) && !char.IsDigit(pEvent.KeyChar) &&
+                (pEvent.KeyChar != '.'))
+            {
+                pEvent.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((pEvent.KeyChar == '.') && ((pSender as TextBox).Text.IndexOf('.') > -1))
+            {
+                pEvent.Handled = true;
+            }
+        }
+
+
+
+
         public void register(IObserver pObserver)
         {
             _NewTurbine += pObserver.update;
@@ -74,5 +92,40 @@ namespace Dam.UI
         }
 
         private Action<IObservable> _NewTurbine;
+
+        private void _txt_MaxFlowRate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void _txt_MinFlowRate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void _txt_MaxPressure_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void _txt_MinPressure_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void _txt_MaxEnergy_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void _txt_MinEnergy_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void _txt_NumberofTurbines_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
     }
 }

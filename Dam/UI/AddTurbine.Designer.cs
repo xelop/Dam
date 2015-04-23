@@ -29,10 +29,12 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this._txt_NumberofTurbines = new System.Windows.Forms.TextBox();
             this._btn_AddTurbine = new System.Windows.Forms.Button();
             this._txt_MinEnergy = new System.Windows.Forms.TextBox();
             this._txt_MinPressure = new System.Windows.Forms.TextBox();
@@ -42,8 +44,6 @@
             this._txt_MaxFlowRate = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this._txt_NumberofTurbines = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -59,6 +59,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(250, 427);
             this.panel1.TabIndex = 0;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI Symbol", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(62, 307);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(165, 21);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "Number of turbines";
             // 
             // label3
             // 
@@ -108,6 +118,14 @@
             this.panel2.Size = new System.Drawing.Size(426, 427);
             this.panel2.TabIndex = 1;
             // 
+            // _txt_NumberofTurbines
+            // 
+            this._txt_NumberofTurbines.Location = new System.Drawing.Point(48, 307);
+            this._txt_NumberofTurbines.Name = "_txt_NumberofTurbines";
+            this._txt_NumberofTurbines.Size = new System.Drawing.Size(130, 20);
+            this._txt_NumberofTurbines.TabIndex = 12;
+            this._txt_NumberofTurbines.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_NumberofTurbines_KeyPress);
+            // 
             // _btn_AddTurbine
             // 
             this._btn_AddTurbine.Location = new System.Drawing.Point(171, 370);
@@ -124,6 +142,7 @@
             this._txt_MinEnergy.Name = "_txt_MinEnergy";
             this._txt_MinEnergy.Size = new System.Drawing.Size(130, 20);
             this._txt_MinEnergy.TabIndex = 10;
+            this._txt_MinEnergy.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_MinEnergy_KeyPress);
             // 
             // _txt_MinPressure
             // 
@@ -131,6 +150,7 @@
             this._txt_MinPressure.Name = "_txt_MinPressure";
             this._txt_MinPressure.Size = new System.Drawing.Size(130, 20);
             this._txt_MinPressure.TabIndex = 9;
+            this._txt_MinPressure.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_MinPressure_KeyPress);
             // 
             // _txt_MinFlowRate
             // 
@@ -138,6 +158,7 @@
             this._txt_MinFlowRate.Name = "_txt_MinFlowRate";
             this._txt_MinFlowRate.Size = new System.Drawing.Size(130, 20);
             this._txt_MinFlowRate.TabIndex = 8;
+            this._txt_MinFlowRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_MinFlowRate_KeyPress);
             // 
             // _txt_MaxEnergy
             // 
@@ -145,6 +166,7 @@
             this._txt_MaxEnergy.Name = "_txt_MaxEnergy";
             this._txt_MaxEnergy.Size = new System.Drawing.Size(130, 20);
             this._txt_MaxEnergy.TabIndex = 7;
+            this._txt_MaxEnergy.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_MaxEnergy_KeyPress);
             // 
             // _txt_MaxPressure
             // 
@@ -152,6 +174,7 @@
             this._txt_MaxPressure.Name = "_txt_MaxPressure";
             this._txt_MaxPressure.Size = new System.Drawing.Size(130, 20);
             this._txt_MaxPressure.TabIndex = 6;
+            this._txt_MaxPressure.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_MaxPressure_KeyPress);
             // 
             // _txt_MaxFlowRate
             // 
@@ -159,6 +182,7 @@
             this._txt_MaxFlowRate.Name = "_txt_MaxFlowRate";
             this._txt_MaxFlowRate.Size = new System.Drawing.Size(130, 20);
             this._txt_MaxFlowRate.TabIndex = 5;
+            this._txt_MaxFlowRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_MaxFlowRate_KeyPress);
             // 
             // label5
             // 
@@ -180,23 +204,6 @@
             this.label4.TabIndex = 3;
             this.label4.Text = "MAX";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI Symbol", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(62, 307);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(165, 21);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "Number of turbines";
-            // 
-            // _txt_NumberofTurbines
-            // 
-            this._txt_NumberofTurbines.Location = new System.Drawing.Point(48, 307);
-            this._txt_NumberofTurbines.Name = "_txt_NumberofTurbines";
-            this._txt_NumberofTurbines.Size = new System.Drawing.Size(130, 20);
-            this._txt_NumberofTurbines.TabIndex = 12;
-            // 
             // AddTurbine
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -206,7 +213,6 @@
             this.Controls.Add(this.panel1);
             this.Name = "AddTurbine";
             this.Text = "Add New Turbine";
-            
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

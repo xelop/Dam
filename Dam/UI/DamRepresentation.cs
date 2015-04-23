@@ -125,6 +125,11 @@ namespace Dam.UI
             _txt_CurrentFlow.Text = Convert.ToString(pQuantity);
         }
 
+        public void VolumeChanged(string pCurrentHeight)
+        {
+            _lbl_Volume.Invoke((MethodInvoker)(() => _lbl_Volume.Text = pCurrentHeight));
+        }                 
+
         public void tankLabelChanged(ulong pCurrentHeight)
         {
             _lbl_TankHeight.Invoke((MethodInvoker)(() => _lbl_TankHeight.Text = Convert.ToString(pCurrentHeight)));
@@ -218,6 +223,41 @@ namespace Dam.UI
             return _txt_Seconds.Text;
         }
 
+        private void DamRepresentation_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void _btn_seconds_Click(object sender, EventArgs e)
+        {
+            _SecondsRequested = true;
+            notifyObservers();
+        }
+
+        private void _txt_Seconds_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+
+        private void _txt_CurrentFlow_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            inputNumbers(sender, e);
+        }
+        private void inputNumbers(object pSender, KeyPressEventArgs pEvent)
+        {
+            if (!char.IsControl(pEvent.KeyChar) && !char.IsDigit(pEvent.KeyChar) &&
+                (pEvent.KeyChar != '.'))
+            {
+                pEvent.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((pEvent.KeyChar == '.') && ((pSender as TextBox).Text.IndexOf('.') > -1))
+            {
+                pEvent.Handled = true;
+            }
+        }
+
 
         //Properties Methods
 
@@ -236,17 +276,6 @@ namespace Dam.UI
         private int selectedTurbineIndex;
 
         private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist, _FlowRateRequest, _SecondsRequested = false;
-
-        private void DamRepresentation_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void _btn_seconds_Click(object sender, EventArgs e)
-        {
-            _SecondsRequested = true;
-            notifyObservers();
-        }
 
     }
 }
