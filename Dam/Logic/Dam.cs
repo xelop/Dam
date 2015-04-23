@@ -155,20 +155,8 @@ namespace Dam
         {
             try
             {
-<<<<<<< HEAD
                 _WaterFlowing = true;
                 while (_WaterFlowing)
-=======
-                _Tank.addWater(_CurrentFlowRate);
-                Thread.Sleep(_Seconds);
-
-                if (_Tank.SignificanceVolumeChanged)
-                {
-                    notifyObservers();//notify will occur when the current height of the tank changes in 1%
-                    _Tank.SignificanceVolumeChanged = false;
-                }
-                if (_Tank.WaterOverflow)
->>>>>>> origin/master
                 {
                     _Tank.addWater(_CurrentFlowRate);
                     Thread.Sleep(_Seconds);
@@ -229,7 +217,6 @@ namespace Dam
         }
 
         public void removeWaterToTank()
-<<<<<<< HEAD
         {   try{
                 _RealeasingWater = true;
                 while (_RealeasingWater)
@@ -250,20 +237,6 @@ namespace Dam
                         setLowCapacity(); 
                         Thread.Sleep(10000);
                     }
-=======
-        {   
-            _RealeasingWater = true;
-            while (_RealeasingWater)
-            {   
-                ulong quantityToRemove = currentWaterLoss();//method that recorre la lista y sume todas las salidas de agua de turbinas activas
-                _Tank.removeWater(quantityToRemove);
-                Thread.Sleep(_Seconds);
-                if (_Tank.SignificanceVolumeChanged)
-                {
-                    _River.calculateHeight(currentWaterLoss(), CurrentFlowRate);
-                    notifyObservers();
-                    _Tank.SignificanceVolumeChanged = false;
->>>>>>> origin/master
                 }
             }   
             catch (Exception ex)
