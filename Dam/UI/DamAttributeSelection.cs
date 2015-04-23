@@ -9,11 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/* this class is the one running with the application.run() as it is the first one to appear, it remains hidden until the program exists
+ * this aspect should be changed. The main purpose is to  get all the attributes the DAM needs.*/
+
 namespace Dam.UI
 {
     public partial class DamAttributeSelection : Form, IObservable
     {
-        private Action<IObservable>_StartSimulation;
 
         public Action<IObservable> startSimulation
         {
@@ -67,5 +69,7 @@ namespace Dam.UI
         {
             this.Close();
         }
+
+        private Action<IObservable> _StartSimulation;
     }
 }

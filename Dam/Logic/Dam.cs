@@ -13,8 +13,11 @@ namespace Dam
         public Dam()
         {
             _ReleasingRate = new Thread(removeWaterToTank);
+            _ReleasingRate.IsBackground = true;
             _RealeasingWater = false;
             _Turbines = new List<Turbine>();
+            _FlowRate = new Thread(addWaterToTank);
+            _FlowRate.IsBackground = true; //way to exit in case the whole application is closed
         }
 
         public Container River
@@ -27,25 +30,21 @@ namespace Dam
             get { return _Tank; }
             set { _Tank = value; }
         }
-
         public ulong CurrentFlowRate
         {
             get { return _CurrentFlowRate; }
             set { _CurrentFlowRate = value; }
         }
-
         public ulong CurrentTotalEnergyProduced
         {
             get { return _CurrentTotalEnergyProduced; }
             set { _CurrentTotalEnergyProduced = value; }
         }
-
         public List<Turbine> Turbines
         {
             get { return _Turbines; }
             set { _Turbines = value; }
         }
-
         public Action<IObservable> ValuesChanged
         {
             get { return _ValuesChanged; }
@@ -70,6 +69,11 @@ namespace Dam
         {
             get { return _VolumeChanged; }
             set { _VolumeChanged = value; }
+        }
+        public bool WaterFlowing
+        {
+            get { return _WaterFlowing; }
+            set { _WaterFlowing = value; }
         }
 
         public static Dam getInstance()
@@ -100,8 +104,7 @@ namespace Dam
         {
             _CurrentFlowRate = pCurrentFlowRate;
             _Tank = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
-            _River = new Container(pMaxHeigth, pMinHeight, pWidth, pLong);
-            _FlowRate = new Thread(addWaterToTank);
+            _River = new Container(200, 1, pWidth, pLong);
         }
 
         public void setTurbineStateForId(string pIndexToFind)
@@ -154,12 +157,13 @@ namespace Dam
                 Thread.Sleep(sleep);
                 if (_Tank.SignificanceVolumeChanged)
                 {
-                    notifyObservers();
+                    notifyObservers();//notify will occur when the current height of the tank changes in 1%
                 }
                 if (_Tank.WaterOverflow)
                 {
-                    notifyObservers();//notify will occur when the current height of the tank changes in 1%
-                    Thread.Sleep(10000);
+                    notifyObservers();
+                    setWaterOverflow();
+                    Thread.Sleep(1000);
                 }
             }
         }
@@ -177,6 +181,14 @@ namespace Dam
                 return allWaterLoss;
             }
             return 0;
+        }
+
+        public void allTurbinesOFF()
+        {
+            foreach (Turbine selectedTurbine in _Turbines)
+            {
+                selectedTurbine.TurnedOn = !selectedTurbine.TurnedOn;
+            }
         }
 
         public ulong currentEnergyProduced()
@@ -201,17 +213,18 @@ namespace Dam
             {   
                 ulong quantityToRemove = currentWaterLoss();//method that recorre la lista y sume todas las salidas de agua de turbinas activas
                 _Tank.removeWater(quantityToRemove);
-                int sleep = 1000 / ((_Tank.CurrentVolume.toString().Length / _CurrentFlowRate.ToString().Length));
-                Thread.Sleep(sleep);
+                Thread.Sleep(1000);
                 if (_Tank.SignificanceVolumeChanged)
                 {
-                    currentWaterLoss();
+                    _River.calculateHeight(currentWaterLoss(), CurrentFlowRate);
                     notifyObservers();
 
                 }
                 if (_Tank.LowCapacity)
                 {
+                    allTurbinesOFF();
                     notifyObservers();
+                    setLowCapacity(); ;
                     Thread.Sleep(10000);
                 }
             }

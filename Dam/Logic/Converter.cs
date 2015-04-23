@@ -34,6 +34,9 @@ namespace Dam
 
         public static HugeInt calculateHugeVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
         {
+            HugeInt volume = new HugeInt(metersToCentimeters(pHeight));//1
+            volume.multiply(new HugeInt(metersToCentimeters(pWidth)));//
+            volume.multiply(new HugeInt(metersToCentimeters(pLong)));//
             return volume;//2
             //F(N) = 2 +
             //O(N) =
