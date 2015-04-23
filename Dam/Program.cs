@@ -23,15 +23,15 @@ namespace Dam
             Controller mainControl = Controller.getInstance();
             mainControl.setTemporalView(simulator);
             Application.Run(simulator);
-
-            /*HugeInt number1 = new HugeInt("123");
-            HugeInt number2 = new HugeInt("9");
+            //Converter.calculateHugeVolume(9, 1231234, 12314241);
+           /* HugeInt number1 = new HugeInt("1");
+            HugeInt number2 = new HugeInt("9999999999999999999");
             //number1.subtract(new HugeInt("101"));
             //System.Windows.Forms.MessageBox.Show(number1.toString());
             //number1.subtract(number2);
             //number1.add(number2);
-            //number1.multiply(number2);
-            number1.oneHundredDivision();
+            number1.multiply(number2);
+            //number1.oneHundredDivision();
             System.Windows.Forms.MessageBox.Show((number1.toString()));
             //s.Stop();
             //TimeSpan d = s.Elapsed;

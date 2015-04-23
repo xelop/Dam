@@ -148,7 +148,10 @@ namespace Dam
             while (_WaterFlowing)
             {
                 _Tank.addWater(_CurrentFlowRate);
-                Thread.Sleep(1000);
+                int sleep = 1000 / ((_Tank.CurrentVolume.toString().Length / _CurrentFlowRate.ToString().Length));
+                //System.Windows.Forms.MessageBox.Show(_Tank.CurrentVolume.toString().Length.ToString());
+                
+                Thread.Sleep(sleep);
                 if (_Tank.SignificanceVolumeChanged)
                 {
                     notifyObservers();
@@ -156,7 +159,7 @@ namespace Dam
                 if (_Tank.WaterOverflow)
                 {
                     notifyObservers();//notify will occur when the current height of the tank changes in 1%
-                    Thread.Sleep(1000);
+                    Thread.Sleep(10000);
                 }
             }
         }
@@ -198,7 +201,8 @@ namespace Dam
             {   
                 ulong quantityToRemove = currentWaterLoss();//method that recorre la lista y sume todas las salidas de agua de turbinas activas
                 _Tank.removeWater(quantityToRemove);
-                Thread.Sleep(1000);
+                int sleep = 1000 / ((_Tank.CurrentVolume.toString().Length / _CurrentFlowRate.ToString().Length));
+                Thread.Sleep(sleep);
                 if (_Tank.SignificanceVolumeChanged)
                 {
                     currentWaterLoss();
