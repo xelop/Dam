@@ -116,7 +116,7 @@ namespace Dam.UI
         public void tankLabelChanged(ulong pCurrentHeight)
         {
             _lbl_TankHeight.Invoke((MethodInvoker)(() => _lbl_TankHeight.Text = Convert.ToString(pCurrentHeight)));
-        }
+        }                           //casting         //tells the thread to execute this
 
         public void volumeLabelChanged(string pCurrentVolume)
         {
@@ -162,7 +162,7 @@ namespace Dam.UI
         }
 
         public string selectedTurbine()
-        {
+        {//returns the id of the selected Turbine
             _cmb_Turbines.Invoke((MethodInvoker)(() => selectedTurbineIndex = _cmb_Turbines.SelectedIndex));
             if (selectedTurbineIndex >= 0)
             {

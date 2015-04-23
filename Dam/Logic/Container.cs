@@ -134,11 +134,11 @@ namespace Dam
         }
 
         public void calculateHeight(ulong pWaterOut, ulong pWaterIn)
-        {
+        {//only for river
             if (pWaterIn != 0)
             {
                 if (pWaterIn > pWaterOut)
-                    CurrentHeigth = (pWaterOut * 50 / pWaterIn)+10;
+                    CurrentHeigth = (pWaterOut * 100 / pWaterIn)+10;
                 else
                     CurrentHeigth = MaxHeigth;
             }
@@ -176,7 +176,6 @@ namespace Dam
         {
             _SignificantDiference = new HugeInt(_MaxVolume.toString());
             _SignificantDiference.oneHundredDivision();
-            System.Windows.Forms.MessageBox.Show(_SignificantDiference.toString());
         }
 
         private Boolean notEnoughWater()

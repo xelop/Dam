@@ -69,7 +69,6 @@ namespace Dam.UI
         {
             this.Close();
         }
-
-        private Action<IObservable> _StartSimulation;
+        private Action<IObservable> _StartSimulation;//IObservale is a parameter
     }
 }

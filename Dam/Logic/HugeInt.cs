@@ -11,7 +11,7 @@ namespace Dam.Logic
         /* This class is designed to manage unsigned huge numbers. It includes basic operations of: adding, subtraction and multiplication. */ 
 
         public HugeInt(String pNumber)
-        {// N =Amount of digits in pNumber
+        {// N = Amount of digits in pNumber / 9
             int numberToSplit;//it is an index within pNumber
             int maximunDigitsInUlong = 9;//we will be making groups of 9 //1
             _Number = new List<ulong>();//1 + 2 + 2 = 5
@@ -44,8 +44,8 @@ namespace Dam.Logic
                 }
             }
             takeOutNonSignificantZeroes();//in case the string came like: 0000000000000000001 // log9(N) + 2 + 2
-        }//F(N) = 10 + log9(N) + [27(log9(n))]
-        //O(N) = log9(N) o N??
+        }//F(N) = 10 + N + [27(N)]
+        //O(N) = N
 
         public List<ulong> Number
         {
@@ -181,12 +181,12 @@ namespace Dam.Logic
                         _Number[firstIndex] = (rest + Constants.OVERFLOW_NUMBER);
                     }
                 }
-                takeOutNonSignificantZeroes();
+                takeOutNonSignificantZeroes();//100-1 = 099
             }
         }
 
         public void multiply(HugeInt pNumber)
-        {//L = _Number size ; M = pNumber size
+        {//L = _Number size ; M = pNumber size // N = L * M
             HugeInt finalProduct = new HugeInt("0");//1 + 2 + 2 + 1 = 6
             HugeInt intermidiaryNumber = new HugeInt("0"); ;//1 + 2 + 2 + 1 = 6//used as a repositiory for the little sums
             ulong productUlong = 0;//1
@@ -213,8 +213,8 @@ namespace Dam.Logic
                 ZeroesToAdd++;//each time 1 cero extra to the right is added // 2
             }
             _Number = finalProduct._Number; // 1
-        }//F(N) =  18 + [49*(L*M)(L*M)(L-1)]
-        //O(N) = 
+        }//F(N) =  18 + [49*(L*M)(L*M)(L-1)] = 18 + 49(N^2(L-1)) = 18 + 49N^2L - 49N^2
+        //O(N) = N^2
 
         public void oneHundredDivision()
         {
