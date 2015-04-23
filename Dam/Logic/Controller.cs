@@ -218,7 +218,16 @@ namespace Dam
                 changeStateOfTurbine(_View.selectedTurbine());
             }
             if (_View.FlowRateRequest)
-                _Dam.CurrentFlowRate=Convert.ToUInt64(_View.currentFlowRate());
+            {
+                _View.FlowRateRequest = false;
+                _Dam.CurrentFlowRate = Convert.ToUInt64(_View.currentFlowRate());
+            }
+
+            if (_View.SecondsRequested)
+            {
+                _View.SecondsRequested = false;
+                _Dam.Seconds = _Dam.Seconds/Convert.ToInt16(_View.currentSeconds());
+            }
 
             if (_View.ProgramClosed)
             {

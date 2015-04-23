@@ -59,6 +59,11 @@ namespace Dam.UI
             get { return _TurbineExist; }
             set { _TurbineExist = value; }
         }
+        public bool SecondsRequested
+        {
+            get { return _SecondsRequested; }
+            set { _SecondsRequested = value; }
+        }
 
 
         public DamRepresentation()
@@ -201,6 +206,10 @@ namespace Dam.UI
         {
             return _txt_CurrentFlow.Text;
         }
+        public string currentSeconds()
+        {
+            return _txt_Seconds.Text;
+        }
 
 
         //Properties Methods
@@ -219,11 +228,17 @@ namespace Dam.UI
         private String _CurrentTankHeight, _CurrentVolume = "0";
         private int selectedTurbineIndex;
 
-        private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist, _FlowRateRequest = false;
+        private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist, _FlowRateRequest, _SecondsRequested = false;
 
         private void DamRepresentation_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void _btn_seconds_Click(object sender, EventArgs e)
+        {
+            _SecondsRequested = true;
+            notifyObservers();
         }
 
     }

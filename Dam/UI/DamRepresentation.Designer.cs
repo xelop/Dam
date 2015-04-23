@@ -42,6 +42,9 @@
             this._lbl_CurrentFlow = new System.Windows.Forms.Label();
             this._btn_ChangeFlow = new System.Windows.Forms.Button();
             this._lbl_riverHeight = new System.Windows.Forms.Label();
+            this._txt_Seconds = new System.Windows.Forms.TextBox();
+            this._lbl_seconds = new System.Windows.Forms.Label();
+            this._btn_seconds = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.RiverWater)).BeginInit();
             this.SuspendLayout();
             // 
@@ -192,12 +195,46 @@
             this._lbl_riverHeight.Size = new System.Drawing.Size(0, 20);
             this._lbl_riverHeight.TabIndex = 17;
             // 
+            // _txt_Seconds
+            // 
+            this._txt_Seconds.Location = new System.Drawing.Point(709, 166);
+            this._txt_Seconds.Name = "_txt_Seconds";
+            this._txt_Seconds.Size = new System.Drawing.Size(100, 20);
+            this._txt_Seconds.TabIndex = 18;
+            this._txt_Seconds.Text = "1";
+            // 
+            // _lbl_seconds
+            // 
+            this._lbl_seconds.AutoSize = true;
+            this._lbl_seconds.BackColor = System.Drawing.Color.Transparent;
+            this._lbl_seconds.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lbl_seconds.ForeColor = System.Drawing.Color.Black;
+            this._lbl_seconds.Location = new System.Drawing.Point(693, 144);
+            this._lbl_seconds.Name = "_lbl_seconds";
+            this._lbl_seconds.Size = new System.Drawing.Size(131, 16);
+            this._lbl_seconds.TabIndex = 19;
+            this._lbl_seconds.Text = "Seconds Relation";
+            // 
+            // _btn_seconds
+            // 
+            this._btn_seconds.ForeColor = System.Drawing.Color.Black;
+            this._btn_seconds.Location = new System.Drawing.Point(719, 192);
+            this._btn_seconds.Name = "_btn_seconds";
+            this._btn_seconds.Size = new System.Drawing.Size(75, 23);
+            this._btn_seconds.TabIndex = 20;
+            this._btn_seconds.Text = "Change";
+            this._btn_seconds.UseVisualStyleBackColor = true;
+            this._btn_seconds.Click += new System.EventHandler(this._btn_seconds_Click);
+            // 
             // DamRepresentation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Dam.Properties.Resources.Dam2;
             this.ClientSize = new System.Drawing.Size(859, 537);
+            this.Controls.Add(this._btn_seconds);
+            this.Controls.Add(this._lbl_seconds);
+            this.Controls.Add(this._txt_Seconds);
             this.Controls.Add(this._lbl_riverHeight);
             this.Controls.Add(this._lbl_TankVolume);
             this.Controls.Add(this._btn_ChangeFlow);
@@ -239,6 +276,9 @@
         private System.Windows.Forms.Button _btn_ChangeFlow;
         public System.Windows.Forms.Panel WaterContainer;
         private System.Windows.Forms.Label _lbl_riverHeight;
+        private System.Windows.Forms.TextBox _txt_Seconds;
+        private System.Windows.Forms.Label _lbl_seconds;
+        private System.Windows.Forms.Button _btn_seconds;
 
     }
 }
