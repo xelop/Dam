@@ -17,6 +17,11 @@ namespace Dam
         [STAThread]
         static void Main()
         {
+
+            /*FileManagement.addToFile();
+            System.Windows.Forms.MessageBox.Show("funco");
+            */
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DamAttributeSelection simulator= new DamAttributeSelection();

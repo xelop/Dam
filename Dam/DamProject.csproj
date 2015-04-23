@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\FileManagement.cs" />
     <Compile Include="Logic\HugeInt.cs" />
     <Compile Include="Logic\Constants.cs" />
     <Compile Include="Logic\Container.cs" />
