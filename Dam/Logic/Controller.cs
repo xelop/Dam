@@ -20,7 +20,7 @@ namespace Dam
         {
             _Dam = Dam.getInstance();
             _UIValuesChanger = new Thread(waveAnimation);
-            _UIValuesChanger.IsBackground = true;
+            _UIValuesChanger.IsBackground = true;//thread; all deleted on exit
         }
 
         public DamAttributeSelection TemporalView
@@ -64,7 +64,7 @@ namespace Dam
 
             _Dam.register(this); //add observer
             _TemporalView.Hide(); //hides the first interface running in the back, because of the system.runapplication
-            newView(); //generates de main interface
+            newView(); //generates the main interface
 
             _Dam.FlowRate.Start(); //starts each thread after the interface was created.
             _Dam.ReleasingRate.Start();
@@ -92,13 +92,13 @@ namespace Dam
         }
 
         public void changeStateOfTurbine(string pIdTurbine)
-        {
+        {//receives an id, and changes it true/false
             _Dam.setTurbineStateForId(pIdTurbine);
-            stateOfCurrentTurbine(pIdTurbine);
+            stateOfCurrentTurbine(pIdTurbine);//changes label ON/OFF
         }
 
         public void stateOfCurrentTurbine(string pIdTurbine)
-        {
+        {//changes the label
             Turbine turbineFound = _Dam.turbineById(pIdTurbine);
             if (turbineFound.TurnedOn)
             {
@@ -106,7 +106,7 @@ namespace Dam
             }
             else
             {
-                _View.statusLabelChanged("OFF");
+                _View.statusLabelChanged("OFF");//current energy produced = 0
             }
             _View.singleEnergyLabelChanged(turbineFound.CurrentEnergyProduced);
         }
@@ -118,7 +118,7 @@ namespace Dam
             {
                 wavePainting(image);
                 image = !image;
-                Thread.Sleep(200);
+                Thread.Sleep(Constants.CHANGE_WAVES);
             }
         }
 
@@ -127,8 +127,8 @@ namespace Dam
             int waveQuantity;
 
             if(pImageOne) //alternate quantity of waves to create a type of animation
-                waveQuantity=10;
-            else waveQuantity=12;
+                waveQuantity=Constants.MIN_WAVES;
+            else waveQuantity=Constants.MAX_WAVES;
 
             int coordenateYTank = Constants.HEIGHT_TANK_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.Tank.CurrentHeigth*Constants.HEIGHT_TANK_LABEL/_Dam.Tank.MaxHeigth);
             int coordenateYRiver = Constants.HEIGHT_RIVER_LABEL+Constants.INCREMENT_OF_WAVES - (Int32)(_Dam.River.CurrentHeigth*Constants.HEIGHT_RIVER_LABEL/_Dam.River.MaxHeigth);
@@ -152,14 +152,14 @@ namespace Dam
             {
                 damVisualizationHandler();
             }
-            else if (pOservable.GetType() == typeof(AddTurbine))
+            else if (pOservable.GetType() == typeof(AddTurbine))//new turbines to create
             {
                 String[] turbineValues=_NewTurbineCreator.getTurbineAttributes();
 
                 createTurbine(turbineValues[0], turbineValues[1], turbineValues[2], turbineValues[3], turbineValues[4],
                     turbineValues[5], Convert.ToInt32(turbineValues[6]));
             }
-            else if (pOservable.GetType() == typeof(DamAttributeSelection))
+            else if (pOservable.GetType() == typeof(DamAttributeSelection))//to create the dam. This only happen once.
             {
                 String[] attributesValues = _TemporalView.getAttributes();
 
@@ -169,7 +169,7 @@ namespace Dam
         }
 
         public void damHandler()
-        {
+        {//changes ALL labels in the interface.
             Dam dam = Dam.getInstance();
             if (dam.Tank.SignificanceVolumeChanged)
             {
@@ -191,11 +191,11 @@ namespace Dam
             }
             if (_Dam.Tank.WaterOverflow)
             {
-                //message box
+                //System.Windows.Forms.MessageBox.Show("The dam is at its maximun capacity. Water entrance will be stopped for 10 seconds.");
             }
             if (_Dam.Tank.LowCapacity)
             {
-                //message box
+                //System.Windows.Forms.MessageBox.Show("The dam is at its maximun capacity. All turbines will be set to OFF.");
                 _View.statusLabelChanged("OFF");
             }
         }
@@ -205,7 +205,7 @@ namespace Dam
             if (_View.TurbineStatusRequested)
             {
                 _View.TurbineStatusRequested = false;
-                stateOfCurrentTurbine(_View.selectedTurbine());
+                stateOfCurrentTurbine(_View.selectedTurbine());//changes true/false
             }
             if (_View.TurbineRequested) //en case of adding a new Turbine, a new interface is shown
             {
@@ -215,7 +215,7 @@ namespace Dam
             if (_View.TurbineChanged)
             {
                 _View.TurbineChanged = false;
-                changeStateOfTurbine(_View.selectedTurbine());
+                changeStateOfTurbine(_View.selectedTurbine());//another turbine was selected
             }
             if (_View.FlowRateRequest)
             {
@@ -231,7 +231,7 @@ namespace Dam
 
             if (_View.ProgramClosed)
             {
-                //metodo para parar todos los threads
+                //method to stop ALL the threasd. Security principles.
                 _RunningThread = false;
                 _Dam.WaterFlowing = false;
                 _Dam.RealeasingWater = false;

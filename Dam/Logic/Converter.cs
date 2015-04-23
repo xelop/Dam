@@ -35,11 +35,13 @@ namespace Dam
    
 
         public static HugeInt calculateHugeVolume(ulong pHeight, ulong pWidth, ulong pLong)//parameters enter as m
-        {
-            HugeInt volume = new HugeInt(metersToCentimeters(pHeight));
-            volume.multiply(new HugeInt(metersToCentimeters(pWidth)));
-            volume.multiply(new HugeInt(metersToCentimeters(pLong)));
-            return volume;
+        {// pHeight digits = L , pLong digits = M , pWidth digits = O . N = LMO 
+            HugeInt volume = new HugeInt(metersToCentimeters(pHeight));//1 + 2 + 2 + 1 + 2 + 2 + 1 + L
+            volume.multiply(new HugeInt(metersToCentimeters(pWidth)));// 2 + 2 + 1 + 2 + 2 + 1 + 2 + 2 + 1 + O + (L*O)
+            volume.multiply(new HugeInt(metersToCentimeters(pLong)));//2 + 2 + 1 + 2 + 2 + 1 + 2 + 2 + 1 + M + (L*O*M)
+            return volume;//2
+            //F(N) = 2 + 11 + L + 15 + (L*O) + 15 + (L*O*M) + L + O + M =  2 + 11 + L + 15 + (L*O) + 15 + (N) + L + O + M
+            //O(N) = N
         }
 
         public static ulong kmToMeters(ulong pKilometers)
@@ -49,7 +51,8 @@ namespace Dam
 
         private static String metersToCentimeters(ulong pMeters)
         {
-            return pMeters.ToString() + "00";
+            return pMeters.ToString() + "00";// 2 + 2 + 2 + 1
+            //F(N) = 7 y O(N) = C
         }
     }
 }

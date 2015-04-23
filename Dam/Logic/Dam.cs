@@ -158,15 +158,15 @@ namespace Dam
             {
                 _Tank.addWater(_CurrentFlowRate);
                 Thread.Sleep(_Seconds);
+
                 if (_Tank.SignificanceVolumeChanged)
                 {
                     notifyObservers();//notify will occur when the current height of the tank changes in 1%
                 }
                 if (_Tank.WaterOverflow)
                 {
-                    notifyObservers();
                     setWaterOverflow();
-                    Thread.Sleep(1000);
+                    Thread.Sleep(10000);
                 }
             }
         }
@@ -227,7 +227,7 @@ namespace Dam
                 {
                     allTurbinesOFF();
                     notifyObservers();
-                    setLowCapacity(); ;
+                    setLowCapacity(); 
                     Thread.Sleep(10000);
                 }
             }

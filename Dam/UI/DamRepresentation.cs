@@ -90,12 +90,20 @@ namespace Dam.UI
 
         public void paintWaves(List<Point[]> pLiquidCoordinates, int pEndingX, int pHeightContainer, PaintEventArgs pEvent)
         {
-            pEvent.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, pLiquidCoordinates[0][0].Y,
-                                                                        pEndingX, pHeightContainer));
+            try
+            {
+                pEvent.Graphics.FillRectangle(Brushes.Blue, new Rectangle(Constants.STARTING_X_CONTAINER, pLiquidCoordinates[0][0].Y,
+                                                                            pEndingX, pHeightContainer));
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.ToString() + " pEndingX : " + pEndingX + " pHeightContainer : " + pHeightContainer + " pLiquidCoordinates[0][0].Y " +
+                    pLiquidCoordinates[0][0].Y);
+            }
             for (int element_counter = 0; element_counter < pLiquidCoordinates.Count; element_counter++)
                 pEvent.Graphics.FillClosedCurve(Brushes.Blue, pLiquidCoordinates[element_counter]);
 
-            pLiquidCoordinates.Clear();
+            //pLiquidCoordinates.Clear();
         }
 
         private void WaterContainer_Paint(object sender, PaintEventArgs e)
@@ -121,7 +129,7 @@ namespace Dam.UI
         public void tankLabelChanged(ulong pCurrentHeight)
         {
             _lbl_TankHeight.Invoke((MethodInvoker)(() => _lbl_TankHeight.Text = Convert.ToString(pCurrentHeight)));
-        }
+        }                           //casting         //tells the thread to execute this
 
         public void volumeLabelChanged(string pCurrentVolume)
         {
@@ -167,7 +175,7 @@ namespace Dam.UI
         }
 
         public string selectedTurbine()
-        {
+        {//returns the id of the selected Turbine
             _cmb_Turbines.Invoke((MethodInvoker)(() => selectedTurbineIndex = _cmb_Turbines.SelectedIndex));
             if (selectedTurbineIndex >= 0)
             {
