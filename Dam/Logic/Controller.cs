@@ -180,10 +180,11 @@ namespace Dam
         public void damHandler()
         {//changes ALL labels in the interface.
             Dam dam = Dam.getInstance();
+
             if (dam.Tank.SignificanceVolumeChanged)
             {
                 dam.Tank.SignificanceVolumeChanged = false;
-                _View.volumeLabelChanged(dam.Tank.CurrentNoticeableVolume.toString());
+                ////_View.volumeLabelChanged(dam.Tank.CurrentNoticeableVolume.toString());
                 _View.tankLabelChanged(dam.Tank.CurrentHeigth);
                 _View.riverLabelChanged(dam.River.CurrentHeigth);
 
@@ -211,6 +212,7 @@ namespace Dam
 
         public void damVisualizationHandler()
         {
+
             if (_View.TurbineStatusRequested)
             {
                 _View.TurbineStatusRequested = false;
@@ -235,7 +237,7 @@ namespace Dam
             if (_View.SecondsRequested)
             {
                 _View.SecondsRequested = false;
-                _Dam.Seconds = _Dam.Seconds/Convert.ToInt16(_View.currentSeconds());
+                _Dam.Seconds = 1000/Convert.ToInt32(_View.currentSeconds());
             }
 
             if (_View.ProgramClosed)

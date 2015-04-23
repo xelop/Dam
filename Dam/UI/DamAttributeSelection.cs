@@ -109,6 +109,6 @@ namespace Dam.UI
         private void FlowRateTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             inputNumbers(sender, e);
-        }//IObservale is a parameter
+        }
     }
 }

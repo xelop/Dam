@@ -102,7 +102,9 @@ namespace Dam.UI
                 FileManagement.addToFile(ex.Message);
             }
 
+
             //TOTAL= 17+ 10N
+
         }
 
         private void WaterContainer_Paint(object sender, PaintEventArgs e)
@@ -277,5 +279,18 @@ namespace Dam.UI
 
         private bool _TurbineChanged, _TurbineRequested, _TurbineStatusRequested, _ProgramClosed, _TurbineExist, _FlowRateRequest, _SecondsRequested = false;
 
+<<<<<<< HEAD
+=======
+        private void DamRepresentation_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void _btn_seconds_Click(object sender, EventArgs e)
+        {
+            _SecondsRequested = true;
+            notifyObservers();
+        }
+>>>>>>> origin/master
     }
 }

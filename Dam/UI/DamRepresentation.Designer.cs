@@ -161,7 +161,11 @@
             this._txt_CurrentFlow.Name = "_txt_CurrentFlow";
             this._txt_CurrentFlow.Size = new System.Drawing.Size(100, 20);
             this._txt_CurrentFlow.TabIndex = 14;
+<<<<<<< HEAD
             this._txt_CurrentFlow.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._txt_CurrentFlow_KeyPress);
+=======
+           
+>>>>>>> origin/master
             // 
             // _lbl_CurrentFlow
             // 
